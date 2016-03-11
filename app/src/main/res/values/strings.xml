@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">KittyCat</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="transition_cat_image">transition_cat_image</string>
+    <string name="transition_cat_id">transition_cat_id</string>
+    <string name="transition_cat_url">transition_cat_url</string>
+    <string name="transition_cat_source_url">transition_cat_source</string>
+    <string name="transition_appbar">transition_appbar</string>
+
+</resources>
