@@ -30,18 +30,22 @@ class MainPresenter : Presenter<MainView> {
     }
 
     fun onFABClicked() {
-        Snackbar.make(mainView!!.getMainView(), "Replace mee", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(mainView!!.getMainView(), "Reload soon...", Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun onSettingsClicked() {
+        Snackbar.make(mainView!!.getMainView(), "Settings", Snackbar.LENGTH_SHORT).show()
     }
 
     fun loadKittens() {
         TheCatAPI.API
-            .getKittens()
+            .getKittens(null)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
                     { kittens -> mainView?.onKittensLoaded(kittens!!.data!!.images!!) },
                     { t ->
-                        Log.e(TAG, "", t)
+                        Log.e(TAG, "error", t)
                         Snackbar.make(mainView!!.getMainView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
                     }
             )
@@ -54,7 +58,7 @@ class MainPresenter : Presenter<MainView> {
         intent.putExtra(DetailActivity.EXTRA_CAT, cat)
 
         val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
-                //Pair(mainView!!.getMainView().findViewById(R.id.appbar), ac.getString(R.string.transition_appbar)),
+//                Pair(mainView!!.getFABView(), ac.getString(R.string.transition_fab)),
                 Pair(view.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image)),
                 Pair(view.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
                 Pair(view.findViewById(R.id.cat_row_image_url), ac.getString(R.string.transition_cat_url)),

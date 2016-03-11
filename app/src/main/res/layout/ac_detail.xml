@@ -79,7 +79,19 @@
                 tools:text="ImageURL" />
         </LinearLayout>
 
-
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/ac_detail_favourite"
+        style="@style/FabStyle"
+        android:src="@mipmap/ic_menu_star"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end" />
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/ac_detail_favourite"-->
+    <!--style="@style/FabStyle"-->
+    <!--android:layout_gravity="bottom|start"-->
+    <!--android:src="@mipmap/ic_menu_star" />-->
 
 </android.support.design.widget.CoordinatorLayout>

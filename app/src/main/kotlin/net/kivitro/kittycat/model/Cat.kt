@@ -32,7 +32,7 @@ data class Image(var url: String? = "", var id: String? = "", var source_url: St
     companion object {
         @JvmField
         final val CREATOR = object : Parcelable.Creator<Image> {
-            override fun createFromParcel(source: Parcel): Image{
+            override fun createFromParcel(source: Parcel): Image {
                 return Image(source)
             }
 

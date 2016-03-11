@@ -11,6 +11,10 @@
         <!--specify enter and exit transitions -->
         <item name="android:windowEnterTransition">@android:transition/fade</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
+
+        <!-- specify shared element transitions -->
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/main_transition</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@transition/main_transition</item>-->
    </style>
 
 </resources>

@@ -1,5 +1,6 @@
 package net.kivitro.kittycat.presenter
 
+import android.support.design.widget.Snackbar
 import net.kivitro.kittycat.view.DetailView
 
 /**
@@ -7,12 +8,18 @@ import net.kivitro.kittycat.view.DetailView
  */
 class DetailPresenter :Presenter<DetailView> {
 
-    override fun attachView(v: DetailView) {
+    private var mainView: DetailView? = null
 
+    override fun attachView(v: DetailView) {
+        mainView = v
     }
 
     override fun detachView() {
+        mainView = null
+    }
 
+    fun onFABClicked() {
+        Snackbar.make(mainView!!.getMainView(), "Added as favourite <3", Snackbar.LENGTH_SHORT).show()
     }
 
 }

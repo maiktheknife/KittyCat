@@ -7,5 +7,6 @@
     <string name="transition_cat_url">transition_cat_url</string>
     <string name="transition_cat_source_url">transition_cat_source</string>
     <string name="transition_appbar">transition_appbar</string>
+    <string name="transition_fab">transition_fab</string>
 
 </resources>
