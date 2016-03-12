@@ -1,11 +1,10 @@
 package net.kivitro.kittycat.view
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.Parcelable
 import android.preference.PreferenceManager
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -24,7 +23,6 @@ import net.kivitro.kittycat.view.adapter.KittyAdapter
 import java.util.*
 
 class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefreshListener {
-
     private lateinit var adapter: KittyAdapter
     private lateinit var presenter: MainPresenter
     private lateinit var layoutManager: StaggeredGridLayoutManager
@@ -35,7 +33,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     private var kittens: List<Image>? = null
 
     internal val containerView: View by bindView(R.id.ac_main_container)
-    internal val fab: FloatingActionButton by bindView(R.id.ac_main_fab)
     internal val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.ac_main_swipeLayout)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +47,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
 
-        fab.setOnClickListener { view -> presenter.onFABClicked(); }
-
         initRecyclerView(presenter)
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -60,7 +55,14 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
             sub_id = (Math.random() * 10000000).toInt();
             preferences.edit().putInt(PREF_SUB_ID, sub_id).apply()
         }
-        Log.d(TAG, "sub_id: $sub_id")
+
+        if (savedInstanceState != null) {
+            hasLoaded = true
+            kittens = savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Image>
+            onKittensLoaded(kittens!!)
+        } else {
+            hasLoaded = false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,11 +82,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         } else {
             presenter.onNoConnection()
         }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        Log.d(TAG, "onPostCreate")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -156,16 +153,12 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         return this
     }
 
-    override fun getMainView(): View {
+    override fun getContainerView(): View {
         return containerView
     }
 
     override fun getSwipeLayout(): SwipeRefreshLayout {
         return swipeRefreshLayout
-    }
-
-    override fun getFABView(): FloatingActionButton {
-        return fab
     }
 
     override fun onKittensLoaded(kittens: List<Image>) {

@@ -19,7 +19,7 @@ import rx.schedulers.Schedulers
  */
 class MainPresenter : Presenter<MainView> {
 
-    private var mainView: MainView? = null
+    var mainView: MainView? = null
 
     override fun attachView(v: MainView) {
         mainView = v
@@ -29,12 +29,8 @@ class MainPresenter : Presenter<MainView> {
         mainView = null
     }
 
-    fun onFABClicked() {
-        Snackbar.make(mainView!!.getMainView(), "Reload soon...", Snackbar.LENGTH_SHORT).show()
-    }
-
     fun onSettingsClicked() {
-        Snackbar.make(mainView!!.getMainView(), "Settings", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(mainView!!.getContainerView(), "Settings", Snackbar.LENGTH_SHORT).show()
     }
 
     fun loadKittens() {
@@ -49,14 +45,14 @@ class MainPresenter : Presenter<MainView> {
                     },
                     { t ->
                         Log.e(TAG, "error", t)
-                        Snackbar.make(mainView!!.getMainView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(mainView!!.getContainerView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
                         mainView?.getSwipeLayout()?.isRefreshing = false;
                     }
             )
     }
 
     fun onNoConnection() {
-        Snackbar.make(mainView!!.getMainView(), "No Connection", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(mainView!!.getContainerView(), "No Connection", Snackbar.LENGTH_SHORT).show()
         mainView!!.getSwipeLayout().isRefreshing = false;
     }
 
@@ -67,7 +63,6 @@ class MainPresenter : Presenter<MainView> {
         intent.putExtra(DetailActivity.EXTRA_CAT, cat)
 
         val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
-//                Pair(mainView!!.getFABView(), ac.getString(R.string.transition_fab)),
                 Pair(view.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image)),
                 Pair(view.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id))
         )
@@ -75,7 +70,7 @@ class MainPresenter : Presenter<MainView> {
     }
 
     companion object {
-        final val TAG = MainPresenter::class.java.name
+        @JvmField final val TAG = MainPresenter::class.java.name
     }
 
 }

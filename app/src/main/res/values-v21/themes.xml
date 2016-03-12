@@ -12,9 +12,16 @@
         <item name="android:windowEnterTransition">@android:transition/fade</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
 
+        <!--<item name="android:windowAllowEnterTransitionOverlap">true</item>-->
+
         <!-- specify shared element transitions -->
-        <item name="android:windowSharedElementEnterTransition">@transition/main_transition</item>
-        <item name="android:windowSharedElementExitTransition">@transition/main_transition</item>
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/main_transition</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@transition/main_transition</item>-->
+    </style>
+
+    <style name="AppTheme.Detail" parent="AppTheme">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
 </resources>

@@ -3,13 +3,9 @@ package net.kivitro.kittycat.network
 import android.content.Context
 import android.preference.PreferenceManager
 import android.support.annotation.IntRange
-import android.support.annotation.StringDef
 import android.util.Log
 import net.kivitro.kittycat.BuildConfig
-import net.kivitro.kittycat.model.Cat
-import net.kivitro.kittycat.model.CatCategory
-import net.kivitro.kittycat.model.CatVote
-import net.kivitro.kittycat.model.FavResponse
+import net.kivitro.kittycat.model.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -26,37 +22,38 @@ import rx.Observable
  */
 interface TheCatAPI {
 
-    @GET("images/get?format=xml&type=png&size=med&results_per_page=50&api_key=" + BuildConfig.THE_CAT_API_KEY)
+    @GET("images/get?format=xml&type=png&size=med&results_per_page=30")
     fun getKittens(@Query("category") category: String?): Observable<Cat>
 
-    @GET("images/vote?api_key=" + BuildConfig.THE_CAT_API_KEY)
-    fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Unit
+    @GET("images/vote")
+    fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<Unit>
 
-    @GET("images/getvotes?api_key=" + BuildConfig.THE_CAT_API_KEY)
-    fun getVotes(): Observable<CatVote>
+    @GET("images/getvotes")
+    fun getVotes(): Observable<CatGetVote>
 
-    @GET("images/favourite?api_key=" + BuildConfig.THE_CAT_API_KEY)
-    fun favourite(@Query("image_id") image_id: String, @FavAction @Query("action") action: String): Observable<FavResponse>
+    @GET("images/favourite")
+    fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
 
-    @GET("images/getfavourites?api_key=" + BuildConfig.THE_CAT_API_KEY)
+    @GET("images/getfavourites")
     fun getFavourites(): Unit
 
     @GET("categories/list")
     fun getCategories(): Observable<CatCategory>
 
     companion object {
-
-        lateinit var API : TheCatAPI
+        const val ACTION_ADD = "add";
+        const val ACTION_REMOVE = "remove";
+        lateinit final var API: TheCatAPI
+            private set
 
         fun create(c: Context): TheCatAPI {
-
             val interceptor = HttpLoggingInterceptor();
-            interceptor.level = HttpLoggingInterceptor.Level.NONE;
+            interceptor.level = HttpLoggingInterceptor.Level.BASIC;
 
             val client = OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor(SubIDInterceptor(c))
-                .build();
+                    .addInterceptor(interceptor)
+                    .addInterceptor(QueryInterceptor(c))
+                    .build();
 
             val api = Retrofit.Builder()
                     .baseUrl("http://thecatapi.com/api/")
@@ -68,23 +65,15 @@ interface TheCatAPI {
             API = api
             return api
         }
-
-        @Retention(AnnotationRetention.SOURCE)
-        @StringDef(
-                ACTION_ADD, ACTION_REMOVE
-        )
-        annotation class FavAction
-
-        const val ACTION_ADD = "add";
-        const val ACTION_REMOVE = "remove";
     }
 
-    class SubIDInterceptor(private val c : Context) : Interceptor {
+    private class QueryInterceptor(private val c: Context) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response? {
             Log.d("SubIDInterceptor", "intercept")
             val requestUrl = chain.request()
                     .url()
                     .newBuilder()
+                    .addQueryParameter("api_key", BuildConfig.THE_CAT_API_KEY)
                     .addQueryParameter("sub_id", PreferenceManager.getDefaultSharedPreferences(c).getInt("sub_id", 0).toString())
                     .build()
 
@@ -92,7 +81,6 @@ interface TheCatAPI {
 
             return chain.proceed(request)
         }
-
     }
 
 }

@@ -11,9 +11,9 @@ data class Cat(var data: Data? = null)
 
 data class Data(var images: List<Image>? = null)
 
-data class Image(var url: String? = "", var id: String? = "", var source_url: String? = "") : Parcelable {
+data class Image(var url: String? = "", /* var favourite: Boolean?, var score: Int?, */ var id: String? = "", var source_url: String? = "") : Parcelable {
 
-    private constructor(p: Parcel) : this(p.readString(), p.readString(), p.readString())
+    private constructor(p: Parcel) : this(p.readString(), /* false, 0,*/ p.readString(), p.readString())
 
     override fun writeToParcel(p: Parcel, p1: Int) {
         p.writeString(url)

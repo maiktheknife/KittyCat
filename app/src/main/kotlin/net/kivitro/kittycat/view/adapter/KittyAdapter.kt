@@ -1,5 +1,7 @@
 package net.kivitro.kittycat.view.adapter
 
+import android.graphics.drawable.BitmapDrawable
+import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
@@ -33,13 +36,29 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
     }
 
     override fun onBindViewHolder(holder: KittyHolder, position: Int) {
+        val context = holder.itemView.context
         val cat = cats[position]
         holder.id.text = cat.id
+
         Picasso
-            .with(holder.itemView.context)
+            .with(context)
             .load(cat.url)
-            .into(holder.image)
-    }
+            .into(holder.image, object : Callback {
+                override fun onSuccess() {
+                    Log.d(TAG, "onSuccess")
+                    val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
+                    Palette.from(bitmap).maximumColorCount(10).generate { palette ->
+                        val color = palette.getVibrantColor(context.resources.getColor(R.color.colorPrimaryDark))
+                        holder.id.setTextColor(color)
+//                        holder.bg.setBackgroundColor(color)
+                    }
+                }
+
+                override fun onError() {
+                    Log.d(TAG, "onError")
+                }
+            })
+        }
 
     fun addItems(cats: List<Image>) {
         Log.d(TAG, "addItems: ${cats.size}")
@@ -56,6 +75,7 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
 
         val image = view.findViewById(R.id.cat_row_image) as ImageView
         val id = view.findViewById(R.id.cat_row_id) as TextView
+//        val bg = view.findViewById(R.id.cat_row_background) as TextView
 
         init {
             view.setOnClickListener { v -> callback.onKittyClicked(itemView, adapterPosition) }

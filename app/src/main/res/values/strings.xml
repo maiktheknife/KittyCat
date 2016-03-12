@@ -11,6 +11,7 @@
     <string name="transition_appbar">transition_appbar</string>
     <string name="transition_fab">transition_fab</string>
 
-
+    <string name="rate">Rate</string>
+    <string name="undo">Undo</string>
 
 </resources>
