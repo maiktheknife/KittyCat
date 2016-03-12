@@ -15,6 +15,7 @@ android {
     }
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -56,6 +57,8 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:$okhttp3_version"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
@@ -74,6 +77,13 @@ buildscript {
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 repositories {
     mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }

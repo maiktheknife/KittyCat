@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import butterknife.bindView
 import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
@@ -17,27 +19,24 @@ import net.kivitro.kittycat.presenter.DetailPresenter
  * Created by Max on 10.03.2016.
  */
 class DetailActivity : AppCompatActivity(), DetailView {
+    val containerView: View by bindView(R.id.ac_detail_container)
+    val fab: FloatingActionButton by bindView(R.id.ac_detail_favourite)
 
     lateinit var presenter: DetailPresenter
-    var containerView: View? = null
-    var fab: FloatingActionButton? = null
+    lateinit var cat: Image
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_detail)
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         presenter = DetailPresenter()
         presenter.attachView(this)
 
-        containerView = findViewById(R.id.ac_detail_container)
+        fab.setOnClickListener { view -> onFabClicked() }
 
-        fab = findViewById(R.id.ac_detail_favourite) as FloatingActionButton
-        fab!!.setOnClickListener { view ->
-            presenter.onFABClicked();
-        }
-
-        val cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
+        cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
         val txtID = findViewById(R.id.ac_detail_id) as TextView
         val txtURL = findViewById(R.id.ac_detail_url) as TextView
         val txtSourceURL = findViewById(R.id.ac_detail_source_url) as TextView
@@ -48,9 +47,14 @@ class DetailActivity : AppCompatActivity(), DetailView {
         txtSourceURL.text = cat.source_url
 
         Picasso
-            .with(this)
-            .load(cat.url)
-            .into(txtImage)
+                .with(this)
+                .load(cat.url)
+                .into(txtImage)
+    }
+
+    fun onFabClicked() {
+        Log.d(TAG, "onFabClicked")
+        presenter.onFABClicked(cat.id!!);
     }
 
     /* @{link DetailView} */
@@ -60,15 +64,15 @@ class DetailActivity : AppCompatActivity(), DetailView {
     }
 
     override fun getMainView(): View {
-        return containerView!!
+        return containerView
     }
 
     override fun getFABView(): FloatingActionButton {
-        return fab!!
+        return fab
     }
 
     companion object {
         private val TAG = DetailActivity::class.java.name
-        final val EXTRA_CAT = "extra_cat"
+        const val EXTRA_CAT = "extra_cat"
     }
 }

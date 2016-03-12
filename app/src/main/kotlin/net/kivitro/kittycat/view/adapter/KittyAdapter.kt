@@ -17,27 +17,24 @@ import net.kivitro.kittycat.presenter.MainPresenter
  */
 class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
 
-    private var cats: List<Image>? = null
+    private var cats: MutableList<Image> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KittyHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cat, parent, false)
         return KittyHolder(view, object : KittyHolder.KittyActions {
             override fun onKittyClicked(view: View, pos: Int) {
-                presenter.onKittyClicked(view, cats!![pos])
+                presenter.onKittyClicked(view, cats[pos])
             }
         })
     }
 
     override fun getItemCount(): Int {
-        return cats?.size ?: 0
+        return cats.size
     }
 
     override fun onBindViewHolder(holder: KittyHolder, position: Int) {
-        val cat = cats!![position]
-        Log.d(TAG, "onBindViewHolder: " + cat)
+        val cat = cats[position]
         holder.id.text = cat.id
-        holder.imageURL.text = cat.url
-        holder.sourceURL.text = cat.source_url
         Picasso
             .with(holder.itemView.context)
             .load(cat.url)
@@ -45,8 +42,10 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
     }
 
     fun addItems(cats: List<Image>) {
-        this.cats = cats;
-        notifyItemRangeInserted(0, this.cats?.size ?: 0);
+        Log.d(TAG, "addItems: ${cats.size}")
+        this.cats.clear();
+        this.cats.addAll(cats)
+        notifyItemRangeChanged(0, this.cats.size);
     }
 
     class KittyHolder(view: View, callback: KittyActions) : RecyclerView.ViewHolder(view) {
@@ -57,8 +56,6 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
 
         val image = view.findViewById(R.id.cat_row_image) as ImageView
         val id = view.findViewById(R.id.cat_row_id) as TextView
-        val imageURL = view.findViewById(R.id.cat_row_image_url) as TextView
-        val sourceURL = view.findViewById(R.id.cat_row_source_url) as TextView
 
         init {
             view.setOnClickListener { v -> callback.onKittyClicked(itemView, adapterPosition) }

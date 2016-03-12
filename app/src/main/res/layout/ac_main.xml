@@ -24,16 +24,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ac_main_recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/ac_main_swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ac_main_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/ac_main_fab"
+        style="@style/FabStyle"
         android:layout_gravity="bottom|end"
-        android:src="@mipmap/ic_menu_refresh"
-        style="@style/FabStyle" />
+        android:src="@mipmap/ic_menu_refresh" />
 
 </android.support.design.widget.CoordinatorLayout>

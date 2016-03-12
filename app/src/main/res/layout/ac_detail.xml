@@ -19,9 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
 
             <ImageView
                 android:id="@+id/ac_detail_image"
@@ -67,7 +66,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:transitionName="@string/transition_cat_source_url"
                 tools:text="SourceURL" />
 
             <TextView
@@ -75,7 +73,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:transitionName="@string/transition_cat_url"
                 tools:text="ImageURL" />
         </LinearLayout>
 
@@ -87,11 +84,5 @@
         android:src="@mipmap/ic_menu_star"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/ac_detail_favourite"-->
-    <!--style="@style/FabStyle"-->
-    <!--android:layout_gravity="bottom|start"-->
-    <!--android:src="@mipmap/ic_menu_star" />-->
 
 </android.support.design.widget.CoordinatorLayout>

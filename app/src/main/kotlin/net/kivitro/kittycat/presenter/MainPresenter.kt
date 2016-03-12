@@ -43,12 +43,21 @@ class MainPresenter : Presenter<MainView> {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
-                    { kittens -> mainView?.onKittensLoaded(kittens!!.data!!.images!!) },
+                    { kittens ->
+                        mainView?.onKittensLoaded(kittens!!.data!!.images!!)
+                        mainView?.getSwipeLayout()?.isRefreshing = false;
+                    },
                     { t ->
                         Log.e(TAG, "error", t)
                         Snackbar.make(mainView!!.getMainView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
+                        mainView?.getSwipeLayout()?.isRefreshing = false;
                     }
             )
+    }
+
+    fun onNoConnection() {
+        Snackbar.make(mainView!!.getMainView(), "No Connection", Snackbar.LENGTH_SHORT).show()
+        mainView!!.getSwipeLayout().isRefreshing = false;
     }
 
     fun onKittyClicked(view: View, cat: Image) {
@@ -60,9 +69,7 @@ class MainPresenter : Presenter<MainView> {
         val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
 //                Pair(mainView!!.getFABView(), ac.getString(R.string.transition_fab)),
                 Pair(view.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image)),
-                Pair(view.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
-                Pair(view.findViewById(R.id.cat_row_image_url), ac.getString(R.string.transition_cat_url)),
-                Pair(view.findViewById(R.id.cat_row_source_url), ac.getString(R.string.transition_cat_source_url))
+                Pair(view.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id))
         )
         ac.startActivity(intent, aoc.toBundle())
     }
