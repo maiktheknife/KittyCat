@@ -1,4 +1,7 @@
 *.iml
+*.apk
+*.log
+*.tmp
 .gradle
 /local.properties
 /gradle.properties
