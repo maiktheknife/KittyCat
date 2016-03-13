@@ -19,27 +19,25 @@
             android:transitionName="@string/transition_cat_image"
             tools:src="@mipmap/ic_launcher" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/cat_row_background"-->
-            <!--style="@style/TextStyle_Title"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@id/cat_row_image"-->
-            <!--android:background="@color/darkTransparent" />-->
-
-        <TextView
-            android:id="@+id/cat_row_id"
-            style="@style/TextStyle_Title"
+        <LinearLayout
+            android:id="@+id/cat_row_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/cat_row_image"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:gravity="start"
-            android:textColor="@color/colorAccent"
-            tools:text="ID" />
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin">
 
+            <TextView
+                android:id="@+id/cat_row_id"
+                style="@style/TextStyle_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                tools:text="ID" />
 
+        </LinearLayout>
     </RelativeLayout>
-
 </android.support.v7.widget.CardView>

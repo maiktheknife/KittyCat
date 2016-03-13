@@ -13,5 +13,6 @@
 
     <string name="rate">Rate</string>
     <string name="undo">Undo</string>
+    <string name="transition_layout">x</string>
 
 </resources>

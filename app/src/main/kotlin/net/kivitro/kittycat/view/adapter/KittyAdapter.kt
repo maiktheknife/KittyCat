@@ -45,7 +45,6 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
             .load(cat.url)
             .into(holder.image, object : Callback {
                 override fun onSuccess() {
-                    Log.d(TAG, "onSuccess")
                     val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
                     Palette.from(bitmap).maximumColorCount(10).generate { palette ->
                         val color = palette.getVibrantColor(context.resources.getColor(R.color.colorPrimaryDark))
@@ -53,18 +52,17 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
 //                        holder.bg.setBackgroundColor(color)
                     }
                 }
-
-                override fun onError() {
-                    Log.d(TAG, "onError")
-                }
+                override fun onError() { Log.d(TAG, "onError") }
             })
         }
 
-    fun addItems(cats: List<Image>) {
-        Log.d(TAG, "addItems: ${cats.size}")
+    fun addItems(catss: List<Image>) {
+        Log.d(TAG, "addItems: ${catss.size}")
         this.cats.clear();
-        this.cats.addAll(cats)
-        notifyItemRangeChanged(0, this.cats.size);
+//        notifyItemRangeRemoved(0, this.cats.size)
+        this.cats.addAll(catss)
+//        notifyItemRangeInserted(0, this.cats.size);
+        notifyItemRangeChanged(0, this.cats.size)
     }
 
     class KittyHolder(view: View, callback: KittyActions) : RecyclerView.ViewHolder(view) {

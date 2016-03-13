@@ -33,9 +33,27 @@ class MainPresenter : Presenter<MainView> {
         Snackbar.make(mainView!!.getContainerView(), "Settings", Snackbar.LENGTH_SHORT).show()
     }
 
-    fun loadKittens() {
+    fun loadCategories() {
         TheCatAPI.API
-            .getKittens(null)
+            .getCategories()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe (
+                    { categories ->
+                        mainView?.onCategoriesLoaded(categories!!.data!!.categories!!)
+                        mainView?.getSwipeLayout()?.isRefreshing = false;
+                    },
+                    { t ->
+                        Log.e(TAG, "loadCategories", t)
+                        Snackbar.make(mainView!!.getContainerView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
+                        mainView?.getSwipeLayout()?.isRefreshing = false;
+                    }
+            )
+    }
+
+    fun loadKittens(category: String?) {
+        TheCatAPI.API
+            .getKittens(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
@@ -44,7 +62,7 @@ class MainPresenter : Presenter<MainView> {
                         mainView?.getSwipeLayout()?.isRefreshing = false;
                     },
                     { t ->
-                        Log.e(TAG, "error", t)
+                        Log.e(TAG, "loadKittens", t)
                         Snackbar.make(mainView!!.getContainerView(), "Loading Error", Snackbar.LENGTH_SHORT).show()
                         mainView?.getSwipeLayout()?.isRefreshing = false;
                     }
@@ -63,6 +81,7 @@ class MainPresenter : Presenter<MainView> {
         intent.putExtra(DetailActivity.EXTRA_CAT, cat)
 
         val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
+                // Pair(view.findViewById(R.id.cat_row_layout), ac.getString(R.string.transition_layout)),
                 Pair(view.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image)),
                 Pair(view.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id))
         )

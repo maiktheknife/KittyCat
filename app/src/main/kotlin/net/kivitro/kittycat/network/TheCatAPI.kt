@@ -22,7 +22,7 @@ import rx.Observable
  */
 interface TheCatAPI {
 
-    @GET("images/get?format=xml&type=png&size=med&results_per_page=30")
+    @GET("images/get?format=xml&type=png&size=med&results_per_page=50")
     fun getKittens(@Query("category") category: String?): Observable<Cat>
 
     @GET("images/vote")
@@ -46,7 +46,8 @@ interface TheCatAPI {
         lateinit final var API: TheCatAPI
             private set
 
-        fun create(c: Context): TheCatAPI {
+        fun create(c: Context) {
+
             val interceptor = HttpLoggingInterceptor();
             interceptor.level = HttpLoggingInterceptor.Level.BASIC;
 
@@ -63,7 +64,6 @@ interface TheCatAPI {
                     .build()
                     .create(TheCatAPI::class.java)
             API = api
-            return api
         }
     }
 

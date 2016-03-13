@@ -69,7 +69,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
         window.enterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionEnd(t: Transition) {
-                fab.animate().alpha(1.0f)
+                fab.animate()
+//                    .alpha(1f)
+                    .scaleX(1f)
+                    .scaleY(1f)
                 window.enterTransition.removeListener(this)
             }
         })
@@ -81,18 +84,15 @@ class DetailActivity : AppCompatActivity(), DetailView {
                 override fun onSuccess() {
                     val bitmap = ((txtImage.drawable) as BitmapDrawable).bitmap
                     Palette.from(bitmap).maximumColorCount(10).generate { palette ->
-                        val color = palette.getVibrantColor(resources.getColor(R.color.colorPrimaryDark))
-                        txtID.setTextColor(color)
-                        txtRate.setTextColor(color)
-                        collapseToolbarLayout.setContentScrimColor(color)
-                        collapseToolbarLayout.setStatusBarScrimColor(color)
-                        appbarLayout.setBackgroundColor(color)
+                        val vibrantColor = palette.getVibrantColor(resources.getColor(R.color.colorPrimaryDark))
+                        txtID.setTextColor(vibrantColor)
+                        txtRate.setTextColor(vibrantColor)
+                        collapseToolbarLayout.setContentScrimColor(vibrantColor)
+                        collapseToolbarLayout.setStatusBarScrimColor(vibrantColor)
+                        appbarLayout.setBackgroundColor(vibrantColor)
                     }
                 }
-
-                override fun onError() {
-                    Log.d(TAG, "onError")
-                }
+                override fun onError() { Log.d(TAG, "onError") }
             })
     }
 
@@ -106,7 +106,9 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     override fun onBackPressed() {
         fab.animate()
-            .alpha(0.0f)
+//            .alpha(0f)
+            .scaleX(0f)
+            .scaleY(0f)
             .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
             .setListener(object : DefaultAnimator() {
                 override fun onAnimationEnd(a: Animator) = super@DetailActivity.onBackPressed()

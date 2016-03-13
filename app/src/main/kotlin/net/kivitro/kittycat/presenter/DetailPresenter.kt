@@ -3,12 +3,9 @@ package net.kivitro.kittycat.presenter
 import android.animation.Animator
 import android.support.design.widget.Snackbar
 import android.util.Log
-import net.kivitro.kittycat.util.DefaultAnimator
 import net.kivitro.kittycat.R
-import net.kivitro.kittycat.network.TheCatAPI
+import net.kivitro.kittycat.util.DefaultAnimator
 import net.kivitro.kittycat.view.DetailView
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 /**
  * Created by Max on 10.03.2016.
@@ -52,18 +49,29 @@ class DetailPresenter :Presenter<DetailView> {
 //            .subscribe (
 //                    { d ->
 //                        Log.d(TAG, "Favourite Success")
-                        mainView!!.getFABView().animate()
-                                .rotationBy(360f)
-                                .setListener(object : DefaultAnimator(){
-                                        override fun onAnimationEnd(a: Animator) {
-                                            val sb = Snackbar.make(mainView!!.getMainView(), "Added as favourite <3", Snackbar.LENGTH_SHORT)
-                                            sb.setAction(mainView!!.getActivity().getString(R.string.undo), { view ->
-                                                Snackbar.make(mainView!!.getMainView(), "Removed as favourite :(", Snackbar.LENGTH_SHORT).show()
-                                            })
-                                            sb.show()
-                                        }
-                                    }
-                                )
+        mainView!!.getFABView().animate()
+            .rotationBy(360f)
+            .scaleX(1.5f)
+            .scaleY(1.5f)
+            .setListener(object : DefaultAnimator() {
+                override fun onAnimationEnd(a: Animator) {
+                    mainView!!.getFABView().animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setListener(object : DefaultAnimator() {
+                            override fun onAnimationEnd(a: Animator) {
+                                val sb = Snackbar.make(mainView!!.getMainView(), "Added as favourite <3", Snackbar.LENGTH_SHORT)
+                                sb.setAction(mainView!!.getActivity().getString(R.string.undo), { view ->
+                                    Snackbar.make(mainView!!.getMainView(), "Removed as favourite :(", Snackbar.LENGTH_SHORT).show()
+                                })
+                                sb.show()
+                            }
+                            }
+                            )
+
+                }
+            }
+                )
 
 //
 //                    },

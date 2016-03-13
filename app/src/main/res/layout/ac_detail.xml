@@ -46,8 +46,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill"
+        android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -104,8 +103,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/ac_detail_favourite"
-        style="@style/FabStyle"
-        android:alpha="0.0"
+        style="@style/FabStyleHidden"
         android:src="@mipmap/ic_menu_star"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
