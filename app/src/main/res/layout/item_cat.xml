@@ -32,10 +32,10 @@
 
             <TextView
                 android:id="@+id/cat_row_id"
-                style="@style/TextStyle_Title"
+                style="@style/TextStyleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:transitionName="@string/transition_cat_id"
                 tools:text="ID" />
 
         </LinearLayout>

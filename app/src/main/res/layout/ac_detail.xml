@@ -5,14 +5,13 @@
     android:id="@+id/ac_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.DetailActivity">
+    tools:context=".view.activity.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:transitionName="@string/transition_appbar">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapse_toolbar"
@@ -46,7 +45,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -57,31 +56,15 @@
 
             <TextView
                 android:id="@+id/ac_detail_id"
-                style="@style/TextStyle_Title"
+                style="@style/TextStyleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:transitionName="@string/transition_cat_id"
                 tools:text="ID" />
 
             <TextView
-                android:id="@+id/ac_detail_source_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="SourceURL" />
-
-            <TextView
-                android:id="@+id/ac_detail_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="ImageURL" />
-
-            <TextView
                 android:id="@+id/ac_detail_rate"
-                style="@style/TextStyle_Title"
+                style="@style/TextStyleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
@@ -97,6 +80,7 @@
                 android:isIndicator="false"
                 android:numStars="5"
                 android:stepSize="0.5" />
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

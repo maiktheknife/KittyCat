@@ -14,11 +14,12 @@ import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
+import net.kivitro.kittycat.view.MainView
 
 /**
  * Created by Max on 08.03.2016.
  */
-class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
+class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
 
     private var cats: MutableList<Image> = arrayListOf()
 
@@ -46,10 +47,10 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
             .into(holder.image, object : Callback {
                 override fun onSuccess() {
                     val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
-                    Palette.from(bitmap).maximumColorCount(10).generate { palette ->
-                        val color = palette.getVibrantColor(context.resources.getColor(R.color.colorPrimaryDark))
-                        holder.id.setTextColor(color)
-//                        holder.bg.setBackgroundColor(color)
+                    Palette.from(bitmap).generate { palette ->
+                        val vibrantColor = palette.getVibrantColor(context.resources.getColor(R.color.colorPrimaryDark))
+                        holder.id.setTextColor(vibrantColor)
+//                        holder.bg.setBackgroundColor(vibrantColor)
                     }
                 }
                 override fun onError() { Log.d(TAG, "onError") }

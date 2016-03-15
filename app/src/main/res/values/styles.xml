@@ -16,10 +16,9 @@
         <item name="android:scaleX">0</item>
         <item name="android:scaleY">0</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:transitionName">@string/transition_fab</item>
     </style>
 
-    <style name="TextStyle_Title">
+    <style name="TextStyleTitle">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textStyle">bold</item>

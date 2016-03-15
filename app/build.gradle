@@ -66,7 +66,7 @@ dependencies {
 buildscript {
     ext.kotlin_version = '1.0.0'
     ext.support_version = '23.2.0'
-    ext.retrofit_version = '2.0.0-beta4'
+    ext.retrofit_version = '2.0.0'
     ext.okhttp3_version = '3.2.0'
     ext.picasso_version = '2.5.2'
 

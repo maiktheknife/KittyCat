@@ -1,4 +1,4 @@
-package net.kivitro.kittycat.view
+package net.kivitro.kittycat.view.activity
 
 import android.app.Activity
 import android.net.ConnectivityManager
@@ -22,12 +22,13 @@ import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Category
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
+import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.adapter.KittyAdapter
 import java.util.*
 
 class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var adapter: KittyAdapter
-    private lateinit var presenter: MainPresenter
+    private lateinit var presenter: MainPresenter<MainView>
     private lateinit var layoutManager: StaggeredGridLayoutManager
 //    private lateinit var spinnerAdapter: ArrayAdapter<String>
 
@@ -46,10 +47,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         setContentView(R.layout.ac_main)
 
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
-//        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        presenter = MainPresenter()
-        presenter.attachView(this)
+        presenter = MainPresenter(this)
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
@@ -66,11 +65,12 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
             sub_id = (Math.random() * 10000000).toInt();
             preferences.edit().putInt(PREF_SUB_ID, sub_id).apply()
         }
+        Log.d(TAG, "sub_id: $sub_id")
 
         if (savedInstanceState != null) {
             hasLoaded = true
             onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Image>)
-            onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
+////            onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
         } else {
             hasLoaded = false
         }
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         }
     }
 
-    private fun initRecyclerView(presenter: MainPresenter) {
+    private fun initRecyclerView(presenter: MainPresenter<MainView>) {
         val recyclerView = findViewById(R.id.ac_main_recyclerView) as RecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.itemAnimator = DefaultItemAnimator()
@@ -163,13 +163,11 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
     /* @{link MainView} */
 
-    override fun getActivity(): Activity {
-        return this
-    }
+    override val activity: Activity
+        get() = this
 
-    override fun getContainerView(): View {
-        return containerView
-    }
+    override val container: View
+        get() = containerView
 
     override fun getSwipeLayout(): SwipeRefreshLayout {
         return swipeRefreshLayout

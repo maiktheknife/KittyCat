@@ -59,7 +59,7 @@ interface TheCatAPI {
             val api = Retrofit.Builder()
                     .baseUrl("http://thecatapi.com/api/")
                     .client(client)
-                    .addConverterFactory(SimpleXmlConverterFactory.create())
+                    .addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build()
                     .create(TheCatAPI::class.java)
@@ -82,5 +82,9 @@ interface TheCatAPI {
             return chain.proceed(request)
         }
     }
+
+}
+
+class FavResponse {
 
 }

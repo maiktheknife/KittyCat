@@ -1,4 +1,4 @@
-package net.kivitro.kittycat.view
+package net.kivitro.kittycat.view.activity
 
 import android.animation.Animator
 import android.app.Activity
@@ -23,14 +23,15 @@ import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.DetailPresenter
-import net.kivitro.kittycat.util.DefaultAnimator
+import net.kivitro.kittycat.util.DefaultAnimatorListener
 import net.kivitro.kittycat.util.DefaultTransitionListener
+import net.kivitro.kittycat.view.DetailView
 
 /**
  * Created by Max on 10.03.2016.
  */
 class DetailActivity : AppCompatActivity(), DetailView {
-    private lateinit var presenter: DetailPresenter
+    private lateinit var presenter: DetailPresenter<DetailView>
     private lateinit var cat: Image
 
     internal val containerView: View by bindView(R.id.ac_detail_container)
@@ -39,6 +40,8 @@ class DetailActivity : AppCompatActivity(), DetailView {
     internal val fab: FloatingActionButton by bindView(R.id.ac_detail_favourite)
     internal val ratingBar: RatingBar by bindView(R.id.ac_detail_ratingbar)
     internal val image: ImageView by bindView(R.id.ac_detail_image)
+    internal val txtID: TextView by bindView(R.id.ac_detail_id)
+    internal val txtRate: TextView by bindView(R.id.ac_detail_rate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,31 +49,21 @@ class DetailActivity : AppCompatActivity(), DetailView {
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        presenter = DetailPresenter()
-        presenter.attachView(this)
-
-        fab.setOnClickListener { view -> presenter.onFABClicked(cat.id!!) }
-        image.setOnClickListener { view -> revealImage(view) }
-
-        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            presenter.onVoted(cat.id!!, (rating * 2).toInt())
-        }
+        presenter = DetailPresenter(this)
 
         cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
-        val txtID = findViewById(R.id.ac_detail_id) as TextView
-        val txtURL = findViewById(R.id.ac_detail_url) as TextView
-        val txtSourceURL = findViewById(R.id.ac_detail_source_url) as TextView
-        val txtImage = findViewById(R.id.ac_detail_image) as ImageView
-        val txtRate = findViewById(R.id.ac_detail_rate) as TextView
+        txtID.text = cat.id + cat.source_url
 
-        txtID.text = cat.id
-        txtURL.text = cat.url
-        txtSourceURL.text = cat.source_url
+        fab.setOnClickListener { v -> presenter.onFABClicked(cat) }
+        image.setOnClickListener { v -> revealImage(v) }
+
+        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+//            presenter.onVoted(cat.id!!, (rating * 2).toInt())
+        }
 
         window.enterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionEnd(t: Transition) {
                 fab.animate()
-//                    .alpha(1f)
                     .scaleX(1f)
                     .scaleY(1f)
                 window.enterTransition.removeListener(this)
@@ -80,10 +73,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
         Picasso
             .with(this)
             .load(cat.url)
-            .into(txtImage, object : Callback {
+            .into(image, object : Callback {
                 override fun onSuccess() {
-                    val bitmap = ((txtImage.drawable) as BitmapDrawable).bitmap
-                    Palette.from(bitmap).maximumColorCount(10).generate { palette ->
+                    val bitmap = ((image.drawable) as BitmapDrawable).bitmap
+                    Palette.from(bitmap).generate{ palette ->
                         val vibrantColor = palette.getVibrantColor(resources.getColor(R.color.colorPrimaryDark))
                         txtID.setTextColor(vibrantColor)
                         txtRate.setTextColor(vibrantColor)
@@ -106,24 +99,21 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     override fun onBackPressed() {
         fab.animate()
-//            .alpha(0f)
             .scaleX(0f)
             .scaleY(0f)
-            .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
-            .setListener(object : DefaultAnimator() {
+//            .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+            .setListener(object : DefaultAnimatorListener() {
                 override fun onAnimationEnd(a: Animator) = super@DetailActivity.onBackPressed()
             })
     }
 
     /* @{link DetailView} */
 
-    override fun getActivity(): Activity {
-        return this
-    }
+    override val activity: Activity
+        get() = this
 
-    override fun getMainView(): View {
-        return containerView
-    }
+    override val container: View
+        get() = containerView
 
     override fun getFABView(): FloatingActionButton {
         return fab
