@@ -6,6 +6,7 @@
 
     <string name="transition_cat_image">transition_cat_image</string>
     <string name="transition_cat_id">transition_cat_id</string>
+    <string name="transition_fab">transition_fab</string>
 
     <string name="rate">Rate</string>
     <string name="undo">Undo</string>

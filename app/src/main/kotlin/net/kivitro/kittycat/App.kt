@@ -10,6 +10,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setUpRetrofit()
+    }
+
+    private fun setUpRetrofit() {
         TheCatAPI.create(this)
     }
 

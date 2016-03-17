@@ -48,9 +48,8 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
                 override fun onSuccess() {
                     val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
                     Palette.from(bitmap).generate { palette ->
-                        val vibrantColor = palette.getVibrantColor(context.resources.getColor(R.color.colorPrimaryDark))
-                        holder.id.setTextColor(vibrantColor)
-//                        holder.bg.setBackgroundColor(vibrantColor)
+                        val color = palette.getMutedColor(context.resources.getColor(R.color.colorPrimary))
+                        holder.id.setTextColor(color)
                     }
                 }
                 override fun onError() { Log.d(TAG, "onError") }

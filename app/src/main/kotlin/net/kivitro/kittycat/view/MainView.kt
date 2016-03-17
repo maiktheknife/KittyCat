@@ -9,7 +9,6 @@ import net.kivitro.kittycat.model.Image
  */
 interface MainView : View {
     fun getSwipeLayout(): SwipeRefreshLayout
-
     fun onKittensLoaded(kittens: List<Image>)
     fun onCategoriesLoaded(categories: List<Category>)
 }

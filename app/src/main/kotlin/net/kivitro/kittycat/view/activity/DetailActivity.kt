@@ -2,6 +2,7 @@ package net.kivitro.kittycat.view.activity
 
 import android.animation.Animator
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -13,7 +14,6 @@ import android.support.v7.widget.Toolbar
 import android.transition.Transition
 import android.util.Log
 import android.view.View
-import android.view.ViewAnimationUtils
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -33,78 +33,111 @@ import net.kivitro.kittycat.view.DetailView
 class DetailActivity : AppCompatActivity(), DetailView {
     private lateinit var presenter: DetailPresenter<DetailView>
     private lateinit var cat: Image
-
-    internal val containerView: View by bindView(R.id.ac_detail_container)
-    internal val appbarLayout: AppBarLayout by bindView(R.id.appbar)
-    internal val collapseToolbarLayout: CollapsingToolbarLayout by bindView(R.id.collapse_toolbar)
-    internal val fab: FloatingActionButton by bindView(R.id.ac_detail_favourite)
-    internal val ratingBar: RatingBar by bindView(R.id.ac_detail_ratingbar)
-    internal val image: ImageView by bindView(R.id.ac_detail_image)
-    internal val txtID: TextView by bindView(R.id.ac_detail_id)
-    internal val txtRate: TextView by bindView(R.id.ac_detail_rate)
+    private var mutedColor: Int = 0
+    private var vibrantColor: Int = 0
+    private var vibrantDarkColor: Int = 0
+    private var issFinishing = false
+    private val containerView: View by bindView(R.id.ac_detail_container)
+    private val appbarLayout: AppBarLayout by bindView(R.id.appbar)
+    private val collapseToolbarLayout: CollapsingToolbarLayout by bindView(R.id.collapse_toolbar)
+    private val fab: FloatingActionButton by bindView(R.id.ac_detail_favourite)
+    private val ratingBar: RatingBar by bindView(R.id.ac_detail_ratingbar)
+    private val image: ImageView by bindView(R.id.ac_detail_image)
+    private val txtID: TextView by bindView(R.id.ac_detail_id)
+    private val txtRate: TextView by bindView(R.id.ac_detail_rate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_detail)
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         presenter = DetailPresenter(this)
 
         cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
-        txtID.text = cat.id + cat.source_url
+        txtID.text = cat.id
 
         fab.setOnClickListener { v -> presenter.onFABClicked(cat) }
-        image.setOnClickListener { v -> revealImage(v) }
+        image.setOnClickListener { v -> presenter.onStartImageAC(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
 
         ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-//            presenter.onVoted(cat.id!!, (rating * 2).toInt())
+            presenter.onVoted(cat, (rating * 2).toInt())
         }
 
+        Picasso
+                .with(this)
+                .load(cat.url)
+                .into(image, object : Callback {
+                    override fun onSuccess() {
+                        val bitmap = ((image.drawable) as BitmapDrawable).bitmap
+                        Palette.from(bitmap).generate { palette -> applyColor(palette) }
+                    }
+
+                    override fun onError() {
+                        Log.d(TAG, "onError")
+                    }
+                })
+
+        /*
+        Activity A's exit transition determines how views in A are animated when A starts B.
+        Activity B's enter transition determines how views in B are animated when A starts B.
+        Activity B's return transition determines how views in B are animated when B returns to A.
+        Activity A's reenter transition determines how views in A are animated when B returns to A.
+        schön wär es ja ^^
+         */
         window.enterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionEnd(t: Transition) {
+                Log.d(TAG, "onTransitionEnd enter")
                 fab.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
+                        .scaleX(1f)
+                        .scaleY(1f)
                 window.enterTransition.removeListener(this)
             }
         })
 
-        Picasso
-            .with(this)
-            .load(cat.url)
-            .into(image, object : Callback {
-                override fun onSuccess() {
-                    val bitmap = ((image.drawable) as BitmapDrawable).bitmap
-                    Palette.from(bitmap).generate{ palette ->
-                        val vibrantColor = palette.getVibrantColor(resources.getColor(R.color.colorPrimaryDark))
-                        txtID.setTextColor(vibrantColor)
-                        txtRate.setTextColor(vibrantColor)
-                        collapseToolbarLayout.setContentScrimColor(vibrantColor)
-                        collapseToolbarLayout.setStatusBarScrimColor(vibrantColor)
-                        appbarLayout.setBackgroundColor(vibrantColor)
-                    }
-                }
-                override fun onError() { Log.d(TAG, "onError") }
-            })
+        window.reenterTransition.addListener(object : DefaultTransitionListener() {
+            override fun onTransitionStart(t: Transition) {
+                Log.d(TAG, "onTransitionStart reenter")
+                fab.scaleX = 0f
+                fab.scaleY = 0f
+            }
+
+            override fun onTransitionEnd(t: Transition) {
+                Log.d(TAG, "onTransitionEnd reenter")
+                fab.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+            }
+        })
     }
 
-    private fun revealImage(view: View) {
-        val pixelDensity = resources.displayMetrics.density;
-        var cx = (view.right.toFloat() - ((28 * pixelDensity) + (16 * pixelDensity))).toInt()
-        val cy = view.bottom
-        val hypotenuse = Math.hypot(view.width.toDouble(), view.height.toDouble()).toFloat();
-        ViewAnimationUtils.createCircularReveal(view, cx, cy, 0f, hypotenuse).setDuration(700).start()
+    private fun applyColor(palette: Palette) {
+        mutedColor = palette.getMutedColor(resources.getColor(R.color.colorPrimary))
+        vibrantColor = palette.getVibrantColor(resources.getColor(R.color.colorAccent))
+        vibrantDarkColor = palette.getDarkVibrantColor(resources.getColor(R.color.colorAccentDark))
+
+        txtID.setTextColor(mutedColor)
+        txtRate.setTextColor(mutedColor)
+        collapseToolbarLayout.setContentScrimColor(mutedColor)
+        collapseToolbarLayout.setStatusBarScrimColor(mutedColor)
+        appbarLayout.setBackgroundColor(mutedColor)
+
+        fab.backgroundTintList = ColorStateList.valueOf(vibrantColor);
+        fab.setRippleColor(vibrantDarkColor)
     }
 
     override fun onBackPressed() {
-        fab.animate()
-            .scaleX(0f)
-            .scaleY(0f)
-//            .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
-            .setListener(object : DefaultAnimatorListener() {
-                override fun onAnimationEnd(a: Animator) = super@DetailActivity.onBackPressed()
-            })
+        if (!issFinishing) {
+            issFinishing = true
+            fab.animate()
+                    .scaleX(0f)
+                    .scaleY(0f)
+                    .setListener(object : DefaultAnimatorListener() {
+                        override fun onAnimationEnd(a: Animator) {
+                            a.removeListener(this)
+                            super@DetailActivity.onBackPressed()
+                        }
+                    })
+        }
     }
 
     /* @{link DetailView} */

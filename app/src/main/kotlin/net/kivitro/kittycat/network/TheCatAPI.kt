@@ -47,9 +47,8 @@ interface TheCatAPI {
             private set
 
         fun create(c: Context) {
-
             val interceptor = HttpLoggingInterceptor();
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC;
+            interceptor.level = HttpLoggingInterceptor.Level.BODY;
 
             val client = OkHttpClient.Builder()
                     .addInterceptor(interceptor)
@@ -78,13 +77,10 @@ interface TheCatAPI {
                     .build()
 
             val request = chain.request().newBuilder().url(requestUrl).build()
-
             return chain.proceed(request)
         }
     }
 
 }
 
-class FavResponse {
 
-}

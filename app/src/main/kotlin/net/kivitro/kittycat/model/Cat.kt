@@ -12,16 +12,14 @@ data class Cat(var data: Data? = null)
 data class Data(var images: List<Image>? = null)
 
 data class Image(var url: String? = "", var favourite: Boolean? = false, var score: Int? = 0, var id: String? = "", var source_url: String? = "") : Parcelable {
-    // var created : Date?
-
-    private constructor(p: Parcel) : this(p.readString(), false, 0, p.readString(), p.readString())
+    private constructor(p: Parcel) : this(p.readString(), p.readInt() == 0, p.readInt(), p.readString(), p.readString())
 
     override fun writeToParcel(p: Parcel, p1: Int) {
         p.writeString(url)
         if (favourite == true) {
-            p.writeByte(0)
+            p.writeInt(0)
         }else {
-            p.writeByte(1)
+            p.writeInt(1)
         }
         p.writeInt(score!!)
         p.writeString(id)
