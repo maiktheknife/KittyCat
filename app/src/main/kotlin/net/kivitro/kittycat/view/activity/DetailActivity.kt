@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.Toolbar
@@ -31,6 +32,7 @@ import net.kivitro.kittycat.view.DetailView
  * Created by Max on 10.03.2016.
  */
 class DetailActivity : AppCompatActivity(), DetailView {
+
     private lateinit var presenter: DetailPresenter<DetailView>
     private lateinit var cat: Image
     private var mutedColor: Int = 0
@@ -56,7 +58,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
         txtID.text = cat.id
 
-        fab.setOnClickListener { v -> presenter.onFABClicked(cat) }
+        fab.setOnClickListener { v -> presenter.onFavourited(cat) }
         image.setOnClickListener { v -> presenter.onStartImageAC(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
 
         ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
@@ -69,11 +71,11 @@ class DetailActivity : AppCompatActivity(), DetailView {
                 .into(image, object : Callback {
                     override fun onSuccess() {
                         val bitmap = ((image.drawable) as BitmapDrawable).bitmap
-                        Palette.from(bitmap).generate { palette -> applyColor(palette) }
+                        Palette.from(bitmap).generate { applyColor(it) }
                     }
 
                     override fun onError() {
-                        Log.d(TAG, "onError")
+                        Log.d(TAG, "on Palette Error")
                     }
                 })
 
@@ -145,11 +147,47 @@ class DetailActivity : AppCompatActivity(), DetailView {
     override val activity: Activity
         get() = this
 
-    override val container: View
-        get() = containerView
+    override fun onVoting(rating: Int) {
+        Log.d(DetailPresenter.TAG, "voted")
+        Snackbar.make(containerView, "voted: $rating", Snackbar.LENGTH_SHORT).show()
+    }
 
-    override fun getFABView(): FloatingActionButton {
-        return fab
+    override fun onVotingError(message: String) {
+        Snackbar.make(containerView, "Voting Error: $message", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onFavourited() {
+        fab.animate()
+                .rotationBy(360f)
+                .scaleX(1.5f)
+                .scaleY(1.5f)
+                .setListener(object : DefaultAnimatorListener() {
+                    override fun onAnimationEnd(a: Animator) {
+                        fab.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setListener(object : DefaultAnimatorListener() {
+                                    override fun onAnimationEnd(a: Animator) {
+                                        val sb = Snackbar.make(containerView, "Added as favourite <3", Snackbar.LENGTH_SHORT)
+                                        sb.setAction(getString(R.string.undo), { v ->
+                                            // todo
+                                        })
+                                        sb.show()
+                                    }
+                                })
+
+                    }
+                })
+
+
+    }
+
+    override fun onDefavourited() {
+        Snackbar.make(containerView, "Removed as favourite :(", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onFavouritedError(message: String) {
+        Snackbar.make(containerView, "Favourite Error: $message", Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {

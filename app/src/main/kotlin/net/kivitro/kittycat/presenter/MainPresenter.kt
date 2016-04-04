@@ -1,7 +1,6 @@
 package net.kivitro.kittycat.presenter
 
 import android.content.Intent
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.util.Log
@@ -20,7 +19,7 @@ import rx.schedulers.Schedulers
 class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 
     fun onSettingsClicked() {
-        Snackbar.make(view.container, "Settings", Snackbar.LENGTH_SHORT).show()
+        view.showSettings()
     }
 
     fun loadCategories() {
@@ -31,12 +30,10 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                 .subscribe (
                         { categories ->
                             view.onCategoriesLoaded(categories!!.data!!.categories!!)
-                            view.getSwipeLayout().isRefreshing = false;
                         },
                         { t ->
                             Log.e(TAG, "loadCategories", t)
-                            Snackbar.make(view.container, "Loading Error", Snackbar.LENGTH_SHORT).show()
-                            view.getSwipeLayout().isRefreshing = false;
+                            view.onCategoriesLoadError(t.message ?: "Error")
                         }
                 )
     }
@@ -49,19 +46,16 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                 .subscribe (
                         { kittens ->
                             view.onKittensLoaded(kittens!!.data!!.images!!)
-                            view.getSwipeLayout().isRefreshing = false;
                         },
                         { t ->
                             Log.e(TAG, "loadKittens", t)
-                            Snackbar.make(view.container, "Loading Error", Snackbar.LENGTH_SHORT).show()
-                            view.getSwipeLayout().isRefreshing = false;
+                            view.onKittensLoadError(t.message ?: "Error")
                         }
                 )
     }
 
     fun onNoConnection() {
-        Snackbar.make(view.container, "No Connection", Snackbar.LENGTH_SHORT).show()
-        view.getSwipeLayout().isRefreshing = false;
+        view.showNoConnection()
     }
 
     fun onKittyClicked(v: View, cat: Image) {

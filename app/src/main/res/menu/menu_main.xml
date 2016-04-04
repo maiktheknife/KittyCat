@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_toggle"
-        android:icon="@mipmap/ic_action_grid"
+        android:icon="@mipmap/ic_action_list"
         android:orderInCategory="1"
         android:title="@string/action_toggle"
         app:showAsAction="ifRoom" />

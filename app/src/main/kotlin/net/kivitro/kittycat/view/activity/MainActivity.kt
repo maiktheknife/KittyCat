@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.preference.PreferenceManager
+import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -166,18 +167,17 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     override val activity: Activity
         get() = this
 
-    override val container: View
-        get() = containerView
-
-    override fun getSwipeLayout(): SwipeRefreshLayout {
-        return swipeRefreshLayout
-    }
-
     override fun onKittensLoaded(kittens: List<Image>) {
         Log.d(TAG, "onKittensLoaded: ${kittens.size}")
         this.hasLoaded = true
         this.kittens = kittens
         adapter.addItems(kittens)
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun onKittensLoadError(message: String) {
+        Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onCategoriesLoaded(categories: List<Category>) {
@@ -185,6 +185,20 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 //        this.categories = categories
 //        spinnerAdapter.clear()
 //        spinnerAdapter.addAll(categories.map{ x -> x.name })
+    }
+
+    override fun onCategoriesLoadError(message: String) {
+        Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun showSettings() {
+        Snackbar.make(containerView, "Settings", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun showNoConnection() {
+        Snackbar.make(containerView, "No Connection", Snackbar.LENGTH_SHORT).show()
+        swipeRefreshLayout.isRefreshing = false
     }
 
     companion object {

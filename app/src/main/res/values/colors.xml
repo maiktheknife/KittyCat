@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--https://www.google.com/design/spec/style/color.html#color-color-palette-->
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FFC107</color>
-    <color name="colorAccentDark">#FFA000</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="colorAccentDark">#F57C00</color>
     <color name="darkTransparent">#B2000000</color>
 </resources>
