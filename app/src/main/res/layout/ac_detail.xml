@@ -73,7 +73,7 @@
 
             <RatingBar
                 android:id="@+id/ac_detail_ratingbar"
-                style="?android:attr/ratingBarStyle"
+                style="@style/Widget.AppCompat.RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

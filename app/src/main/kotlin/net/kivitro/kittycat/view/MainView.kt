@@ -17,4 +17,10 @@ interface MainView : View {
 
     fun showNoConnection()
 
+    fun showState(state: State)
+
+    enum class State {
+        LOADING, ERROR, CONTENT
+    }
+
 }

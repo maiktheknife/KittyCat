@@ -59,7 +59,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         txtID.text = cat.id
 
         fab.setOnClickListener { v -> presenter.onFavourited(cat) }
-        image.setOnClickListener { v -> presenter.onStartImageAC(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
+        image.setOnClickListener { v -> presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
 
         ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             presenter.onVoted(cat, (rating * 2).toInt())

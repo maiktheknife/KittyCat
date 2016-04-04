@@ -10,5 +10,6 @@
 
     <string name="rate">Rate</string>
     <string name="undo">Undo</string>
+    <string name="error">Error</string>
 
 </resources>

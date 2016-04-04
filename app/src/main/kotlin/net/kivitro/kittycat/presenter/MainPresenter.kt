@@ -23,6 +23,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
     }
 
     fun loadCategories() {
+        Log.d(TAG, "loadCategories")
         TheCatAPI.API
                 .getCategories()
                 .subscribeOn(Schedulers.io())
@@ -33,28 +34,36 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                         },
                         { t ->
                             Log.e(TAG, "loadCategories", t)
-                            view.onCategoriesLoadError(t.message ?: "Error")
+                            view.onCategoriesLoadError(t.message ?: "Unknown Error")
                         }
                 )
     }
 
-    fun loadKittens(category: String?) {
+    fun loadKittens(category: String?, showLoading: Boolean) {
+        Log.d(TAG, "loadKittens $category $showLoading")
+        if (showLoading) {
+            view.showState(MainView.State.LOADING)
+        }
         TheCatAPI.API
                 .getKittens(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe (
                         { kittens ->
+                            view.showState(MainView.State.CONTENT)
                             view.onKittensLoaded(kittens!!.data!!.images!!)
                         },
                         { t ->
                             Log.e(TAG, "loadKittens", t)
-                            view.onKittensLoadError(t.message ?: "Error")
+                            view.showState(MainView.State.ERROR)
+                            view.onKittensLoadError(t.message ?: "Unknown Error")
                         }
                 )
     }
 
     fun onNoConnection() {
+        Log.d(TAG, "onNoConnection")
+        view.showState(MainView.State.ERROR)
         view.showNoConnection()
     }
 
@@ -72,7 +81,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
     }
 
     companion object {
-        @JvmField final val TAG = MainPresenter::class.java.name
+        private final val TAG = MainPresenter::class.java.name
     }
 
 }

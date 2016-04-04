@@ -16,14 +16,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import butterknife.bindView
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Category
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.view.MainView
+import net.kivitro.kittycat.view.MainView.State
 import net.kivitro.kittycat.view.adapter.KittyAdapter
 import java.util.*
 
@@ -33,6 +32,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     private lateinit var layoutManager: StaggeredGridLayoutManager
 //    private lateinit var spinnerAdapter: ArrayAdapter<String>
 
+    private var firstLoad: Boolean = true
     private var hasLoaded: Boolean = false
     private var isConnected: Boolean = false
     private var isGridView: Boolean = true
@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 //    private var categories: List<Category>? = null
 
     internal val containerView: View by bindView(R.id.ac_main_container)
+    internal val loadingView: View by bindView(R.id.loadingView)
+    internal val errorView: View by bindView(R.id.errorView)
     internal val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.ac_main_swipeLayout)
 //    internal val categorySpinner: Spinner by bindView(R.id.ac_main_spinner)
 
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
         if (savedInstanceState != null) {
             hasLoaded = true
+            showState(State.CONTENT)
             onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Image>)
 ////            onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
         } else {
@@ -80,7 +83,9 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState")
-        outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Image>)
+        if (kittens != null) {
+            outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Image>)
+        }
 //        outState.putParcelableArrayList(EXTRA_CATEGORIES, categories as ArrayList<Category>)
     }
 
@@ -143,7 +148,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     private fun loadKitties() {
 //        presenter.loadCategories()
 //        presenter.loadKittens(categorySpinner.selectedItem as String?)
-        presenter.loadKittens(null)
+        presenter.loadKittens(null, firstLoad)
     }
 
     /* @{link SwipeRefreshLayout.OnRefreshListener}*/
@@ -170,12 +175,14 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     override fun onKittensLoaded(kittens: List<Image>) {
         Log.d(TAG, "onKittensLoaded: ${kittens.size}")
         this.hasLoaded = true
+        this.firstLoad = false
         this.kittens = kittens
         adapter.addItems(kittens)
         swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onKittensLoadError(message: String) {
+        Log.d(TAG, "onKittensLoadError: $message")
         Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
     }
@@ -188,17 +195,41 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     }
 
     override fun onCategoriesLoadError(message: String) {
+        Log.d(TAG, "onCategoriesLoadError: $message")
         Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showSettings() {
+        Log.d(TAG, "showSettings")
         Snackbar.make(containerView, "Settings", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun showNoConnection() {
+        Log.d(TAG, "showNoConnection")
         Snackbar.make(containerView, "No Connection", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun showState(state: State) {
+        Log.d(TAG, "showState $state")
+        when (state){
+            State.LOADING -> {
+                swipeRefreshLayout.visibility = View.GONE;
+                errorView.visibility = View.GONE;
+                loadingView.visibility = View.VISIBLE;
+            }
+            State.ERROR -> {
+                swipeRefreshLayout.visibility = View.GONE;
+                errorView.visibility = View.VISIBLE;
+                loadingView.visibility = View.GONE;
+            }
+            State.CONTENT -> {
+                swipeRefreshLayout.visibility = View.VISIBLE;
+                errorView.visibility = View.GONE;
+                loadingView.visibility = View.GONE;
+            }
+        }
     }
 
     companion object {

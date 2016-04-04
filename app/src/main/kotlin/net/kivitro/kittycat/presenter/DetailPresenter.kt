@@ -55,8 +55,8 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
         }
     }
 
-    fun onStartImageAC(cat: Image, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {
-        Log.d(TAG, "onStartImageAC: $cat")
+    fun onImageClicked(cat: Image, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {
+        Log.d(TAG, "onImageClicked: $cat")
         val ac = view.activity
         val intent = Intent(ac, FullScreenImageActivity::class.java)
         intent.putExtra(FullScreenImageActivity.EXTRA_CAT, cat)

@@ -68,7 +68,7 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
     class KittyHolder(view: View, callback: KittyActions) : RecyclerView.ViewHolder(view) {
 
         interface KittyActions {
-            fun onKittyClicked(view: View, pos: Int): Unit
+            fun onKittyClicked(view: View, pos: Int)
         }
 
         val image = view.findViewById(R.id.cat_row_image) as ImageView
@@ -81,7 +81,7 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
     }
 
     companion object {
-        private val TAG = KittyAdapter::class.java.simpleName
+        private val TAG = KittyAdapter::class.java.name
     }
 
 }

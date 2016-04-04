@@ -32,6 +32,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/view_loading" />
+    <include layout="@layout/view_error" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/ac_main_swipeLayout"
         android:layout_width="match_parent"
