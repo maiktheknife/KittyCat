@@ -38,5 +38,6 @@ data class Category(var id: Int? = -1, var name: String? = ""): Parcelable {
                 return arrayOfNulls(size)
             }
         }
+        val ALL: Category = Category(0, "All")
     }
 }

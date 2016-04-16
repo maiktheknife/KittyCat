@@ -1,6 +1,7 @@
 package net.kivitro.kittycat.view.activity
 
 import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
@@ -9,6 +10,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.Toolbar
@@ -58,12 +60,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
         cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
         txtID.text = cat.id
 
+        initRatingBar((cat.score ?: 0 / 2).toFloat())
+
         fab.setOnClickListener { v -> presenter.onFavourited(cat) }
         image.setOnClickListener { v -> presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
-
-        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            presenter.onVoted(cat, (rating * 2).toInt())
-        }
 
         Picasso
                 .with(this)
@@ -73,7 +73,6 @@ class DetailActivity : AppCompatActivity(), DetailView {
                         val bitmap = ((image.drawable) as BitmapDrawable).bitmap
                         Palette.from(bitmap).generate { applyColor(it) }
                     }
-
                     override fun onError() {
                         Log.d(TAG, "on Palette Error")
                     }
@@ -112,10 +111,25 @@ class DetailActivity : AppCompatActivity(), DetailView {
         })
     }
 
+    private fun initRatingBar(rating: Float) {
+        Log.d(TAG, "setRatingBarValue $rating")
+        ratingBar.rating = 0f
+        val anim = ObjectAnimator.ofFloat(ratingBar, "rating", 0f, rating);
+        anim.duration = 1000;
+        anim.addListener(object : DefaultAnimatorListener(){
+            override fun onAnimationEnd(a: Animator) {
+                ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+                    presenter.onVoted(cat, (rating * 2).toInt())
+                }
+            }
+        })
+        anim.start();
+    }
+
     private fun applyColor(palette: Palette) {
-        mutedColor = palette.getMutedColor(resources.getColor(R.color.colorPrimary))
-        vibrantColor = palette.getVibrantColor(resources.getColor(R.color.colorAccent))
-        vibrantDarkColor = palette.getDarkVibrantColor(resources.getColor(R.color.colorAccentDark))
+        mutedColor = palette.getMutedColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        vibrantColor = palette.getVibrantColor(ContextCompat.getColor(this, R.color.colorAccent))
+        vibrantDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(this, R.color.colorAccentDark))
 
         txtID.setTextColor(mutedColor)
         txtRate.setTextColor(mutedColor)

@@ -39,23 +39,18 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                 )
     }
 
-    fun loadKittens(category: String?, showLoading: Boolean) {
-        Log.d(TAG, "loadKittens $category $showLoading")
-        if (showLoading) {
-            view.showState(MainView.State.LOADING)
-        }
+    fun loadKittens(category: String?) {
+        Log.d(TAG, "loadKittens $category")
         TheCatAPI.API
                 .getKittens(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe (
                         { kittens ->
-                            view.showState(MainView.State.CONTENT)
                             view.onKittensLoaded(kittens!!.data!!.images!!)
                         },
                         { t ->
                             Log.e(TAG, "loadKittens", t)
-                            view.showState(MainView.State.ERROR)
                             view.onKittensLoadError(t.message ?: "Unknown Error")
                         }
                 )
@@ -63,7 +58,6 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 
     fun onNoConnection() {
         Log.d(TAG, "onNoConnection")
-        view.showState(MainView.State.ERROR)
         view.showNoConnection()
     }
 

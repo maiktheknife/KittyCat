@@ -1,17 +1,14 @@
 package net.kivitro.kittycat.view.activity
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
-import android.transition.Transition
-import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import butterknife.bindView
 import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
-import net.kivitro.kittycat.util.DefaultTransitionListener
 
 /**
  * Created by Max on 17.03.2016.
@@ -29,8 +26,9 @@ class FullScreenImageActivity : AppCompatActivity() {
         window.statusBarColor = mutedColor
         window.navigationBarColor = mutedColor
 
-        fab.backgroundTintList = ColorStateList.valueOf(intent.getIntExtra(EXTRA_COLOR_VIBRATE, R.color.colorAccent));
-        fab.setRippleColor(intent.getIntExtra(EXTRA_COLOR_VIBRATE_DARK, R.color.colorAccentDark))
+        fab.visibility = View.GONE
+//        fab.backgroundTintList = ColorStateList.valueOf(intent.getIntExtra(EXTRA_COLOR_VIBRATE, R.color.colorAccent));
+//        fab.setRippleColor(intent.getIntExtra(EXTRA_COLOR_VIBRATE_DARK, R.color.colorAccentDark))
 
         val cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
         Picasso
@@ -38,15 +36,15 @@ class FullScreenImageActivity : AppCompatActivity() {
                 .load(cat.url)
                 .into(image)
 
-        window.enterTransition.addListener(object : DefaultTransitionListener() {
-            override fun onTransitionEnd(t: Transition) {
-                Log.d(TAG, "onTransitionEnd enter")
-                fab.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                window.enterTransition.removeListener(this)
-            }
-        })
+//        window.enterTransition.addListener(object : DefaultTransitionListener() {
+//            override fun onTransitionEnd(t: Transition) {
+//                Log.d(TAG, "onTransitionEnd enter")
+//                fab.animate()
+//                        .scaleX(1f)
+//                        .scaleY(1f)
+//                window.enterTransition.removeListener(this)
+//            }
+//        })
     }
 
     companion object {

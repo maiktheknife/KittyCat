@@ -5,7 +5,10 @@ import android.preference.PreferenceManager
 import android.support.annotation.IntRange
 import android.util.Log
 import net.kivitro.kittycat.BuildConfig
-import net.kivitro.kittycat.model.*
+import net.kivitro.kittycat.model.Cat
+import net.kivitro.kittycat.model.CatCategory
+import net.kivitro.kittycat.model.CatGetVote
+import net.kivitro.kittycat.model.FavResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -68,7 +71,7 @@ interface TheCatAPI {
 
     private class QueryInterceptor(private val c: Context) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response? {
-            Log.d("SubIDInterceptor", "intercept")
+            Log.d("QueryInterceptor", "intercept")
             val requestUrl = chain.request()
                     .url()
                     .newBuilder()

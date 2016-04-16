@@ -12,6 +12,8 @@ android {
         versionCode 2
         versionName "1.0"
         buildConfigField "String", "THE_CAT_API_KEY" , getPropertyValue("THE_CAT_API_KEY")
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -22,6 +24,7 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 
     packagingOptions {
@@ -61,6 +64,13 @@ dependencies {
     compile "com.jakewharton:kotterknife:$kotterknife_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Unit Tests
+    testCompile 'junit:junit:4.12'
+
+    // Integrations Tests
+    androidTestCompile 'junit:junit:4.12'
+
 }
 
 buildscript {
@@ -70,7 +80,6 @@ buildscript {
     ext.okhttp3_version = '3.2.0'
     ext.picasso_version = '2.5.2'
     ext.kotterknife_version = '0.1.0-SNAPSHOT'
-
 
     repositories {
         mavenCentral()

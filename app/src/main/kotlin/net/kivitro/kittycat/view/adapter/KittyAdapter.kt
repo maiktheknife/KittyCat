@@ -1,6 +1,7 @@
 package net.kivitro.kittycat.view.adapter
 
 import android.graphics.drawable.BitmapDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -20,7 +21,6 @@ import net.kivitro.kittycat.view.MainView
  * Created by Max on 08.03.2016.
  */
 class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
-
     private var cats: MutableList<Image> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KittyHolder {
@@ -48,7 +48,7 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
                 override fun onSuccess() {
                     val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
                     Palette.from(bitmap).generate { palette ->
-                        val color = palette.getMutedColor(context.resources.getColor(R.color.colorPrimary))
+                        val color = palette.getMutedColor(ContextCompat.getColor(context, R.color.colorPrimary))
                         holder.id.setTextColor(color)
                     }
                 }
@@ -57,12 +57,12 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
         }
 
     fun addItems(catss: List<Image>) {
-        Log.d(TAG, "addItems: ${catss.size}")
-        this.cats.clear();
-//        notifyItemRangeRemoved(0, this.cats.size)
-        this.cats.addAll(catss)
-//        notifyItemRangeInserted(0, this.cats.size);
-        notifyItemRangeChanged(0, this.cats.size)
+        Log.d(TAG, "addItems: ${cats.size} -> ${catss.size}")
+        cats.clear()
+//        notifyItemRangeRemoved(0, cats.size)
+        cats.addAll(catss)
+//        notifyItemRangeInserted(0, cats.size)
+        notifyDataSetChanged()
     }
 
     class KittyHolder(view: View, callback: KittyActions) : RecyclerView.ViewHolder(view) {
