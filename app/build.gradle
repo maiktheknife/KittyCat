@@ -65,6 +65,8 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    compile "com.github.chrisbanes:PhotoView:$photoview"
+
     // Unit Tests
     testCompile 'junit:junit:4.12'
 
@@ -80,6 +82,7 @@ buildscript {
     ext.okhttp3_version = '3.2.0'
     ext.picasso_version = '2.5.2'
     ext.kotterknife_version = '0.1.0-SNAPSHOT'
+    ext.photoview = '1.2.6'
 
     repositories {
         mavenCentral()
