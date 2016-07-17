@@ -26,6 +26,7 @@ import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.adapter.CategoryAdapter
 import net.kivitro.kittycat.view.adapter.KittyAdapter
+import timber.log.Timber
 import java.util.*
 
 class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefreshListener {
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Log.d(TAG, "onSaveInstanceState")
+        Timber.d("onSaveInstanceState")
         if (kittens != null) {
             outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Image>)
         }
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     override fun onResume() {
         super.onResume()
         isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
-        Log.d(TAG, "onResume $isConnected $firstLoad")
+        Timber.d("onResume %s %s", isConnected, firstLoad)
         if (isConnected) {
             if (firstLoad) {
                 presenter.loadCategories()
@@ -129,6 +130,10 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         when (item.itemId) {
             R.id.action_toggle -> {
                 toggleView(item)
+                return true
+            }
+            R.id.action_about -> {
+                presenter.onAboutClicked()
                 return true
             }
             R.id.action_settings -> {
@@ -175,7 +180,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     }
 
     private fun showState(state: State) {
-        Log.d(TAG, "showState $state")
+        Timber.d("showState %s", state)
         when (state) {
             State.LOADING -> {
                 loadingView.visibility = View.VISIBLE;
@@ -198,7 +203,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     /* @{link SwipeRefreshLayout.OnRefreshListener}*/
 
     override fun onRefresh() {
-        Log.d(TAG, "onRefresh")
+        Timber.d("onRefresh")
         isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
         if (isConnected) {
             loadKitties()
@@ -217,7 +222,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         get() = this
 
     override fun onKittensLoaded(kittens: List<Image>) {
-        Log.d(TAG, "onKittensLoaded: ${kittens.size}")
+        Timber.d("onKittensLoaded %d", kittens.size)
         this.firstLoad = false
         this.kittens = kittens
         adapter.addItems(kittens)
@@ -226,31 +231,32 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     }
 
     override fun onKittensLoadError(message: String) {
-        Log.d(TAG, "onKittensLoadError: $message")
+        Timber.d("onKittensLoadError %s", message)
+
         Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
         showState(State.ERROR)
     }
 
     override fun onCategoriesLoaded(categories: List<Category>) {
-        Log.d(TAG, "onCategoriesLoaded: ${categories.size}")
+        Timber.d("onCategoriesLoaded %d", categories.size)
         this.categories = categories
         spinnerAdapter.addItems(categories)
     }
 
     override fun onCategoriesLoadError(message: String) {
-        Log.d(TAG, "onCategoriesLoadError: $message")
+        Timber.d("onCategoriesLoadError %s", message)
         Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showSettings() {
-        Log.d(TAG, "showSettings")
+        Timber.d("showSettings")
         Snackbar.make(containerView, "Settings", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun showNoConnection() {
-        Log.d(TAG, "showNoConnection")
+        Timber.d("showNoConnection")
         Snackbar.make(containerView, "No Connection", Snackbar.LENGTH_SHORT).show()
         swipeRefreshLayout.isRefreshing = false
         showState(State.ERROR)

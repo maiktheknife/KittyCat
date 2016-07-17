@@ -3,8 +3,9 @@ package net.kivitro.kittycat.presenter
 import android.content.Intent
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
-import android.util.Log
 import android.view.View
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.network.TheCatAPI
@@ -12,6 +13,7 @@ import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.activity.DetailActivity
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Created by Max on 08.03.2016.
@@ -22,8 +24,15 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
         view.showSettings()
     }
 
+    fun onAboutClicked() {
+        LibsBuilder()
+                .withActivityTitle("About")
+                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                .start(view.activity);
+    }
+
     fun loadCategories() {
-        Log.d(TAG, "loadCategories")
+        Timber.d("loadCategories")
         TheCatAPI.API
                 .getCategories()
                 .subscribeOn(Schedulers.io())
@@ -33,14 +42,14 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                             view.onCategoriesLoaded(categories!!.data!!.categories!!)
                         },
                         { t ->
-                            Log.e(TAG, "loadCategories", t)
+                            Timber.e(t, "loadCategories")
                             view.onCategoriesLoadError(t.message ?: "Unknown Error")
                         }
                 )
     }
 
     fun loadKittens(category: String?) {
-        Log.d(TAG, "loadKittens $category")
+        Timber.d("loadKittens %s", category)
         TheCatAPI.API
                 .getKittens(category)
                 .subscribeOn(Schedulers.io())
@@ -50,19 +59,19 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                             view.onKittensLoaded(kittens!!.data!!.images!!)
                         },
                         { t ->
-                            Log.e(TAG, "loadKittens", t)
+                            Timber.e(t, "loadKittens")
                             view.onKittensLoadError(t.message ?: "Unknown Error")
                         }
                 )
     }
 
     fun onNoConnection() {
-        Log.d(TAG, "onNoConnection")
+        Timber.d("onNoConnection")
         view.showNoConnection()
     }
 
     fun onKittyClicked(v: View, cat: Image) {
-        Log.d(TAG, "onKittyClicked $cat")
+        Timber.d("onKittyClicked %s", cat)
         val ac = view.activity
         val intent = Intent(ac, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EXTRA_CAT, cat)
@@ -72,10 +81,6 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
                 Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
         )
         ac.startActivity(intent, aoc.toBundle())
-    }
-
-    companion object {
-        private final val TAG = MainPresenter::class.java.name
     }
 
 }
