@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.Toolbar
 import android.transition.Transition
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -29,6 +28,7 @@ import net.kivitro.kittycat.presenter.DetailPresenter
 import net.kivitro.kittycat.util.DefaultAnimatorListener
 import net.kivitro.kittycat.util.DefaultTransitionListener
 import net.kivitro.kittycat.view.DetailView
+import timber.log.Timber
 
 /**
  * Created by Max on 10.03.2016.
@@ -74,7 +74,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
                         Palette.from(bitmap).generate { applyColor(it) }
                     }
                     override fun onError() {
-                        Log.d(TAG, "on Palette Error")
+                        Timber.d("on Palette Error")
                     }
                 })
 
@@ -87,7 +87,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
          */
         window.enterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionEnd(t: Transition) {
-                Log.d(TAG, "onTransitionEnd enter")
+                Timber.d("onTransitionEnd enter")
                 fab.animate()
                         .scaleX(1f)
                         .scaleY(1f)
@@ -97,13 +97,13 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
         window.reenterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionStart(t: Transition) {
-                Log.d(TAG, "onTransitionStart reenter")
+                Timber.d("onTransitionStart reenter")
                 fab.scaleX = 0f
                 fab.scaleY = 0f
             }
 
             override fun onTransitionEnd(t: Transition) {
-                Log.d(TAG, "onTransitionEnd reenter")
+                Timber.d("onTransitionEnd reenter")
                 fab.animate()
                         .scaleX(1f)
                         .scaleY(1f)
@@ -112,10 +112,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
     }
 
     private fun initRatingBar(rating: Float) {
-        Log.d(TAG, "setRatingBarValue $rating")
+        Timber.d("setRatingBarValue %f", rating)
         ratingBar.rating = 0f
-        val anim = ObjectAnimator.ofFloat(ratingBar, "rating", 0f, rating);
-        anim.duration = 1000;
+        val anim = ObjectAnimator.ofFloat(ratingBar, "rating", 0f, rating)
+        anim.duration = 1000
         anim.addListener(object : DefaultAnimatorListener(){
             override fun onAnimationEnd(a: Animator) {
                 ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
@@ -123,7 +123,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
                 }
             }
         })
-        anim.start();
+        anim.start()
     }
 
     private fun applyColor(palette: Palette) {
@@ -137,7 +137,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         collapseToolbarLayout.setStatusBarScrimColor(mutedColor)
         appbarLayout.setBackgroundColor(mutedColor)
 
-        fab.backgroundTintList = ColorStateList.valueOf(vibrantColor);
+        fab.backgroundTintList = ColorStateList.valueOf(vibrantColor)
         fab.setRippleColor(vibrantDarkColor)
     }
 
@@ -162,11 +162,12 @@ class DetailActivity : AppCompatActivity(), DetailView {
         get() = this
 
     override fun onVoting(rating: Int) {
-        Log.d(DetailPresenter.TAG, "voted")
+        Timber.d("onVoting")
         Snackbar.make(containerView, "voted: $rating", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onVotingError(message: String) {
+        Timber.d("onVotingError")
         Snackbar.make(containerView, "Voting Error: $message", Snackbar.LENGTH_SHORT).show()
     }
 
@@ -205,7 +206,6 @@ class DetailActivity : AppCompatActivity(), DetailView {
     }
 
     companion object {
-        private val TAG = DetailActivity::class.java.name
         const val EXTRA_CAT = "extra_cat"
     }
 }

@@ -29,7 +29,7 @@ data class Category(var id: Int? = -1, var name: String? = ""): Parcelable {
 
     companion object {
         @JvmField
-        final val CREATOR = object : Parcelable.Creator<Category> {
+        val CREATOR = object : Parcelable.Creator<Category> {
             override fun createFromParcel(source: Parcel): Category {
                 return Category(source)
             }

@@ -9,14 +9,15 @@
 *   Get an [API Key](https://thecatapi.com/api-key-registration.html)
 *   Create a file named `gradle.properties` at project level with the entry: THE_CAT_API_KEY    
     ```
-    THE_CAT_API_KEY=YOUR_KEY
-    
+    THE_CAT_API_KEY=YOUR_KEY    
     ```
 *   Build and run
 
-###Used Libraries
-* [rxAndroid](https://github.com/ReactiveX/RxAndroid)
-* [okhttp](http://square.github.io/okhttp/)
-* [retrofit](http://square.github.io/retrofit/)
-* [picasso](http://square.github.io/picasso/)
-* [kotterknife](https://github.com/JakeWharton/kotterknife)
+### Used Libraries
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [Okhttp](http://square.github.io/okhttp/)
+* [Retrofit](http://square.github.io/retrofit/)
+* [Picasso](http://square.github.io/picasso/)
+* [Timber](https://github.com/JakeWharton/timber)
+* [PhotoView](https://github.com/chrisbanes/PhotoView)
+* [AboutLibraries](https://github.com/mikepenz/AboutLibraries)

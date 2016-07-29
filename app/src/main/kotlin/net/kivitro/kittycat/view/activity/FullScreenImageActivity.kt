@@ -19,7 +19,7 @@ import uk.co.senab.photoview.PhotoViewAttacher
  * Created by Max on 17.03.2016.
  */
 class FullScreenImageActivity : AppCompatActivity() {
-    private final val HideDelay: Long = 1000
+    private val HideDelay: Long = 1000
     private val image: ImageView by bindView(R.id.ac_full_image)
     private lateinit var attacher: PhotoViewAttacher
     private var isSystemUiVisible: Boolean = true

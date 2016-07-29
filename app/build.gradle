@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "net.kivitro.kittycat"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 3
         versionName "1.0"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")
@@ -84,7 +84,7 @@ dependencies {
 
 buildscript {
     ext.kotlin_version = '1.0.1'
-    ext.support_version = '23.2.0'
+    ext.support_version = '24.0.0'
     ext.retrofit_version = '2.0.0'
     ext.okhttp3_version = '3.2.0'
     ext.picasso_version = '2.5.2'

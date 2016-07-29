@@ -12,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -60,33 +59,33 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
         presenter = MainPresenter(this)
 
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
 
-        errorSwipeRefreshLayout.setOnRefreshListener(this);
-        errorSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
+        errorSwipeRefreshLayout.setOnRefreshListener(this)
+        errorSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
 
         spinnerAdapter = CategoryAdapter()
         categorySpinner.adapter = spinnerAdapter
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.d(TAG, "onItemSelected")
+                Timber.d("onItemSelected")
                 loadKitties()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(TAG, "onNothingSelected")
+                Timber.d("onNothingSelected")
             }
         }
 
         initRecyclerView(presenter)
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         var sub_id = preferences.getInt(PREF_SUB_ID, -1)
         if (sub_id == -1) {
-            sub_id = (Math.random() * 10000000).toInt();
+            sub_id = (Math.random() * 10000000).toInt()
             preferences.edit().putInt(PREF_SUB_ID, sub_id).apply()
         }
-        Log.d(TAG, "sub_id: $sub_id")
+        Timber.d("sub_id %s", sub_id)
 
         if (savedInstanceState != null) {
             firstLoad = false
@@ -183,19 +182,19 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         Timber.d("showState %s", state)
         when (state) {
             State.LOADING -> {
-                loadingView.visibility = View.VISIBLE;
-                errorSwipeRefreshLayout.visibility = View.GONE;
-                swipeRefreshLayout.visibility = View.GONE;
+                loadingView.visibility = View.VISIBLE
+                errorSwipeRefreshLayout.visibility = View.GONE
+                swipeRefreshLayout.visibility = View.GONE
             }
             State.ERROR -> {
-                loadingView.visibility = View.GONE;
-                errorSwipeRefreshLayout.visibility = View.VISIBLE;
-                swipeRefreshLayout.visibility = View.GONE;
+                loadingView.visibility = View.GONE
+                errorSwipeRefreshLayout.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
             }
             State.CONTENT -> {
-                loadingView.visibility = View.GONE;
-                errorSwipeRefreshLayout.visibility = View.GONE;
-                swipeRefreshLayout.visibility = View.VISIBLE;
+                loadingView.visibility = View.GONE
+                errorSwipeRefreshLayout.visibility = View.GONE
+                swipeRefreshLayout.visibility = View.VISIBLE
             }
         }
     }
@@ -263,7 +262,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
     }
 
     companion object {
-        private final val TAG = MainActivity::class.java.name
         private const val EXTRA_KITTENS = "extra_kittens"
         private const val EXTRA_CATEGORIES = "extra_categories"
         private const val PREF_SUB_ID = "sub_id"

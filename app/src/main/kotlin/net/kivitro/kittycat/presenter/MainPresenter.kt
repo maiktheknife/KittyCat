@@ -28,7 +28,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
         LibsBuilder()
                 .withActivityTitle("About")
                 .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                .start(view.activity);
+                .start(view.activity)
     }
 
     fun loadCategories() {

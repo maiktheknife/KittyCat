@@ -16,6 +16,6 @@
     <!--AboutView-->
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
-    <string name="aboutLibraries_description_text">Kittycat\n/nAndroid Showcase</string>
+    <string name="aboutLibraries_description_text">Kittycat - Android Showcase</string>
 
 </resources>

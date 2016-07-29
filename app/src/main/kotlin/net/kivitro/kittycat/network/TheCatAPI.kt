@@ -44,19 +44,19 @@ interface TheCatAPI {
     fun getCategories(): Observable<CatCategory>
 
     companion object {
-        const val ACTION_ADD = "add";
-        const val ACTION_REMOVE = "remove";
-        lateinit final var API: TheCatAPI
+        const val ACTION_ADD = "add"
+        const val ACTION_REMOVE = "remove"
+        lateinit var API: TheCatAPI
             private set
 
         fun create(c: Context) {
-            val interceptor = HttpLoggingInterceptor();
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC;
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BASIC
 
             val client = OkHttpClient.Builder()
                     .addInterceptor(interceptor)
                     .addInterceptor(QueryInterceptor(c))
-                    .build();
+                    .build()
 
             val api = Retrofit.Builder()
                     .baseUrl("http://thecatapi.com/api/")
