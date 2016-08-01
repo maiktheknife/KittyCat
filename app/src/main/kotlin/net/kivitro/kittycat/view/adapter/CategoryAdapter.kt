@@ -42,7 +42,7 @@ class CategoryAdapter() : BaseAdapter() {
     }
 
     fun addItems(categories: List<Category>) {
-        Timber.d("addItems %f", categories.size)
+        Timber.d("addItems %d", categories.size)
         this.categories.clear()
         this.categories.add(Category.ALL)
         this.categories.addAll(categories)
