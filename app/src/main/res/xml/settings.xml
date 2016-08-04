@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_cat_laf">
+        <ListPreference
+            android:key="@string/pref_key_laf_theme"
+            android:title="@string/pref_title_laf_theme"
+            android:entries="@array/themes"
+            android:entryValues="@array/themes_values"
+            android:defaultValue="light" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_about">
+        <Preference
+            android:key="@string/pref_key_about_website"
+            android:summary="@string/website"
+            android:title="@string/pref_title_about_website">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/website" />
+        </Preference>
+        <Preference
+            android:key="@string/pref_key_about_version"
+            android:enabled="false"
+            android:title="@string/pref_title_about_version" />
+
+        <Preference
+            android:key="@string/pref_key_about_license"
+            android:title="@string/pref_title_about_license" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

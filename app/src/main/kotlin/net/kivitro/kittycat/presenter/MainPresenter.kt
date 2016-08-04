@@ -11,6 +11,7 @@ import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.network.TheCatAPI
 import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.activity.DetailActivity
+import net.kivitro.kittycat.view.activity.SettingsActivity
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import timber.log.Timber
@@ -21,10 +22,12 @@ import timber.log.Timber
 class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 
     fun onSettingsClicked() {
-        view.showSettings()
+        Timber.d("onSettingsClicked")
+        view.activity.startActivity(Intent(view.activity, SettingsActivity::class.java))
     }
 
     fun onAboutClicked() {
+        Timber.d("onAboutClicked")
         LibsBuilder()
                 .withActivityTitle("About")
                 .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)

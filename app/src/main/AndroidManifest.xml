@@ -13,23 +13,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".view.activity.MainActivity">
+        <activity
+            android:name=".view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.DetailActivity"
-            android:theme="@style/AppTheme.Detail">
-        </activity>
-
+            android:theme="@style/AppTheme.Detail"/>
         <activity
-            android:name=".view.activity.FullScreenImageActivity">
-        </activity>
-
+            android:name=".view.activity.FullScreenImageActivity" />
+        <activity
+            android:name=".view.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".view.activity.MainActivity" />
     </application>
 
 </manifest>

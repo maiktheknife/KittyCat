@@ -249,11 +249,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         swipeRefreshLayout.isRefreshing = false
     }
 
-    override fun showSettings() {
-        Timber.d("showSettings")
-        Snackbar.make(containerView, "Settings", Snackbar.LENGTH_SHORT).show()
-    }
-
     override fun showNoConnection() {
         Timber.d("showNoConnection")
         Snackbar.make(containerView, "No Connection", Snackbar.LENGTH_SHORT).show()

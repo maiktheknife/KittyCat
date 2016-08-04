@@ -13,8 +13,5 @@ interface MainView : View {
     fun onCategoriesLoaded(categories: List<Category>)
     fun onCategoriesLoadError(message: String)
 
-    fun showSettings()
-
     fun showNoConnection()
-
 }
