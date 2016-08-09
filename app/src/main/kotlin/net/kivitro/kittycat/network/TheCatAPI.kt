@@ -3,7 +3,6 @@ package net.kivitro.kittycat.network
 import android.content.Context
 import android.preference.PreferenceManager
 import android.support.annotation.IntRange
-import android.util.Log
 import net.kivitro.kittycat.BuildConfig
 import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.model.CatCategory
@@ -25,7 +24,7 @@ import rx.Observable
  */
 interface TheCatAPI {
 
-    @GET("images/get?format=xml&type=png&size=med&results_per_page=50")
+    @GET("images/get?format=xml&type=png&size=med")
     fun getKittens(@Query("category") category: String?): Observable<Cat>
 
     @GET("images/vote")
@@ -71,12 +70,12 @@ interface TheCatAPI {
 
     private class QueryInterceptor(private val c: Context) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response? {
-            Log.d("QueryInterceptor", "intercept")
             val requestUrl = chain.request()
                     .url()
                     .newBuilder()
                     .addQueryParameter("api_key", BuildConfig.THE_CAT_API_KEY)
                     .addQueryParameter("sub_id", PreferenceManager.getDefaultSharedPreferences(c).getInt("sub_id", 0).toString())
+                    .addQueryParameter("results_per_page", PreferenceManager.getDefaultSharedPreferences(c).getInt("loading_count", 20).toString())
                     .build()
 
             val request = chain.request().newBuilder().url(requestUrl).build()

@@ -3,11 +3,18 @@
 
     <PreferenceCategory android:title="@string/pref_cat_laf">
         <ListPreference
-            android:key="@string/pref_key_laf_theme"
-            android:title="@string/pref_title_laf_theme"
+            android:defaultValue="light"
             android:entries="@array/themes"
             android:entryValues="@array/themes_values"
-            android:defaultValue="light" />
+            android:key="@string/pref_key_laf_theme"
+            android:title="@string/pref_title_laf_theme" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_loading">
+        <net.kivitro.kittycat.view.widget.NumberPickerPreference
+            android:defaultValue="30"
+            android:key="@string/pref_key_loading_count"
+            android:title="@string/pref_title_loading_count" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_cat_about">
@@ -20,10 +27,9 @@
                 android:data="@string/website" />
         </Preference>
         <Preference
-            android:key="@string/pref_key_about_version"
             android:enabled="false"
+            android:key="@string/pref_key_about_version"
             android:title="@string/pref_title_about_version" />
-
         <Preference
             android:key="@string/pref_key_about_license"
             android:title="@string/pref_title_about_license" />

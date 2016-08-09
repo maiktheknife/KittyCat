@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.presenter.SettingsPresenter
 import net.kivitro.kittycat.view.SettingsView
+import net.kivitro.kittycat.view.widget.NumberPickerPreference
+import net.kivitro.kittycat.view.widget.NumberPreferenceDialogFragment
 import timber.log.Timber
 
 /**
@@ -30,7 +32,6 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var presenter : SettingsPresenter<SettingsView>
 
         override fun onCreatePreferences(bundle: Bundle?, s: String?) {
-            Timber.w("onCreatePreferences")
             addPreferencesFromResource(R.xml.settings)
             presenter = SettingsPresenter(this)
         }
@@ -53,12 +54,16 @@ class SettingsActivity : AppCompatActivity() {
             pVersion.summary = thisVersion
         }
 
-//        override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-//            findPreference(getString(R.string.pref_key_about_license)).setOnPreferenceClickListener { preference ->
-//                presenter.onAboutClicked()
-//                true
-//            }
-//        }
+        override fun onDisplayPreferenceDialog(preference: Preference?) {
+            Timber.d("onDisplayPreferenceDialog")
+            if (preference is NumberPickerPreference) {
+                val dialogFragment = NumberPreferenceDialogFragment.newInstance(preference.getKey())
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
+            } else {
+                super.onDisplayPreferenceDialog(preference)
+            }
+        }
 
         private fun initSummary(p: Preference?) {
             if (p is PreferenceGroup) { // PreferenceCategory oder PreferenceScreen
