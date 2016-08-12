@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://kivitro.net/android/preferences">
 
     <PreferenceCategory android:title="@string/pref_cat_laf">
         <ListPreference
@@ -11,10 +13,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_cat_loading">
-        <net.kivitro.kittycat.view.widget.NumberPickerPreference
+        <net.kivitro.android.preferences.NumberPickerPreference
             android:defaultValue="30"
             android:key="@string/pref_key_loading_count"
-            android:title="@string/pref_title_loading_count" />
+            android:title="@string/pref_title_loading_count"
+            custom:minValue="5"
+            custom:maxValue="75" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_cat_about">

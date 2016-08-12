@@ -1,14 +1,20 @@
+apply from: 'dependencies.gradle'
+
 buildscript {
+    ext.kotlin_version = '1.0.1'
+
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url "https://jitpack.io" }
     }

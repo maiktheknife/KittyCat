@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
 import android.support.v7.widget.Toolbar
+import net.kivitro.android.preferences.NumberPickerPreference
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.presenter.SettingsPresenter
 import net.kivitro.kittycat.view.SettingsView
-import net.kivitro.kittycat.view.widget.NumberPickerPreference
-import net.kivitro.kittycat.view.widget.NumberPreferenceDialogFragment
 import timber.log.Timber
 
 /**
@@ -55,9 +54,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         override fun onDisplayPreferenceDialog(preference: Preference?) {
-            Timber.d("onDisplayPreferenceDialog")
+            Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
             if (preference is NumberPickerPreference) {
-                val dialogFragment = NumberPreferenceDialogFragment.newInstance(preference.getKey())
+                val dialogFragment = NumberPickerPreference.newDialogInstance(preference.getKey())
                 dialogFragment.setTargetFragment(this, 0);
                 dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
             } else {

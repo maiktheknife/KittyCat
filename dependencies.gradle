@@ -1,0 +1,68 @@
+ext {
+    support_version = '24.0.0'
+    rxjava_version = '1.1.1'
+    rxjndroid_version = '1.1.0'
+    retrofit_version = '2.0.0'
+    okhttp3_version = '3.2.0'
+    picasso_version = '2.5.2'
+    kotterknife_version = '0.1.0-SNAPSHOT'
+    photoview_version = '1.2.6'
+    timber_version = '4.1.2'
+    greedo_version = '1.0.0'
+    about_version = '5.7.1'
+
+    appDependencies = [
+//             Std
+            appCompat        : "com.android.support:appcompat-v7:$support_version",
+            support          : "com.android.support:support-v4:$support_version",
+            design           : "com.android.support:design:$support_version",
+            recycler         : "com.android.support:recyclerview-v7:$support_version",
+            card             : "com.android.support:cardview-v7:$support_version",
+            palette          : "com.android.support:palette-v7:$support_version",
+            preferencev7     : "com.android.support:preference-v7:$support_version",
+            preferencev14    : "com.android.support:preference-v14:$support_version",
+
+            kotlin           : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+
+            // RxJava
+            rxJava           : "io.reactivex:rxjava:$rxjava_version",
+            rxAndroid        : "io.reactivex:rxandroid:$rxjndroid_version",
+
+            // Type-safe REST client for Android and Java --> http://square.github.io/retrofit/
+            retrofit         : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            retrofitAdapter  : "com.squareup.retrofit2:adapter-rxjava:$retrofit_version",
+            retrofitConverter: "com.squareup.retrofit2:converter-simplexml:$retrofit_version",
+
+            // A powerful image downloading and caching library for Android --> http://square.github.io/picasso/
+            picasso          : "com.squareup.picasso:picasso:$picasso_version",
+
+            // An HTTP & SPDY client for Android and Java applications --> http://square.github.io/okhttp/
+            okhttp           : "com.squareup.okhttp3:okhttp:$okhttp3_version",
+            okhttpLogger     : "com.squareup.okhttp3:logging-interceptor:$okhttp3_version",
+
+            kotterknife      : "com.jakewharton:kotterknife:$kotterknife_version",
+
+            timber           : "com.jakewharton.timber:timber:$timber_version",
+
+            photoView        : "com.github.chrisbanes:PhotoView:$photoview_version",
+
+            aboutlibraries   : "com.mikepenz:aboutlibraries:$about_version@aar",
+
+            greedolayout     : "com.fivehundredpx:greedo-layout:$greedo_version",
+
+            // Test
+            jUnit            : "junit:junit:4.12"
+    ]
+
+    preferenceDependencies = [
+            appCompat        : "com.android.support:appcompat-v7:$support_version",
+            support          : "com.android.support:support-v4:$support_version",
+            preferencev7     : "com.android.support:preference-v7:$support_version",
+            preferencev14    : "com.android.support:preference-v14:$support_version",
+
+            kotlin           : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+
+            timber           : "com.jakewharton.timber:timber:$timber_version"
+    ]
+
+}
