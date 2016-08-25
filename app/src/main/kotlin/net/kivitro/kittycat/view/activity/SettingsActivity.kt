@@ -51,6 +51,14 @@ class SettingsActivity : AppCompatActivity() {
                 thisVersion = "Could not get version name from manifest!"
             }
             pVersion.summary = thisVersion
+
+
+            val pLicense = findPreference(getString(R.string.pref_key_about_license))
+            Timber.w("%s", pLicense)
+            pLicense.setOnPreferenceClickListener {
+                presenter.onAboutClicked()
+                true
+            }
         }
 
         override fun onDisplayPreferenceDialog(preference: Preference?) {

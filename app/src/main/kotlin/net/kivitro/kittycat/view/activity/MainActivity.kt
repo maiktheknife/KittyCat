@@ -131,10 +131,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
                 toggleView(item)
                 return true
             }
-            R.id.action_about -> {
-                presenter.onAboutClicked()
-                return true
-            }
             R.id.action_settings -> {
                 presenter.onSettingsClicked()
                 return true

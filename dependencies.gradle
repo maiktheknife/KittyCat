@@ -12,7 +12,7 @@ ext {
     about_version = '5.7.1'
 
     appDependencies = [
-//             Std
+            // Std
             appCompat        : "com.android.support:appcompat-v7:$support_version",
             support          : "com.android.support:support-v4:$support_version",
             design           : "com.android.support:design:$support_version",

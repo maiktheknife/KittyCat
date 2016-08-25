@@ -74,7 +74,9 @@ dependencies {
     compile app.kotterknife
     compile app.timber
     compile app.photoView
-    compile app.aboutlibraries
+    compile (app.aboutlibraries) {
+        transitive = true
+    }
     compile app.greedolayout
 
     // Unit Tests

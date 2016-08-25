@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.transition.Transition
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import butterknife.bindView
@@ -13,6 +12,7 @@ import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.util.DefaultTransitionListener
+import timber.log.Timber
 import uk.co.senab.photoview.PhotoViewAttacher
 
 /**
@@ -60,7 +60,7 @@ class FullScreenImageActivity : AppCompatActivity() {
 
         window.enterTransition.addListener(object : DefaultTransitionListener() {
             override fun onTransitionEnd(t: Transition) {
-                Log.d(TAG, "onTransitionEnd")
+                Timber.d("onTransitionEnd")
                 Handler().postDelayed({
                     toggleSystemUI()
                 }, HideDelay)
@@ -69,7 +69,7 @@ class FullScreenImageActivity : AppCompatActivity() {
     }
 
     private fun toggleSystemUI() {
-        Log.d(TAG, "toggleSystemUI $isSystemUiVisible")
+        Timber.d("toggleSystemUI %s", isSystemUiVisible)
         if (isSystemUiVisible) {
             hideSystemUI()
         } else {
@@ -80,23 +80,21 @@ class FullScreenImageActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart")
         attacher.update()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        Log.d(TAG, "onBackPressed")
         attacher.cleanup()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop")
         attacher.cleanup()
     }
 
     private fun hideSystemUI() {
+        Timber.d("hideSystemUI")
         window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         .or(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
@@ -107,6 +105,7 @@ class FullScreenImageActivity : AppCompatActivity() {
     }
 
     private fun showSystemUI() {
+        Timber.d("showSystemUI")
         window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         .or(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
@@ -114,7 +113,6 @@ class FullScreenImageActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val TAG = FullScreenImageActivity::class.java.name
         const val EXTRA_CAT = "extra_cat"
         const val EXTRA_COLOR_MUTED = "extra_bg"
         const val EXTRA_COLOR_VIBRATE = "extra_vibrate"
