@@ -2,6 +2,7 @@ package net.kivitro.kittycat
 
 import android.app.Application
 import net.kivitro.kittycat.network.TheCatAPI
+import net.kivitro.kittycat.util.UIUtil
 import timber.log.Timber
 
 /**
@@ -13,6 +14,7 @@ class App : Application() {
         super.onCreate()
         setUpTimber()
         setUpRetrofit()
+        UIUtil.setUpTheme(this)
     }
 
     private fun setUpTimber() {

@@ -3,13 +3,16 @@ package net.kivitro.kittycat.view.activity
 import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
 import android.support.v7.widget.Toolbar
+import net.kivitro.android.preferences.ColorPickerPreference
 import net.kivitro.android.preferences.NumberPickerPreference
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.presenter.SettingsPresenter
+import net.kivitro.kittycat.util.UIUtil
 import net.kivitro.kittycat.view.SettingsView
 import timber.log.Timber
 
@@ -31,11 +34,13 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var presenter : SettingsPresenter<SettingsView>
 
         override fun onCreatePreferences(bundle: Bundle?, s: String?) {
+            Timber.d("onCreatePreferences")
             addPreferencesFromResource(R.xml.settings)
             presenter = SettingsPresenter(this)
         }
 
         override fun onStart() {
+            Timber.d("onStart")
             super.onStart()
             for (i in 0..preferenceScreen.preferenceCount - 1) {
                 initSummary(preferenceScreen.getPreference(i))
@@ -52,18 +57,24 @@ class SettingsActivity : AppCompatActivity() {
             }
             pVersion.summary = thisVersion
 
-
             val pLicense = findPreference(getString(R.string.pref_key_about_license))
             Timber.w("%s", pLicense)
             pLicense.setOnPreferenceClickListener {
                 presenter.onAboutClicked()
                 true
             }
+
+           findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { preference, value ->
+               Timber.d("onChange $value")
+               UIUtil.setUpTheme(activity, value as String)
+               activity.recreate()
+               true
+           }
         }
 
         override fun onDisplayPreferenceDialog(preference: Preference?) {
             Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
-            if (preference is NumberPickerPreference) {
+            if (preference is NumberPickerPreference || preference is ColorPickerPreference) {
                 val dialogFragment = NumberPickerPreference.newDialogInstance(preference.getKey())
                 dialogFragment.setTargetFragment(this, 0);
                 dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
@@ -102,7 +113,12 @@ class SettingsActivity : AppCompatActivity() {
                 return
             }
             if (p is ListPreference) {
-                p.setSummary(p.entry)
+                val currentNightMode = resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)
+                p.summary = when (currentNightMode) {
+                    Configuration.UI_MODE_NIGHT_NO -> "Using DayTheme"
+                    Configuration.UI_MODE_NIGHT_YES -> "Using NightTheme"
+                    else -> "Not sure, assume day"
+                }
             }
         }
 
@@ -110,7 +126,6 @@ class SettingsActivity : AppCompatActivity() {
 
         override val activity: Activity
             get() = this.getActivity()
-
     }
 
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://kivitro.net/android/preferences">
 
     <PreferenceCategory android:title="@string/pref_cat_laf">
@@ -17,8 +16,8 @@
             android:defaultValue="30"
             android:key="@string/pref_key_loading_count"
             android:title="@string/pref_title_loading_count"
-            custom:minValue="5"
-            custom:maxValue="75" />
+            custom:maxValue="75"
+            custom:minValue="5" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_cat_about">
@@ -31,12 +30,11 @@
                 android:data="@string/website" />
         </Preference>
         <Preference
-            android:enabled="false"
-            android:key="@string/pref_key_about_version"
-            android:title="@string/pref_title_about_version" />
-        <Preference
             android:key="@string/pref_key_about_license"
             android:title="@string/pref_title_about_license" />
+        <Preference
+            android:key="@string/pref_key_about_version"
+            android:title="@string/pref_title_about_version" />
     </PreferenceCategory>
 
 </PreferenceScreen>

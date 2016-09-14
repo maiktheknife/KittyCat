@@ -62,7 +62,9 @@ ext {
 
             kotlin           : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            timber           : "com.jakewharton.timber:timber:$timber_version"
+            timber           : "com.jakewharton.timber:timber:$timber_version",
+
+            colorpicker      : "com.github.QuadFlask:colorpicker:0.0.11"
     ]
 
 }

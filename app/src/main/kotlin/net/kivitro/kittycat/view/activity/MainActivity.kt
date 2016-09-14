@@ -1,11 +1,14 @@
 package net.kivitro.kittycat.view.activity
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -42,7 +45,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
     internal val containerView: View by bindView(R.id.ac_main_container)
     internal val loadingView: View by bindView(R.id.ac_main_loading_view)
-    internal val errorSwipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.ac_main_error_swipeLayout)
+    internal val errorView: View by bindView(R.id.ac_main_error_layout)
+    internal val retryBtn: View by bindView(R.id.ac_main_error_btn)
     internal val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.ac_main_swipeLayout)
     internal val recyclerView: RecyclerView by bindView(R.id.ac_main_recyclerView)
     internal val categorySpinner: Spinner by bindView(R.id.ac_main_spinner)
@@ -55,6 +59,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_main)
 
+        Timber.d("access %s", ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
         presenter = MainPresenter(this)
@@ -62,8 +68,9 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
 
-        errorSwipeRefreshLayout.setOnRefreshListener(this)
-        errorSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
+        retryBtn.setOnClickListener {
+            loadKittiesIfPossible()
+        }
 
         spinnerAdapter = CategoryAdapter()
         categorySpinner.adapter = spinnerAdapter
@@ -162,6 +169,15 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         recyclerView.adapter = adapter
     }
 
+    private fun loadKittiesIfPossible(){
+        isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
+        if (isConnected) {
+            loadKitties()
+        } else {
+            presenter.onNoConnection()
+        }
+    }
+
     private fun loadKitties() {
         if (firstLoad) {
             showState(State.LOADING)
@@ -179,17 +195,17 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
         when (state) {
             State.LOADING -> {
                 loadingView.visibility = View.VISIBLE
-                errorSwipeRefreshLayout.visibility = View.GONE
+                errorView.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.GONE
             }
             State.ERROR -> {
                 loadingView.visibility = View.GONE
-                errorSwipeRefreshLayout.visibility = View.VISIBLE
+                errorView.visibility = View.VISIBLE
                 swipeRefreshLayout.visibility = View.GONE
             }
             State.CONTENT -> {
                 loadingView.visibility = View.GONE
-                errorSwipeRefreshLayout.visibility = View.GONE
+                errorView.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.VISIBLE
             }
         }
@@ -199,12 +215,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
     override fun onRefresh() {
         Timber.d("onRefresh")
-        isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
-        if (isConnected) {
-            loadKitties()
-        } else {
-            presenter.onNoConnection()
-        }
+        loadKittiesIfPossible()
     }
 
     private fun getConnectivityManager(): ConnectivityManager {

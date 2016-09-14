@@ -4,11 +4,15 @@
     <string-array name="themes">
         <item>@string/pref_themes_light</item>
         <item>@string/pref_themes_dark</item>
+        <item>@string/pref_themes_auto</item>
+        <item>@string/pref_themes_system</item>
     </string-array>
 
     <string-array name="themes_values">
-        <item>light</item>
-        <item>dark</item>
+        <item>@string/pref_themes_light_value</item>
+        <item>@string/pref_themes_dark_value</item>
+        <item>@string/pref_themes_auto_value</item>
+        <item>@string/pref_themes_system_value</item>
     </string-array>
 
 </resources>

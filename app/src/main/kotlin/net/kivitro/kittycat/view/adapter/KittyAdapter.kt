@@ -4,7 +4,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.view.MainView
+import timber.log.Timber
 
 /**
  * Created by Max on 08.03.2016.
@@ -52,12 +52,12 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
                         holder.id.setTextColor(color)
                     }
                 }
-                override fun onError() { Log.d(TAG, "onError") }
+                override fun onError() { Timber.d("onError") }
             })
         }
 
     fun addItems(catss: List<Image>) {
-        Log.d(TAG, "addItems: ${cats.size} -> ${catss.size}")
+        Timber.d("addItems: ${cats.size} -> ${catss.size}")
         cats.clear()
 //        notifyItemRangeRemoved(0, cats.size)
         cats.addAll(catss)
@@ -78,10 +78,6 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
         init {
             view.setOnClickListener { v -> callback.onKittyClicked(itemView, adapterPosition) }
         }
-    }
-
-    companion object {
-        private val TAG = KittyAdapter::class.java.name
     }
 
 }

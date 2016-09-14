@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 16
@@ -32,6 +32,7 @@ dependencies {
     compile app.preferencev14
     compile app.kotlin
     compile app.timber
+    compile app.colorpicker
 }
 
 buildscript {
