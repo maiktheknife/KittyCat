@@ -5,8 +5,6 @@
 .gradle
 /local.properties
 /gradle.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
 /gradle
