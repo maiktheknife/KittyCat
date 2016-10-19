@@ -100,7 +100,7 @@ class FullScreenImageActivity : AppCompatActivity() {
                         .or(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
                         .or(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
                         .or(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) // hide nav bar
-                        .or(View.SYSTEM_UI_FLAG_FULLSCREEN) // hide status bar
+                        .or(View.SYSTEM_UI_FLAG_LOW_PROFILE) // dim status bar
                         .or(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
@@ -114,7 +114,7 @@ class FullScreenImageActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_CAT = "extra_cat"
-        const val EXTRA_COLOR_MUTED = "extra_bg"
+        const val EXTRA_COLOR_MUTED = "extra_muted"
         const val EXTRA_COLOR_VIBRATE = "extra_vibrate"
         const val EXTRA_COLOR_VIBRATE_DARK = "extra_vibrate_dark"
     }
