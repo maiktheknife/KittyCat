@@ -8,8 +8,8 @@ ext {
     kotterknife_version = '0.1.0-SNAPSHOT'
     photoview_version = '1.2.6'
     timber_version = '4.1.2'
-    greedo_version = '1.0.0'
     about_version = '5.7.1'
+    appbarspring_version = '1.0.2'
 
     appDependencies = [
             // Std
@@ -48,7 +48,7 @@ ext {
 
             aboutlibraries   : "com.mikepenz:aboutlibraries:$about_version@aar",
 
-            greedolayout     : "com.fivehundredpx:greedo-layout:$greedo_version",
+            appbarspring     : "com.github.todou:appbarspring:$appbarspring_version",
 
             // Test
             jUnit            : "junit:junit:4.12"

@@ -41,6 +41,8 @@ class DetailActivity : AppCompatActivity(), DetailView {
     private var vibrantColor: Int = 0
     private var vibrantDarkColor: Int = 0
     private var issFinishing = false
+    private var scrollRange = -1
+    private var isAppbarTitleShown = false
     private val containerView: View by bindView(R.id.ac_detail_container)
     private val appbarLayout: AppBarLayout by bindView(R.id.appbar)
     private val collapseToolbarLayout: CollapsingToolbarLayout by bindView(R.id.collapse_toolbar)
@@ -54,6 +56,20 @@ class DetailActivity : AppCompatActivity(), DetailView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_detail)
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+
+        collapseToolbarLayout.title = " "
+        appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            if (scrollRange == -1) {
+                scrollRange = (appBarLayout.totalScrollRange).toInt()
+            }
+            if (scrollRange + verticalOffset == 0) {
+                collapseToolbarLayout.title = getString(R.string.app_name)
+                isAppbarTitleShown = true
+            } else if(isAppbarTitleShown) {
+                collapseToolbarLayout.title = " " //carefully, there should a space between double quote otherwise it wont work
+                isAppbarTitleShown = false
+            }
+        }
 
         presenter = DetailPresenter(this)
 

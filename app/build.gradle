@@ -77,7 +77,8 @@ dependencies {
     compile (app.aboutlibraries) {
         transitive = true
     }
-    compile app.greedolayout
+
+    compile app.appbarspring
 
     // Unit Tests
     testCompile app.jUnit
