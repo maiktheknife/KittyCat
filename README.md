@@ -1,5 +1,7 @@
 # KittyCat
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0f60638fcf614d54bc91e7d0c8abb33b)](https://www.codacy.com/app/maiktheknife/KittyCat?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maiktheknife/KittyCat&amp;utm_campaign=Badge_Grade)
+
 ### Material Design ShowCase powered by
 * [Kotlin](https://kotlinlang.org/)
 * [The MVP Pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter)
@@ -23,6 +25,6 @@
 * [Picasso](http://square.github.io/picasso/)
 * [Timber](https://github.com/JakeWharton/timber/)
 * [Kotterknife](https://github.com/JakeWharton/kotterknife/)
-* [Greedolayout](https://github.com/500px/greedo-layout-for-android)
 * [PhotoView](https://github.com/chrisbanes/PhotoView/)
 * [AboutLibraries](https://github.com/mikepenz/AboutLibraries/)
+* [Appbarlayout-spring-behavior](https://github.com/ToDou/appbarlayout-spring-behavior)
