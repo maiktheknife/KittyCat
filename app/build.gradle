@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25"
 
     defaultConfig {
         applicationId "net.kivitro.kittycat"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 3
         versionName "1.0"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")
@@ -101,8 +101,5 @@ repositories {
     mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-    maven {
-        url 'https://github.com/500px/greedo-layout-for-android/raw/master/releases/'
     }
 }
