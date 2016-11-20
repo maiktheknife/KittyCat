@@ -48,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
             /* Set Values */
             val pVersion = findPreference(getString(R.string.pref_key_about_version))
-            val thisVersion: String
+            var thisVersion: String
             try {
                 val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
                 thisVersion = pi.versionName + " (" + pi.versionCode + ")"
@@ -75,7 +75,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onDisplayPreferenceDialog(preference: Preference?) {
             Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
             if (preference is NumberPickerPreference || preference is ColorPickerPreference) {
-                val dialogFragment = NumberPickerPreference.newDialogInstance(preference.getKey())
+                val dialogFragment = NumberPickerPreference.newDialogInstance(preference.key)
                 dialogFragment.setTargetFragment(this, 0);
                 dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
             } else {
