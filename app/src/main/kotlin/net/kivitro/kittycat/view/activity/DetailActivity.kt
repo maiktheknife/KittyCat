@@ -60,7 +60,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         collapseToolbarLayout.title = " "
         appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (scrollRange == -1) {
-                scrollRange = (appBarLayout.totalScrollRange).toInt()
+                scrollRange = (appBarLayout.totalScrollRange)
             }
             if (scrollRange + verticalOffset == 0) {
                 collapseToolbarLayout.title = getString(R.string.app_name)
