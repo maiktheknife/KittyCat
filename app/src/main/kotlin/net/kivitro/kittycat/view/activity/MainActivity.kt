@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
             showState(State.LOADING)
         }
         val category = categorySpinner.selectedItem as Category?
-        if (Category.ALL.equals(category)) {
+        if (Category.ALL == category) {
             presenter.loadKittens(null)
         }else {
             presenter.loadKittens(category?.name)

@@ -76,8 +76,8 @@ class SettingsActivity : AppCompatActivity() {
             Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
             if (preference is NumberPickerPreference || preference is ColorPickerPreference) {
                 val dialogFragment = NumberPickerPreference.newDialogInstance(preference.key)
-                dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
+                dialogFragment.setTargetFragment(this, 0)
+                dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
             } else {
                 super.onDisplayPreferenceDialog(preference)
             }

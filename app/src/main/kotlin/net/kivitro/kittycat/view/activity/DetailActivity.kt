@@ -154,7 +154,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         appbarLayout.setBackgroundColor(mutedColor)
 
         fab.backgroundTintList = ColorStateList.valueOf(vibrantColor)
-        fab.setRippleColor(vibrantDarkColor)
+        fab.rippleColor = vibrantDarkColor
     }
 
     override fun onBackPressed() {
