@@ -24,64 +24,64 @@ import rx.Observable
  */
 interface TheCatAPI {
 
-    @GET("images/get?format=xml&type=png&size=med")
-    fun getKittens(@Query("category") category: String?): Observable<Cat>
+	@GET("images/get?format=xml&type=png&size=med")
+	fun getKittens(@Query("category") category: String?): Observable<Cat>
 
-    @GET("images/vote")
-    fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<Unit>
+	@GET("images/vote")
+	fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<Unit>
 
-    @GET("images/getvotes")
-    fun getVotes(): Observable<CatGetVote>
+	@GET("images/getvotes")
+	fun getVotes(): Observable<CatGetVote>
 
-    @GET("images/favourite")
-    fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
+	@GET("images/favourite")
+	fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
 
-    @GET("images/getfavourites")
-    fun getFavourites(): Unit
+	@GET("images/getfavourites")
+	fun getFavourites(): Unit
 
-    @GET("categories/list")
-    fun getCategories(): Observable<CatCategory>
+	@GET("categories/list")
+	fun getCategories(): Observable<CatCategory>
 
-    companion object {
-        const val ACTION_ADD = "add"
-        const val ACTION_REMOVE = "remove"
-        lateinit var API: TheCatAPI
-            private set
+	companion object {
+		const val ACTION_ADD = "add"
+		const val ACTION_REMOVE = "remove"
+		lateinit var API: TheCatAPI
+			private set
 
-        fun create(c: Context) {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BASIC
+		fun create(c: Context) {
+			val interceptor = HttpLoggingInterceptor()
+			interceptor.level = HttpLoggingInterceptor.Level.BASIC
 
-            val client = OkHttpClient.Builder()
-                    .addInterceptor(interceptor)
-                    .addInterceptor(QueryInterceptor(c))
-                    .build()
+			val client = OkHttpClient.Builder()
+					.addInterceptor(interceptor)
+					.addInterceptor(QueryInterceptor(c))
+					.build()
 
-            val api = Retrofit.Builder()
-                    .baseUrl("http://thecatapi.com/api/")
-                    .client(client)
-                    .addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .build()
-                    .create(TheCatAPI::class.java)
-            API = api
-        }
-    }
+			val api = Retrofit.Builder()
+					.baseUrl("http://thecatapi.com/api/")
+					.client(client)
+					.addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
+					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+					.build()
+					.create(TheCatAPI::class.java)
+			API = api
+		}
+	}
 
-    private class QueryInterceptor(private val c: Context) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response? {
-            val requestUrl = chain.request()
-                    .url()
-                    .newBuilder()
-                    .addQueryParameter("api_key", BuildConfig.THE_CAT_API_KEY)
-                    .addQueryParameter("sub_id", PreferenceManager.getDefaultSharedPreferences(c).getInt("sub_id", 0).toString())
-                    .addQueryParameter("results_per_page", PreferenceManager.getDefaultSharedPreferences(c).getInt("loading_count", 20).toString())
-                    .build()
+	private class QueryInterceptor(private val c: Context) : Interceptor {
+		override fun intercept(chain: Interceptor.Chain): Response? {
+			val requestUrl = chain.request()
+					.url()
+					.newBuilder()
+					.addQueryParameter("api_key", BuildConfig.THE_CAT_API_KEY)
+					.addQueryParameter("sub_id", PreferenceManager.getDefaultSharedPreferences(c).getInt("sub_id", 0).toString())
+					.addQueryParameter("results_per_page", PreferenceManager.getDefaultSharedPreferences(c).getInt("loading_count", 20).toString())
+					.build()
 
-            val request = chain.request().newBuilder().url(requestUrl).build()
-            return chain.proceed(request)
-        }
-    }
+			val request = chain.request().newBuilder().url(requestUrl).build()
+			return chain.proceed(request)
+		}
+	}
 
 }
 

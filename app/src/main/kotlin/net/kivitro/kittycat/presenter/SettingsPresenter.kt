@@ -10,12 +10,12 @@ import timber.log.Timber
  */
 class SettingsPresenter<V : SettingsView>(val view: V) : Presenter<V> {
 
-    fun onAboutClicked() {
-        Timber.d("onAboutClicked")
-        LibsBuilder()
-                .withActivityTitle("About")
-                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                .start(view.activity)
-    }
+	fun onAboutClicked() {
+		Timber.d("onAboutClicked")
+		LibsBuilder()
+				.withActivityTitle("About")
+				.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+				.start(view.activity)
+	}
 
 }

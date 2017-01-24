@@ -21,111 +21,111 @@ import timber.log.Timber
  */
 class SettingsActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.ac_settings)
-        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.ac_settings)
+		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+		supportActionBar?.setDisplayShowHomeEnabled(true)
+		supportActionBar?.setHomeButtonEnabled(true)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+	}
 
-    class SettingsFragment() : PreferenceFragmentCompat(), SettingsView, SharedPreferences.OnSharedPreferenceChangeListener {
-        private lateinit var presenter : SettingsPresenter<SettingsView>
+	class SettingsFragment() : PreferenceFragmentCompat(), SettingsView, SharedPreferences.OnSharedPreferenceChangeListener {
+		private lateinit var presenter: SettingsPresenter<SettingsView>
 
-        override fun onCreatePreferences(bundle: Bundle?, s: String?) {
-            Timber.d("onCreatePreferences")
-            addPreferencesFromResource(R.xml.settings)
-            presenter = SettingsPresenter(this)
-        }
+		override fun onCreatePreferences(bundle: Bundle?, s: String?) {
+			Timber.d("onCreatePreferences")
+			addPreferencesFromResource(R.xml.settings)
+			presenter = SettingsPresenter(this)
+		}
 
-        override fun onStart() {
-            Timber.d("onStart")
-            super.onStart()
-            for (i in 0..preferenceScreen.preferenceCount - 1) {
-                initSummary(preferenceScreen.getPreference(i))
-            }
+		override fun onStart() {
+			Timber.d("onStart")
+			super.onStart()
+			for (i in 0..preferenceScreen.preferenceCount - 1) {
+				initSummary(preferenceScreen.getPreference(i))
+			}
 
-            /* Set Values */
-            val pVersion = findPreference(getString(R.string.pref_key_about_version))
-            var thisVersion: String
-            try {
-                val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
-                thisVersion = pi.versionName + " (" + pi.versionCode + ")"
-            } catch (e: PackageManager.NameNotFoundException) {
-                thisVersion = "Could not get version name from manifest!"
-            }
-            pVersion.summary = thisVersion
+			/* Set Values */
+			val pVersion = findPreference(getString(R.string.pref_key_about_version))
+			var thisVersion: String
+			try {
+				val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
+				thisVersion = pi.versionName + " (" + pi.versionCode + ")"
+			} catch (e: PackageManager.NameNotFoundException) {
+				thisVersion = "Could not get version name from manifest!"
+			}
+			pVersion.summary = thisVersion
 
-            val pLicense = findPreference(getString(R.string.pref_key_about_license))
-            Timber.w("%s", pLicense)
-            pLicense.setOnPreferenceClickListener {
-                presenter.onAboutClicked()
-                true
-            }
+			val pLicense = findPreference(getString(R.string.pref_key_about_license))
+			Timber.w("%s", pLicense)
+			pLicense.setOnPreferenceClickListener {
+				presenter.onAboutClicked()
+				true
+			}
 
-           findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { preference, value ->
-               Timber.d("onChange $value")
-               UIUtil.setUpTheme(activity, value as String)
-               activity.recreate()
-               true
-           }
-        }
+			findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { preference, value ->
+				Timber.d("onChange $value")
+				UIUtil.setUpTheme(activity, value as String)
+				activity.recreate()
+				true
+			}
+		}
 
-        override fun onDisplayPreferenceDialog(preference: Preference?) {
-            Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
-            if (preference is NumberPickerPreference || preference is ColorPickerPreference) {
-                val dialogFragment = NumberPickerPreference.newDialogInstance(preference.key)
-                dialogFragment.setTargetFragment(this, 0)
-                dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
-            } else {
-                super.onDisplayPreferenceDialog(preference)
-            }
-        }
+		override fun onDisplayPreferenceDialog(preference: Preference?) {
+			Timber.d("onDisplayPreferenceDialog ${preference?.javaClass?.name}")
+			if (preference is NumberPickerPreference || preference is ColorPickerPreference) {
+				val dialogFragment = NumberPickerPreference.newDialogInstance(preference.key)
+				dialogFragment.setTargetFragment(this, 0)
+				dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
+			} else {
+				super.onDisplayPreferenceDialog(preference)
+			}
+		}
 
-        private fun initSummary(p: Preference?) {
-            if (p is PreferenceGroup) { // PreferenceCategory oder PreferenceScreen
-                for (i in 0..p.preferenceCount - 1) {
-                    initSummary(p.getPreference(i))
-                }
-            } else {
-                updatePreferenceSummary(p)
-            }
-        }
+		private fun initSummary(p: Preference?) {
+			if (p is PreferenceGroup) { // PreferenceCategory oder PreferenceScreen
+				for (i in 0..p.preferenceCount - 1) {
+					initSummary(p.getPreference(i))
+				}
+			} else {
+				updatePreferenceSummary(p)
+			}
+		}
 
-        override fun onResume() {
-            super.onResume()
-            preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        }
+		override fun onResume() {
+			super.onResume()
+			preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+		}
 
-        override fun onPause() {
-            super.onPause()
-            preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-        }
+		override fun onPause() {
+			super.onPause()
+			preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+		}
 
-        override fun onSharedPreferenceChanged(p: SharedPreferences?, key: String?) {
-            Timber.d("onPreferenceChange %s", key)
-            updatePreferenceSummary(findPreference(key))
-        }
+		override fun onSharedPreferenceChanged(p: SharedPreferences?, key: String?) {
+			Timber.d("onPreferenceChange %s", key)
+			updatePreferenceSummary(findPreference(key))
+		}
 
-        private fun updatePreferenceSummary(p: Preference?) {
-            if (p == null || p is PreferenceScreen || p is PreferenceCategory || p.key == null) {
-                return
-            }
-            if (p is ListPreference) {
-                val currentNightMode = resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)
-                p.summary = when (currentNightMode) {
-                    Configuration.UI_MODE_NIGHT_NO -> "Using DayTheme"
-                    Configuration.UI_MODE_NIGHT_YES -> "Using NightTheme"
-                    else -> "Not sure, assume day"
-                }
-            }
-        }
+		private fun updatePreferenceSummary(p: Preference?) {
+			if (p == null || p is PreferenceScreen || p is PreferenceCategory || p.key == null) {
+				return
+			}
+			if (p is ListPreference) {
+				val currentNightMode = resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)
+				p.summary = when (currentNightMode) {
+					Configuration.UI_MODE_NIGHT_NO -> "Using DayTheme"
+					Configuration.UI_MODE_NIGHT_YES -> "Using NightTheme"
+					else -> "Not sure, assume day"
+				}
+			}
+		}
 
-        /* @{link SettingsView} */
+		/* @{link SettingsView} */
 
-        override val activity: Activity
-            get() = this.getActivity()
-    }
+		override val activity: Activity
+			get() = this.getActivity()
+	}
 
 }

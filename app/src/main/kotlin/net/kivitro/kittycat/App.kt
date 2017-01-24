@@ -11,26 +11,26 @@ import timber.log.Timber
  */
 class App : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-        setUpLeakCanary()
-        setUpTimber()
-        setUpRetrofit()
-        UIUtil.setUpTheme(this)
-    }
+	override fun onCreate() {
+		super.onCreate()
+		setUpLeakCanary()
+		setUpTimber()
+		setUpRetrofit()
+		UIUtil.setUpTheme(this)
+	}
 
-    private fun setUpLeakCanary(){
-        LeakCanary.install(this);
-    }
+	private fun setUpLeakCanary() {
+		LeakCanary.install(this);
+	}
 
-    private fun setUpTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
+	private fun setUpTimber() {
+		if (BuildConfig.DEBUG) {
+			Timber.plant(Timber.DebugTree())
+		}
+	}
 
-    private fun setUpRetrofit() {
-        TheCatAPI.create(this)
-    }
+	private fun setUpRetrofit() {
+		TheCatAPI.create(this)
+	}
 
 }

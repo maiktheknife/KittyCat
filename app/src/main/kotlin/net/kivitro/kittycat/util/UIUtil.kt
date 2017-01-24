@@ -11,14 +11,14 @@ import timber.log.Timber
  */
 object UIUtil {
 
-    fun setUpTheme(c: Context, value: String? = null) {
-        val theme = value ?: PreferenceManager.getDefaultSharedPreferences(c).getString(c.getString(R.string.pref_key_laf_theme), c.getString(R.string.pref_themes_system_value))
-        Timber.d("setUpTheme from '%s' to '%s'", AppCompatDelegate.getDefaultNightMode(), theme)
-        when (theme) {
-            c.getString(R.string.pref_themes_light_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            c.getString(R.string.pref_themes_dark_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            c.getString(R.string.pref_themes_auto_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
-    }
+	fun setUpTheme(c: Context, value: String? = null) {
+		val theme = value ?: PreferenceManager.getDefaultSharedPreferences(c).getString(c.getString(R.string.pref_key_laf_theme), c.getString(R.string.pref_themes_system_value))
+		Timber.d("setUpTheme from '%s' to '%s'", AppCompatDelegate.getDefaultNightMode(), theme)
+		when (theme) {
+			c.getString(R.string.pref_themes_light_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+			c.getString(R.string.pref_themes_dark_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+			c.getString(R.string.pref_themes_auto_value) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
+			else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+		}
+	}
 }

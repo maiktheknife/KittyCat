@@ -19,62 +19,62 @@ import timber.log.Timber
  */
 class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 
-    fun onSettingsClicked() {
-        Timber.d("onSettingsClicked")
-        view.activity.startActivity(Intent(view.activity, SettingsActivity::class.java))
-    }
+	fun onSettingsClicked() {
+		Timber.d("onSettingsClicked")
+		view.activity.startActivity(Intent(view.activity, SettingsActivity::class.java))
+	}
 
-    fun loadCategories() {
-        Timber.d("loadCategories")
-        TheCatAPI.API
-                .getCategories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe (
-                        { categories ->
-                            view.onCategoriesLoaded(categories!!.data!!.categories!!)
-                        },
-                        { t ->
-                            Timber.e(t, "loadCategories")
-                            view.onCategoriesLoadError(t.message ?: "Unknown Error")
-                        }
-                )
-    }
+	fun loadCategories() {
+		Timber.d("loadCategories")
+		TheCatAPI.API
+				.getCategories()
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(
+						{ categories ->
+							view.onCategoriesLoaded(categories!!.data!!.categories!!)
+						},
+						{ t ->
+							Timber.e(t, "loadCategories")
+							view.onCategoriesLoadError(t.message ?: "Unknown Error")
+						}
+				)
+	}
 
-    fun loadKittens(category: String?) {
-        Timber.d("loadKittens %s", category)
-        TheCatAPI.API
-                .getKittens(category)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe (
-                        { kittens ->
-                            view.onKittensLoaded(kittens!!.data!!.images!!)
-                        },
-                        { t ->
-                            Timber.e(t, "loadKittens")
-                            view.onKittensLoadError(t.message ?: "Unknown Error")
-                        }
-                )
-    }
+	fun loadKittens(category: String?) {
+		Timber.d("loadKittens %s", category)
+		TheCatAPI.API
+				.getKittens(category)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(
+						{ kittens ->
+							view.onKittensLoaded(kittens!!.data!!.images!!)
+						},
+						{ t ->
+							Timber.e(t, "loadKittens")
+							view.onKittensLoadError(t.message ?: "Unknown Error")
+						}
+				)
+	}
 
-    fun onNoConnection() {
-        Timber.d("onNoConnection")
-        view.showNoConnection()
-    }
+	fun onNoConnection() {
+		Timber.d("onNoConnection")
+		view.showNoConnection()
+	}
 
-    fun onKittyClicked(v: View, cat: Image) {
-        Timber.d("onKittyClicked %s", cat)
-        val ac = view.activity
-        val intent = Intent(ac, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_CAT, cat)
+	fun onKittyClicked(v: View, cat: Image) {
+		Timber.d("onKittyClicked %s", cat)
+		val ac = view.activity
+		val intent = Intent(ac, DetailActivity::class.java)
+		intent.putExtra(DetailActivity.EXTRA_CAT, cat)
 
-        val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
-                Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
-                Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
-        )
-        ac.startActivity(intent, aoc.toBundle())
-    }
+		val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
+				Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
+				Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
+		)
+		ac.startActivity(intent, aoc.toBundle())
+	}
 
 }
 
