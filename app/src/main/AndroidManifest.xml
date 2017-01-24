@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="net.kivitro.kittycat">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="net.kivitro.kittycat">
 
     <!--normal-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!--dangerous-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".App"
@@ -20,19 +20,23 @@
         tools:replace="android:theme">
         <activity android:name=".view.activity.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.DetailActivity"
-            android:theme="@style/AppTheme.Detail" />
+            android:parentActivityName=".view.activity.MainActivity"
+            android:theme="@style/AppTheme.Detail"/>
         <activity
-            android:name=".view.activity.FullScreenImageActivity" />
+            android:name=".view.activity.FullScreenImageActivity"
+            android:parentActivityName=".view.activity.DetailActivity"
+            android:theme="@style/AppTheme.FullScreen"/>
         <activity
             android:name=".view.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".view.activity.MainActivity" />
+            android:parentActivityName=".view.activity.MainActivity"/>
+
     </application>
 
 </manifest>

@@ -6,12 +6,12 @@ import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.Toolbar
 import android.transition.Transition
@@ -33,7 +33,7 @@ import timber.log.Timber
 /**
  * Created by Max on 10.03.2016.
  */
-class DetailActivity : AppCompatActivity(), DetailView {
+class DetailActivity : LowProfileActivity(), DetailView {
 
 	private lateinit var presenter: DetailPresenter<DetailView>
 	private lateinit var cat: Image
@@ -84,6 +84,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
 		Picasso
 				.with(this)
 				.load(cat.url)
+				.error(R.mipmap.ic_launcher)
 				.into(image, object : Callback {
 					override fun onSuccess() {
 						val bitmap = ((image.drawable) as BitmapDrawable).bitmap
@@ -91,7 +92,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
 					}
 
 					override fun onError() {
-						Timber.d("on Palette Error")
+						Timber.d("on Error")
 					}
 				})
 
@@ -124,6 +125,18 @@ class DetailActivity : AppCompatActivity(), DetailView {
 				fab.animate()
 						.scaleX(1f)
 						.scaleY(1f)
+			}
+		})
+	}
+
+	override fun onStart() {
+		super.onStart()
+		window.enterTransition.addListener(object : DefaultTransitionListener() {
+			override fun onTransitionEnd(t: Transition) {
+				Timber.d("onTransitionEnd")
+				Handler().postDelayed({
+					hideSystemUI()
+				}, 1000L)
 			}
 		})
 	}
