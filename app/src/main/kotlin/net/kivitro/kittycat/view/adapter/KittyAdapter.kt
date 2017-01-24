@@ -44,6 +44,7 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
         Picasso
             .with(context)
             .load(cat.url)
+            .error(R.mipmap.ic_launcher)
             .into(holder.image, object : Callback {
                 override fun onSuccess() {
                     val bitmap = ((holder.image.drawable) as BitmapDrawable).bitmap
