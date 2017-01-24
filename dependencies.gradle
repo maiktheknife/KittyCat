@@ -1,7 +1,7 @@
 ext {
     support_version = '25.0.0'
     rxjava_version = '1.1.1'
-    rxjndroid_version = '1.1.0'
+    rxandroid_version = '1.1.0'
     retrofit_version = '2.0.0'
     okhttp3_version = '3.2.0'
     picasso_version = '2.5.2'
@@ -10,6 +10,7 @@ ext {
     timber_version = '4.1.2'
     about_version = '5.7.1'
     appbarspring_version = '1.0.2'
+    leakcanary_version = '1.5'
 
     appDependencies = [
             // Std
@@ -26,7 +27,7 @@ ext {
 
             // RxJava
             rxJava           : "io.reactivex:rxjava:$rxjava_version",
-            rxAndroid        : "io.reactivex:rxandroid:$rxjndroid_version",
+            rxAndroid        : "io.reactivex:rxandroid:$rxandroid_version",
 
             // Type-safe REST client for Android and Java --> http://square.github.io/retrofit/
             retrofit         : "com.squareup.retrofit2:retrofit:$retrofit_version",
@@ -49,6 +50,10 @@ ext {
             aboutlibraries   : "com.mikepenz:aboutlibraries:$about_version@aar",
 
             appbarspring     : "com.github.todou:appbarspring:$appbarspring_version",
+
+            leakcanary       : "com.squareup.leakcanary:leakcanary-android:$leakcanary_version",
+
+            leakcanary_no_op : "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version",
 
             // Test
             jUnit            : "junit:junit:4.12"

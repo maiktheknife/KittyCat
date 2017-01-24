@@ -7,10 +7,10 @@ android {
 
     defaultConfig {
         applicationId "net.kivitro.kittycat"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -79,6 +79,10 @@ dependencies {
     }
 
     compile app.appbarspring
+
+    debugCompile app.leakcanary
+    releaseCompile app.leakcanary_no_op
+    testCompile app.leakcanary_no_op
 
     // Unit Tests
     testCompile app.jUnit
