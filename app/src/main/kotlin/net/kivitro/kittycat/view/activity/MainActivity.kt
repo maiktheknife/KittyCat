@@ -7,7 +7,6 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.preference.PreferenceManager
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
@@ -25,6 +24,7 @@ import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Category
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
+import net.kivitro.kittycat.snack
 import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.adapter.CategoryAdapter
 import net.kivitro.kittycat.view.adapter.KittyAdapter
@@ -68,9 +68,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		swipeRefreshLayout.setOnRefreshListener(this)
 		swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
 
-		retryBtn.setOnClickListener {
-			loadKittiesIfPossible()
-		}
+		retryBtn.setOnClickListener { loadKittiesIfPossible() }
 
 		spinnerAdapter = CategoryAdapter()
 		categorySpinner.adapter = spinnerAdapter
@@ -239,8 +237,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 	override fun onKittensLoadError(message: String) {
 		Timber.d("onKittensLoadError %s", message)
-
-		Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("Loading Error: $message")
 		swipeRefreshLayout.isRefreshing = false
 		showState(State.ERROR)
 	}
@@ -253,13 +250,13 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 	override fun onCategoriesLoadError(message: String) {
 		Timber.d("onCategoriesLoadError %s", message)
-		Snackbar.make(containerView, "Loading Error: $message", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("Loading Error: $message")
 		swipeRefreshLayout.isRefreshing = false
 	}
 
 	override fun showNoConnection() {
 		Timber.d("showNoConnection")
-		Snackbar.make(containerView, "No Connection", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("No Connection")
 		swipeRefreshLayout.isRefreshing = false
 		showState(State.ERROR)
 	}

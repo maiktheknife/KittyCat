@@ -10,7 +10,6 @@ import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.Toolbar
@@ -20,11 +19,12 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import butterknife.bindView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
+import net.kivitro.kittycat.action
+import net.kivitro.kittycat.loadUrl
 import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.DetailPresenter
+import net.kivitro.kittycat.snack
 import net.kivitro.kittycat.util.DefaultAnimatorListener
 import net.kivitro.kittycat.util.DefaultTransitionListener
 import net.kivitro.kittycat.view.DetailView
@@ -80,21 +80,10 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 		fab.setOnClickListener { v -> presenter.onFavourited(cat) }
 		image.setOnClickListener { v -> presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
-
-		Picasso
-				.with(this)
-				.load(cat.url)
-				.error(R.mipmap.ic_launcher)
-				.into(image, object : Callback {
-					override fun onSuccess() {
-						val bitmap = ((image.drawable) as BitmapDrawable).bitmap
-						Palette.from(bitmap).generate { applyColor(it) }
-					}
-
-					override fun onError() {
-						Timber.d("on Error")
-					}
-				})
+		image.loadUrl(cat.url!!, {
+			val bitmap = ((image.drawable) as BitmapDrawable).bitmap
+			Palette.from(bitmap).generate { applyColor(it) }
+		}, {})
 
 		/*
 		Activity A's exit transition determines how views in A are animated when A starts B.
@@ -193,12 +182,12 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 	override fun onVoting(rating: Int) {
 		Timber.d("onVoting")
-		Snackbar.make(containerView, "voted: $rating", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("voted: $rating")
 	}
 
 	override fun onVotingError(message: String) {
 		Timber.d("onVotingError")
-		Snackbar.make(containerView, "Voting Error: $message", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("Voting Error: $message")
 	}
 
 	override fun onFavourited() {
@@ -213,14 +202,13 @@ class DetailActivity : LowProfileActivity(), DetailView {
 								.scaleY(1f)
 								.setListener(object : DefaultAnimatorListener() {
 									override fun onAnimationEnd(a: Animator) {
-										val sb = Snackbar.make(containerView, "Added as favourite <3", Snackbar.LENGTH_SHORT)
-										sb.setAction(getString(R.string.undo), { v ->
-											// todo
-										})
-										sb.show()
+										containerView.snack("Added as favourite <3") {
+											action(getString(R.string.undo)) {
+												// todo
+											}
+										}
 									}
 								})
-
 					}
 				})
 
@@ -228,11 +216,11 @@ class DetailActivity : LowProfileActivity(), DetailView {
 	}
 
 	override fun onDefavourited() {
-		Snackbar.make(containerView, "Removed as favourite :(", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("Removed as favourite :(")
 	}
 
 	override fun onFavouritedError(message: String) {
-		Snackbar.make(containerView, "Favourite Error: $message", Snackbar.LENGTH_SHORT).show()
+		containerView.snack("Favourite Error: $message")
 	}
 
 	companion object {

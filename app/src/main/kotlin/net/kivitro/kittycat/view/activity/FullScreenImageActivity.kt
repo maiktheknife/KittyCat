@@ -3,9 +3,8 @@ package net.kivitro.kittycat.view.activity
 import android.os.Bundle
 import android.widget.ImageView
 import butterknife.bindView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.R
+import net.kivitro.kittycat.loadUrl
 import net.kivitro.kittycat.model.Image
 import uk.co.senab.photoview.PhotoViewAttacher
 
@@ -30,20 +29,7 @@ class FullScreenImageActivity : LowProfileActivity() {
 		attacher = PhotoViewAttacher(image)
 
 		val cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
-		Picasso
-				.with(this)
-				.load(cat.url)
-				.error(R.mipmap.ic_launcher)
-				.into(image, object : Callback {
-					override fun onSuccess() {
-						attacher.update()
-					}
-
-					override fun onError() {
-						attacher.update()
-					}
-				})
-
+		image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update()})
 	}
 
 	override fun onStart() {
