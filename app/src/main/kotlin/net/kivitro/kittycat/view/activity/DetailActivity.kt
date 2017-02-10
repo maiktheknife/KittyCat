@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
@@ -74,16 +73,27 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		presenter = DetailPresenter(this)
 
 		cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
-		txtID.text = cat.id
 
-		initRatingBar((cat.score ?: 0 / 2).toFloat())
+		initViewWithCat(cat)
 
 		fab.setOnClickListener { v -> presenter.onFavourited(cat) }
-		image.setOnClickListener { v -> presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v) }
+		image.setOnClickListener { v ->
+			fab.animate()
+					.scaleX(0f)
+					.scaleY(0f)
+					.setListener(object : DefaultAnimatorListener() {
+						override fun onAnimationEnd(a: Animator) {
+							Timber.d("onTransitionEnd enter")
+							fab.hide()
+							presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v)
+						}
+					})
+		}
+
 		image.loadUrl(cat.url!!, {
 			val bitmap = ((image.drawable) as BitmapDrawable).bitmap
 			Palette.from(bitmap).generate { applyColor(it) }
-		}, {})
+		})
 
 		/*
 		Activity A's exit transition determines how views in A are animated when A starts B.
@@ -101,33 +111,34 @@ class DetailActivity : LowProfileActivity(), DetailView {
 				window.enterTransition.removeListener(this)
 			}
 		})
-
-		window.reenterTransition.addListener(object : DefaultTransitionListener() {
-			override fun onTransitionStart(t: Transition) {
-				Timber.d("onTransitionStart reenter")
-				fab.scaleX = 0f
-				fab.scaleY = 0f
-			}
-
-			override fun onTransitionEnd(t: Transition) {
-				Timber.d("onTransitionEnd reenter")
-				fab.animate()
-						.scaleX(1f)
-						.scaleY(1f)
-			}
-		})
 	}
 
-	override fun onStart() {
-		super.onStart()
-		window.enterTransition.addListener(object : DefaultTransitionListener() {
-			override fun onTransitionEnd(t: Transition) {
-				Timber.d("onTransitionEnd")
-				Handler().postDelayed({
-					hideSystemUI()
-				}, 1000L)
-			}
-		})
+	override fun onBackPressed() {
+		if (!issFinishing) {
+			issFinishing = true
+			fab.animate()
+					.scaleX(0f)
+					.scaleY(0f)
+					.setListener(object : DefaultAnimatorListener() {
+						override fun onAnimationEnd(a: Animator) {
+							a.removeListener(this)
+							fab.hide()
+							super@DetailActivity.onBackPressed()
+						}
+					})
+		}
+	}
+
+	/* View */
+
+	private fun initViewWithCat(cat: Image) {
+		txtID.text = cat.id
+
+		if (cat.favourite!!) {
+			fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black))
+		}
+
+		initRatingBar((cat.score ?: 0 / 2).toFloat())
 	}
 
 	private fun initRatingBar(rating: Float) {
@@ -160,21 +171,6 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		fab.rippleColor = vibrantDarkColor
 	}
 
-	override fun onBackPressed() {
-		if (!issFinishing) {
-			issFinishing = true
-			fab.animate()
-					.scaleX(0f)
-					.scaleY(0f)
-					.setListener(object : DefaultAnimatorListener() {
-						override fun onAnimationEnd(a: Animator) {
-							a.removeListener(this)
-							super@DetailActivity.onBackPressed()
-						}
-					})
-		}
-	}
-
 	/* @{link DetailView} */
 
 	override val activity: Activity
@@ -197,6 +193,9 @@ class DetailActivity : LowProfileActivity(), DetailView {
 				.scaleY(1.5f)
 				.setListener(object : DefaultAnimatorListener() {
 					override fun onAnimationEnd(a: Animator) {
+						cat.favourite = true
+						fab.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_favorite_black))
+
 						fab.animate()
 								.scaleX(1f)
 								.scaleY(1f)
@@ -204,19 +203,19 @@ class DetailActivity : LowProfileActivity(), DetailView {
 									override fun onAnimationEnd(a: Animator) {
 										containerView.snack("Added as favourite <3") {
 											action(getString(R.string.undo)) {
-												// todo
+												presenter.onFavourited(cat)
 											}
 										}
 									}
 								})
 					}
 				})
-
-
 	}
 
 	override fun onDefavourited() {
 		containerView.snack("Removed as favourite :(")
+		cat.favourite = false
+		fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_black))
 	}
 
 	override fun onFavouritedError(message: String) {

@@ -91,7 +91,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/ac_detail_favourite"
         style="@style/FabStyle.Hidden"
-        android:src="@mipmap/ic_menu_star"
+        android:src="@drawable/ic_favorite_border_black"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end"/>
 
