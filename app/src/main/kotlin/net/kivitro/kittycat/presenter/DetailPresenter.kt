@@ -37,22 +37,33 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 
 	fun onFavourited(cat: Image) {
 		Timber.d("onFavourited %s", cat)
-		if (cat.favourite == true) {
-			view.onDefavourited()
-		} else {
-			TheCatAPI.API
-					.favourite(cat.id!!, TheCatAPI.ACTION_ADD)
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe(
-							{ d ->
-								view.onFavourited()
-							},
-							{ t ->
-								Timber.d(t, "onFavourited")
-								view.onFavouritedError(t.message ?: "Unknown Error")
-							})
-		}
+		TheCatAPI.API
+				.favourite(cat.id!!, TheCatAPI.ACTION_ADD)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(
+						{ d ->
+							view.onFavourited()
+						},
+						{ t ->
+							Timber.d(t, "onFavourited")
+							view.onFavouritedError(t.message ?: "Unknown Error")
+						})
+	}
+
+	fun onDefavourited(cat: Image): Unit {
+		TheCatAPI.API
+				.favourite(cat.id!!, TheCatAPI.ACTION_REMOVE)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(
+						{ d ->
+							view.onDefavourited()
+						},
+						{ t ->
+							Timber.d(t, "onDefavourited")
+							view.onFavouritedError(t.message ?: "Unknown Error")
+						})
 	}
 
 	fun onImageClicked(cat: Image, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {

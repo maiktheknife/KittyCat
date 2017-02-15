@@ -57,14 +57,13 @@ interface TheCatAPI {
 					.addInterceptor(QueryInterceptor(c))
 					.build()
 
-			val api = Retrofit.Builder()
+			API = Retrofit.Builder()
 					.baseUrl("http://thecatapi.com/api/")
 					.client(client)
 					.addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
 					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
 					.build()
 					.create(TheCatAPI::class.java)
-			API = api
 		}
 	}
 

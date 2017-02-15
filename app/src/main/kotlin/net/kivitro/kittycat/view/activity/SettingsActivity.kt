@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
 import android.support.v7.widget.Toolbar
-import net.kivitro.android.preferences.ColorPickerPreference
 import net.kivitro.android.preferences.NumberPickerPreference
+import net.kivitro.android.preferences.ColorPickerPreference
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.presenter.SettingsPresenter
 import net.kivitro.kittycat.util.UIUtil
@@ -30,7 +30,7 @@ class SettingsActivity : AppCompatActivity() {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
-	class SettingsFragment() : PreferenceFragmentCompat(), SettingsView, SharedPreferences.OnSharedPreferenceChangeListener {
+	class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPreferences.OnSharedPreferenceChangeListener {
 		private lateinit var presenter: SettingsPresenter<SettingsView>
 
 		override fun onCreatePreferences(bundle: Bundle?, s: String?) {

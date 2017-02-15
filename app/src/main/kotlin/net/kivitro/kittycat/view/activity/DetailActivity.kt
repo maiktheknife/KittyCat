@@ -76,7 +76,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 		initViewWithCat(cat)
 
-		fab.setOnClickListener { v -> presenter.onFavourited(cat) }
+		fab.setOnClickListener { v -> if (cat.favourite!!) presenter.onDefavourited(cat) else presenter.onFavourited(cat) }
 		image.setOnClickListener { v ->
 			fab.animate()
 					.scaleX(0f)
@@ -203,7 +203,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 									override fun onAnimationEnd(a: Animator) {
 										containerView.snack("Added as favourite <3") {
 											action(getString(R.string.undo)) {
-												presenter.onFavourited(cat)
+												presenter.onDefavourited(cat)
 											}
 										}
 									}
