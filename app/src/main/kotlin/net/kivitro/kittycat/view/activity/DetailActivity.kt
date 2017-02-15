@@ -43,7 +43,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 	private var scrollRange = -1
 	private var isAppbarTitleShown = false
 	private val containerView: View by bindView(R.id.ac_detail_container)
-	private val appbarLayout: AppBarLayout by bindView(R.id.appbar)
+	private val appBarLayout: AppBarLayout by bindView(R.id.appbar)
 	private val collapseToolbarLayout: CollapsingToolbarLayout by bindView(R.id.collapse_toolbar)
 	private val fab: FloatingActionButton by bindView(R.id.ac_detail_favourite)
 	private val ratingBar: RatingBar by bindView(R.id.ac_detail_ratingbar)
@@ -57,18 +57,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
 		collapseToolbarLayout.title = " "
-		appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-			if (scrollRange == -1) {
-				scrollRange = (appBarLayout.totalScrollRange)
-			}
-			if (scrollRange + verticalOffset == 0) {
-				collapseToolbarLayout.title = getString(R.string.app_name)
-				isAppbarTitleShown = true
-			} else if (isAppbarTitleShown) {
-				collapseToolbarLayout.title = " " //carefully, there should a space between double quote otherwise it wont work
-				isAppbarTitleShown = false
-			}
-		}
+		appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset -> applyScroll(verticalOffset) }
 
 		presenter = DetailPresenter(this)
 
@@ -77,18 +66,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		initViewWithCat(cat)
 
 		fab.setOnClickListener { v -> if (cat.favourite!!) presenter.onDefavourited(cat) else presenter.onFavourited(cat) }
-		image.setOnClickListener { v ->
-			fab.animate()
-					.scaleX(0f)
-					.scaleY(0f)
-					.setListener(object : DefaultAnimatorListener() {
-						override fun onAnimationEnd(a: Animator) {
-							Timber.d("onTransitionEnd enter")
-							fab.hide()
-							presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v)
-						}
-					})
-		}
+		image.setOnClickListener { v -> animateImageClick(v) }
 
 		image.loadUrl(cat.url!!, {
 			val bitmap = ((image.drawable) as BitmapDrawable).bitmap
@@ -165,10 +143,36 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		txtRate.setTextColor(mutedColor)
 		collapseToolbarLayout.setContentScrimColor(mutedColor)
 		collapseToolbarLayout.setStatusBarScrimColor(mutedColor)
-		appbarLayout.setBackgroundColor(mutedColor)
+		appBarLayout.setBackgroundColor(mutedColor)
 
 		fab.backgroundTintList = ColorStateList.valueOf(vibrantColor)
 		fab.rippleColor = vibrantDarkColor
+	}
+
+	private fun applyScroll(verticalOffset: Int) {
+		if (scrollRange == -1) {
+			scrollRange = (appBarLayout.totalScrollRange)
+		}
+		if (scrollRange + verticalOffset == 0) {
+			collapseToolbarLayout.title = getString(R.string.app_name)
+			isAppbarTitleShown = true
+		} else if (isAppbarTitleShown) {
+			collapseToolbarLayout.title = " " //carefully, there should a space between double quote otherwise it wont work
+			isAppbarTitleShown = false
+		}
+	}
+
+	private fun animateImageClick(v: View) {
+		fab.animate()
+				.scaleX(0f)
+				.scaleY(0f)
+				.setListener(object : DefaultAnimatorListener() {
+					override fun onAnimationEnd(a: Animator) {
+						Timber.d("onTransitionEnd enter")
+						fab.hide()
+						presenter.onImageClicked(cat, mutedColor, vibrantColor, vibrantDarkColor, v)
+					}
+				})
 	}
 
 	/* @{link DetailView} */
