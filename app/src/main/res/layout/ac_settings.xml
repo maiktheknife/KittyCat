@@ -30,7 +30,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <fragment
-        android:name="net.kivitro.kittycat.view.activity.SettingsActivity$SettingsFragment"
+        android:name="net.kivitro.kittycat.view.fragment.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag=".SettingsFragment"
