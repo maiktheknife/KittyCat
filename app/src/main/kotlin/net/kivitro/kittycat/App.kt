@@ -2,8 +2,9 @@ package net.kivitro.kittycat
 
 import android.app.Application
 import com.squareup.leakcanary.LeakCanary
+import com.squareup.picasso.Picasso
 import net.kivitro.kittycat.network.TheCatAPI
-import net.kivitro.kittycat.util.UIUtil
+import net.kivitro.kittycat.util.UIUtil.setUpTheme
 import timber.log.Timber
 
 /**
@@ -16,11 +17,12 @@ class App : Application() {
 		setUpLeakCanary()
 		setUpTimber()
 		setUpRetrofit()
-		UIUtil.setUpTheme(this)
+		setUpPicasso()
+		setUpTheme(this)
 	}
 
 	private fun setUpLeakCanary() {
-		LeakCanary.install(this);
+		LeakCanary.install(this)
 	}
 
 	private fun setUpTimber() {
@@ -31,6 +33,14 @@ class App : Application() {
 
 	private fun setUpRetrofit() {
 		TheCatAPI.create(this)
+	}
+
+	private fun setUpPicasso() {
+		val picasso = Picasso.Builder(this)
+				.loggingEnabled(false)
+				.indicatorsEnabled(BuildConfig.DEBUG)
+				.build()
+		Picasso.setSingletonInstance(picasso)
 	}
 
 }
