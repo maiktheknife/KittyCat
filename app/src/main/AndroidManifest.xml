@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".view.activity.FavouriteActivity"
+            android:parentActivityName=".view.activity.MainActivity"/>
+        <activity
             android:name=".view.activity.DetailActivity"
             android:parentActivityName=".view.activity.MainActivity"
             android:theme="@style/AppTheme.Detail"/>

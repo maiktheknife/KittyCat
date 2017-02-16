@@ -4,10 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.support.annotation.IntRange
 import net.kivitro.kittycat.BuildConfig
-import net.kivitro.kittycat.model.Cat
-import net.kivitro.kittycat.model.CatCategory
-import net.kivitro.kittycat.model.CatGetVote
-import net.kivitro.kittycat.model.FavResponse
+import net.kivitro.kittycat.model.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -37,7 +34,7 @@ interface TheCatAPI {
 	fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
 
 	@GET("images/getfavourites")
-	fun getFavourites(): Unit
+	fun getFavourites(): Observable<CatFavourites>
 
 	@GET("categories/list")
 	fun getCategories(): Observable<CatCategory>

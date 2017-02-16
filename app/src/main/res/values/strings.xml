@@ -3,6 +3,7 @@
     <string name="website">https://github.com/maiktheknife/KittyCat</string>
 
     <string name="action_toggle">Toggle</string>
+    <string name="action_favourites">favourites</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_about">About</string>

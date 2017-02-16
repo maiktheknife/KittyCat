@@ -9,6 +9,7 @@ import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.network.TheCatAPI
 import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.activity.DetailActivity
+import net.kivitro.kittycat.view.activity.FavouriteActivity
 import net.kivitro.kittycat.view.activity.SettingsActivity
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -18,6 +19,11 @@ import timber.log.Timber
  * Created by Max on 08.03.2016.
  */
 class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
+
+	fun onFavouritedClicked(){
+		Timber.d("onFavouritedClicked")
+		view.activity.startActivity(Intent(view.activity, FavouriteActivity::class.java))
+	}
 
 	fun onSettingsClicked() {
 		Timber.d("onSettingsClicked")
