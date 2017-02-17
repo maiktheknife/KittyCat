@@ -5,7 +5,7 @@ import android.widget.ImageView
 import butterknife.bindView
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.loadUrl
-import net.kivitro.kittycat.model.Image
+import net.kivitro.kittycat.model.Cat
 import uk.co.senab.photoview.PhotoViewAttacher
 
 /**
@@ -28,7 +28,7 @@ class FullScreenImageActivity : LowProfileActivity() {
 
 		attacher = PhotoViewAttacher(image)
 
-		val cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
+		val cat = intent.getParcelableExtra<Cat>(EXTRA_CAT)
 		image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update()})
 	}
 

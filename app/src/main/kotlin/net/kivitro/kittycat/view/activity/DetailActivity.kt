@@ -21,7 +21,7 @@ import butterknife.bindView
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.action
 import net.kivitro.kittycat.loadUrl
-import net.kivitro.kittycat.model.Image
+import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.presenter.DetailPresenter
 import net.kivitro.kittycat.snack
 import net.kivitro.kittycat.util.DefaultAnimatorListener
@@ -35,7 +35,7 @@ import timber.log.Timber
 class DetailActivity : LowProfileActivity(), DetailView {
 
 	private lateinit var presenter: DetailPresenter<DetailView>
-	private lateinit var cat: Image
+	private lateinit var cat: Cat
 	private var mutedColor: Int = 0
 	private var vibrantColor: Int = 0
 	private var vibrantDarkColor: Int = 0
@@ -61,7 +61,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 		presenter = DetailPresenter(this)
 
-		cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
+		cat = intent.getParcelableExtra<Cat>(EXTRA_CAT)
 
 		initViewWithCat(cat)
 
@@ -109,7 +109,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 	/* View */
 
-	private fun initViewWithCat(cat: Image) {
+	private fun initViewWithCat(cat: Cat) {
 		txtID.text = cat.id
 
 		if (cat.favourite!!) {

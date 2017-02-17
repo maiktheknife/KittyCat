@@ -5,7 +5,7 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
 import net.kivitro.kittycat.R
-import net.kivitro.kittycat.model.Image
+import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.network.TheCatAPI
 import net.kivitro.kittycat.view.DetailView
 import net.kivitro.kittycat.view.activity.FullScreenImageActivity
@@ -18,7 +18,7 @@ import timber.log.Timber
  */
 class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 
-	fun onVoted(cat: Image, rating: Int) {
+	fun onVoted(cat: Cat, rating: Int) {
 		Timber.d("onVoted %s", cat)
 		TheCatAPI.API
 				.vote(cat.id!!, rating)
@@ -35,7 +35,7 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 				)
 	}
 
-	fun onFavourited(cat: Image) {
+	fun onFavourited(cat: Cat) {
 		Timber.d("onFavourited %s", cat)
 		TheCatAPI.API
 				.favourite(cat.id!!, TheCatAPI.ACTION_ADD)
@@ -51,7 +51,7 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 						})
 	}
 
-	fun onDefavourited(cat: Image): Unit {
+	fun onDefavourited(cat: Cat): Unit {
 		TheCatAPI.API
 				.favourite(cat.id!!, TheCatAPI.ACTION_REMOVE)
 				.subscribeOn(Schedulers.io())
@@ -66,7 +66,7 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 						})
 	}
 
-	fun onImageClicked(cat: Image, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {
+	fun onImageClicked(cat: Cat, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {
 		Timber.d("onImageClicked %s", cat)
 		val ac = view.activity
 		val intent = Intent(ac, FullScreenImageActivity::class.java)

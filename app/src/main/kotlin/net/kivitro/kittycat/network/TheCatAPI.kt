@@ -21,23 +21,32 @@ import rx.Observable
  */
 interface TheCatAPI {
 
+	/* API/IMAGES */
+
 	@GET("images/get?format=xml&type=png&size=med")
-	fun getKittens(@Query("category") category: String?): Observable<Cat>
+	fun getKittens(@Query("category") category: String?): Observable<CatResponse>
 
 	@GET("images/vote")
-	fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<Unit>
+	fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<VoteResponse>
 
 	@GET("images/getvotes")
-	fun getVotes(): Observable<CatGetVote>
+	fun getVotes(): Observable<CatResponse>
 
 	@GET("images/favourite")
 	fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
 
 	@GET("images/getfavourites")
-	fun getFavourites(): Observable<CatFavourites>
+	fun getFavourites(): Observable<CatResponse>
+
+	/* API/CATEGORIES */
 
 	@GET("categories/list")
-	fun getCategories(): Observable<CatCategory>
+	fun getCategories(): Observable<CategoryResponse>
+
+	/* API/STATS */
+
+	@GET("stats/getoverview")
+	fun getOverview(): Observable<OverviewResponse>
 
 	companion object {
 		const val ACTION_ADD = "add"
@@ -46,12 +55,12 @@ interface TheCatAPI {
 			private set
 
 		fun create(c: Context) {
-			val interceptor = HttpLoggingInterceptor()
-			interceptor.level = HttpLoggingInterceptor.Level.BASIC
+			val loggingInterceptor = HttpLoggingInterceptor()
+			loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
 
 			val client = OkHttpClient.Builder()
-					.addInterceptor(interceptor)
-					.addInterceptor(QueryInterceptor(c))
+					.addInterceptor(loggingInterceptor)
+					.addInterceptor(ApiKeyInterceptor(c))
 					.build()
 
 			API = Retrofit.Builder()
@@ -59,19 +68,21 @@ interface TheCatAPI {
 					.client(client)
 					.addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
 					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+					.validateEagerly(true)
 					.build()
 					.create(TheCatAPI::class.java)
 		}
 	}
 
-	private class QueryInterceptor(private val c: Context) : Interceptor {
+	private class ApiKeyInterceptor(private val c: Context) : Interceptor {
 		override fun intercept(chain: Interceptor.Chain): Response? {
+			val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(c)
 			val requestUrl = chain.request()
 					.url()
 					.newBuilder()
 					.addQueryParameter("api_key", BuildConfig.THE_CAT_API_KEY)
-					.addQueryParameter("sub_id", PreferenceManager.getDefaultSharedPreferences(c).getInt("sub_id", 0).toString())
-					.addQueryParameter("results_per_page", PreferenceManager.getDefaultSharedPreferences(c).getInt("loading_count", 20).toString())
+					.addQueryParameter("sub_id", defaultSharedPreferences.getInt("sub_id", 0).toString())
+					.addQueryParameter("results_per_page", defaultSharedPreferences.getInt("loading_count", 20).toString())
 					.build()
 
 			val request = chain.request().newBuilder().url(requestUrl).build()

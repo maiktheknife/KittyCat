@@ -21,8 +21,8 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import butterknife.bindView
 import net.kivitro.kittycat.R
+import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.model.Category
-import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.snack
 import net.kivitro.kittycat.view.MainView
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	private var firstLoad: Boolean = true
 	private var isConnected: Boolean = false
 	private var isGridView: Boolean = true
-	private var kittens: List<Image>? = null
+	private var kittens: List<Cat>? = null
 	private var categories: List<Category>? = null
 
 	internal val containerView: View by bindView(R.id.ac_main_container)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		if (savedInstanceState != null) {
 			firstLoad = false
 			showState(State.CONTENT)
-			onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Image>)
+			onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Cat>)
 			onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
 		}
 	}
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		super.onSaveInstanceState(outState)
 		Timber.d("onSaveInstanceState")
 		if (kittens != null) {
-			outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Image>)
+			outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Cat>)
 		}
 		if (categories != null) {
 			outState.putParcelableArrayList(EXTRA_CATEGORIES, categories as ArrayList<Category>)
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 				return true
 			}
 			R.id.action_favorites -> {
-				presenter.onFavouritedClicked()
+				presenter.loadFavourites()
 				return true
 			}
 			R.id.action_settings -> {
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	override val activity: Activity
 		get() = this
 
-	override fun onKittensLoaded(kittens: List<Image>) {
+	override fun onKittensLoaded(kittens: List<Cat>) {
 		Timber.d("onKittensLoaded %d", kittens.size)
 		this.firstLoad = false
 		this.kittens = kittens

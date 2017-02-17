@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.loadUrl
-import net.kivitro.kittycat.model.Image
+import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.view.MainView
 import timber.log.Timber
@@ -20,7 +20,7 @@ import timber.log.Timber
  * Created by Max on 08.03.2016.
  */
 class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
-	private var cats: MutableList<Image> = arrayListOf()
+	private var cats: MutableList<Cat> = arrayListOf()
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KittyHolder {
 		val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cat, parent, false)
@@ -48,7 +48,7 @@ class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapte
 		})
 	}
 
-	fun addItems(catss: List<Image>) {
+	fun addItems(catss: List<Cat>) {
 		Timber.d("addItems: ${cats.size} -> ${catss.size}")
 		cats.clear()
 		cats.addAll(catss)
