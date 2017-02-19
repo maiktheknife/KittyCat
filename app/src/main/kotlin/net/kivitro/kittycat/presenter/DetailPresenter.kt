@@ -69,15 +69,15 @@ class DetailPresenter<V : DetailView>(val view: V) : Presenter<V> {
 	fun onImageClicked(cat: Cat, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int, v: View) {
 		Timber.d("onImageClicked %s", cat)
 		val ac = view.activity
-		val intent = Intent(ac, FullScreenImageActivity::class.java)
-		intent.putExtra(FullScreenImageActivity.EXTRA_CAT, cat)
-		intent.putExtra(FullScreenImageActivity.EXTRA_COLOR_MUTED, mutedColor)
-		intent.putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE, vibrateColor)
-		intent.putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE_DARK, vibrateColorDark)
+		val intent = Intent(ac, FullScreenImageActivity::class.java).apply {
+			putExtra(FullScreenImageActivity.EXTRA_CAT, cat)
+			putExtra(FullScreenImageActivity.EXTRA_COLOR_MUTED, mutedColor)
+			putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE, vibrateColor)
+			putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE_DARK, vibrateColorDark)
+		}
 
 		val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
 				Pair(v, ac.getString(R.string.transition_cat_image))
-				//,Pair(view.getFABView() as View, ac.getString(R.string.transition_fab))
 		)
 		ac.startActivity(intent, aoc.toBundle())
 	}

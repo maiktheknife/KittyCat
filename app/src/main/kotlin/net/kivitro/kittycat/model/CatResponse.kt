@@ -60,7 +60,7 @@ data class Cat(
 	}
 
 	override fun toString(): String {
-		return "Cat(id: $id, url=$url, source_url=$source_url, favourite=$favourite, score=$score)"
+		return "Cat(id: $id, url=$url, source_url=$source_url, favourite=$favourite, score=$score, created=$created)"
 	}
 
 	companion object {

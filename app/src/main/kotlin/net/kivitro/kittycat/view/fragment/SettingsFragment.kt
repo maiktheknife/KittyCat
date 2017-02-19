@@ -10,7 +10,7 @@ import net.kivitro.android.preferences.ColorPickerPreference
 import net.kivitro.android.preferences.NumberPickerPreference
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.presenter.SettingsPresenter
-import net.kivitro.kittycat.util.UIUtil
+import net.kivitro.kittycat.util.UIUtil.setUpTheme
 import net.kivitro.kittycat.view.SettingsView
 import timber.log.Timber
 
@@ -56,7 +56,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 
 		findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { preference, value ->
 			Timber.d("onChange $value")
-			UIUtil.setUpTheme(activity, value as String)
+			setUpTheme(activity, value as String)
 			activity.recreate()
 			true
 		}

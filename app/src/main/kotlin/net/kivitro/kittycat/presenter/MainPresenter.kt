@@ -32,7 +32,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
 						{ categories ->
-							view.onCategoriesLoaded(categories!!.data!!.categories!!)
+							view.onCategoriesLoaded(categories.data!!.categories!!)
 						},
 						{ t ->
 							Timber.e(t, "loadCategories")
@@ -49,7 +49,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
 						{ kittens ->
-							view.onKittensLoaded(kittens!!.data!!.images!!)
+							view.onKittensLoaded(kittens.data!!.images!!)
 						},
 						{ t ->
 							Timber.e(t, "loadKittens")
@@ -67,9 +67,10 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 				.subscribe(
 						{ kittens ->
 							// set favourite = true, they ARE Favourites
-							val favourites = kittens.data!!.images!!.map { x ->
-								x.favourite = true
-								x
+							val favourites = kittens.data!!.images!!.map {
+								it.apply {
+									favourite = true
+								}
 							}
 							view.onKittensLoaded(favourites)
 						},
@@ -89,8 +90,9 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 	fun onKittyClicked(v: View, cat: Cat) {
 		Timber.d("onKittyClicked %s", cat)
 		val ac = view.activity
-		val intent = Intent(ac, DetailActivity::class.java)
-		intent.putExtra(DetailActivity.EXTRA_CAT, cat)
+		val intent = Intent(ac, DetailActivity::class.java).apply {
+			putExtra(DetailActivity.EXTRA_CAT, cat)
+		}
 
 		val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
 				Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),

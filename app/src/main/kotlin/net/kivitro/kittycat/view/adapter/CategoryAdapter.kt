@@ -35,7 +35,7 @@ class CategoryAdapter : BaseAdapter() {
 	}
 
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-		val v: View = convertView ?: LayoutInflater.from(parent.context).inflate(R.layout.item_spinner, parent, false)
+		val v = convertView ?: LayoutInflater.from(parent.context).inflate(R.layout.item_spinner, parent, false)
 		val text = v.findViewById(android.R.id.text1) as TextView
 		text.text = getItem(position).name
 		return v
@@ -43,9 +43,11 @@ class CategoryAdapter : BaseAdapter() {
 
 	fun addItems(categories: List<Category>) {
 		Timber.d("addItems %d", categories.size)
-		this.categories.clear()
-		this.categories.add(Category.ALL)
-		this.categories.addAll(categories)
+		this.categories.apply {
+			clear()
+			add(Category.ALL)
+			addAll(categories)
+		}
 		notifyDataSetChanged()
 	}
 

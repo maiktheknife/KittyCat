@@ -22,14 +22,16 @@ class FullScreenImageActivity : LowProfileActivity() {
 		hideSystemUI()
 
 		val mutedColor = intent.getIntExtra(EXTRA_COLOR_MUTED, R.color.colorPrimary)
-		window.decorView.setBackgroundColor(mutedColor)
-		window.statusBarColor = mutedColor
-		window.navigationBarColor = mutedColor
+		window.apply {
+			decorView.setBackgroundColor(mutedColor)
+			statusBarColor = mutedColor
+			navigationBarColor = mutedColor
+		}
 
 		attacher = PhotoViewAttacher(image)
 
 		val cat = intent.getParcelableExtra<Cat>(EXTRA_CAT)
-		image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update()})
+		image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update() })
 	}
 
 	override fun onStart() {

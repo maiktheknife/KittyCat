@@ -104,11 +104,11 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		Timber.d("onSaveInstanceState")
-		if (kittens != null) {
-			outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Cat>)
+		kittens?.let {
+			outState.putParcelableArrayList(EXTRA_KITTENS, it as ArrayList<Cat>)
 		}
-		if (categories != null) {
-			outState.putParcelableArrayList(EXTRA_CATEGORIES, categories as ArrayList<Category>)
+		categories?.let {
+			outState.putParcelableArrayList(EXTRA_CATEGORIES, it as ArrayList<Category>)
 		}
 	}
 

@@ -23,6 +23,7 @@
 * [Okhttp](http://square.github.io/okhttp/)
 * [Retrofit](http://square.github.io/retrofit/)
 * [Picasso](http://square.github.io/picasso/)
+* [Leakcanary](https://github.com/square/leakcanary)
 * [Timber](https://github.com/JakeWharton/timber/)
 * [Kotterknife](https://github.com/JakeWharton/kotterknife/)
 * [PhotoView](https://github.com/chrisbanes/PhotoView/)
