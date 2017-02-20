@@ -25,7 +25,6 @@
 * [Picasso](http://square.github.io/picasso/)
 * [Leakcanary](https://github.com/square/leakcanary)
 * [Timber](https://github.com/JakeWharton/timber/)
-* [Kotterknife](https://github.com/JakeWharton/kotterknife/)
 * [PhotoView](https://github.com/chrisbanes/PhotoView/)
 * [AboutLibraries](https://github.com/mikepenz/AboutLibraries/)
 * [Appbarlayout-spring-behavior](https://github.com/ToDou/appbarlayout-spring-behavior)

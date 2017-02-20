@@ -41,8 +41,6 @@ ext {
             okhttp           : "com.squareup.okhttp3:okhttp:$okhttp3_version",
             okhttpLogger     : "com.squareup.okhttp3:logging-interceptor:$okhttp3_version",
 
-            kotterknife      : "com.jakewharton:kotterknife:$kotterknife_version",
-
             timber           : "com.jakewharton.timber:timber:$timber_version",
 
             photoView        : "com.github.chrisbanes:PhotoView:$photoview_version",
