@@ -37,19 +37,16 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 		}
 
 		/* Set Values */
-		val pVersion = findPreference(getString(R.string.pref_key_about_version))
-		var thisVersion: String
+		val thisVersion: String =
 		try {
 			val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
-			thisVersion = pi.versionName + " (" + pi.versionCode + ")"
+			pi.versionName + " (" + pi.versionCode + ")"
 		} catch (e: PackageManager.NameNotFoundException) {
-			thisVersion = "Could not get version name from manifest!"
+			"Could not get version name from manifest!"
 		}
-		pVersion.summary = thisVersion
+		findPreference(getString(R.string.pref_key_about_version)).summary = thisVersion
 
-		val pLicense = findPreference(getString(R.string.pref_key_about_license))
-		Timber.w("%s", pLicense)
-		pLicense.setOnPreferenceClickListener {
+		findPreference(getString(R.string.pref_key_about_license)).setOnPreferenceClickListener {
 			presenter.onAboutClicked()
 			true
 		}

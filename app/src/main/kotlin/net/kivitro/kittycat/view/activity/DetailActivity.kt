@@ -54,7 +54,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		ac_detail_favourite.setOnClickListener { v -> if (cat.favourite!!) presenter.onDefavourited(cat) else presenter.onFavourited(cat) }
 		ac_detail_image.setOnClickListener { v -> animateImageClick(v) }
 
-		ac_detail_image.loadUrl(cat.url!!, {
+		ac_detail_image.loadUrl(cat.url!!, callback = {
 			val bitmap = ((ac_detail_image.drawable) as BitmapDrawable).bitmap
 			Palette.from(bitmap).generate { applyColor(it) }
 		})
