@@ -42,9 +42,7 @@ def getPropertyValue(String key) {
 }
 
 dependencies {
-    compile project(':preferences')
-
-    def app = rootProject.ext.appDependencies
+    def app = rootProject.ext.dependencies
 
     compile app.appCompat
     compile app.support
@@ -83,6 +81,8 @@ dependencies {
     debugCompile app.leakcanary
     releaseCompile app.leakcanary_no_op
     testCompile app.leakcanary_no_op
+
+    compile app.androidPreferences
 
     // Unit Tests
     testCompile app.jUnit

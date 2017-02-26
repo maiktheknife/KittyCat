@@ -12,7 +12,7 @@ ext {
     appbarspring_version = '1.0.2'
     leakcanary_version = '1.5'
 
-    appDependencies = [
+    dependencies = [
             // Std
             appCompat        : "com.android.support:appcompat-v7:$support_version",
             support          : "com.android.support:support-v4:$support_version",
@@ -53,21 +53,10 @@ ext {
 
             leakcanary_no_op : "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version",
 
+            androidPreferences : "com.github.maiktheknife:AndroidPreferences:-SNAPSHOT",
+
             // Test
             jUnit            : "junit:junit:4.12"
-    ]
-
-    preferenceDependencies = [
-            appCompat        : "com.android.support:appcompat-v7:$support_version",
-            support          : "com.android.support:support-v4:$support_version",
-            preferencev7     : "com.android.support:preference-v7:$support_version",
-            preferencev14    : "com.android.support:preference-v14:$support_version",
-
-            kotlin           : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
-
-            timber           : "com.jakewharton.timber:timber:$timber_version",
-
-            colorpicker      : "com.github.QuadFlask:colorpicker:0.0.11"
     ]
 
 }

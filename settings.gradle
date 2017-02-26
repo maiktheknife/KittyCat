@@ -1,1 +1,1 @@
-include ':app', ':preferences'
+include ':app'

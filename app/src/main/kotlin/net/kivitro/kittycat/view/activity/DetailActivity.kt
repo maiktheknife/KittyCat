@@ -108,16 +108,17 @@ class DetailActivity : LowProfileActivity(), DetailView {
 	private fun initRatingBar(rating: Float) {
 		Timber.d("setRatingBarValue %f", rating)
 		ac_detail_ratingbar.rating = 0f
-		val anim = ObjectAnimator.ofFloat(ac_detail_ratingbar, "rating", 0f, rating)
-		anim.duration = 1000
-		anim.addListener(object : DefaultAnimatorListener() {
-			override fun onAnimationEnd(a: Animator) {
-				ac_detail_ratingbar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-					presenter.onVoted(cat, (rating * 2).toInt())
+		ObjectAnimator.ofFloat(ac_detail_ratingbar, "rating", 0f, rating).apply {
+			duration = 1000
+			addListener(object : DefaultAnimatorListener() {
+				override fun onAnimationEnd(a: Animator) {
+					ac_detail_ratingbar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+						presenter.onVoted(cat, (rating * 2).toInt())
+					}
 				}
-			}
-		})
-		anim.start()
+			})
+			start()
+		}
 	}
 
 	private fun applyColor(palette: Palette) {
