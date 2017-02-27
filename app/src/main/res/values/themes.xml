@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <!--enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
-        <!--specify enter and exit transitions -->
-        <item name="android:windowEnterTransition">@android:transition/fade</item>
-        <item name="android:windowExitTransition">@android:transition/fade</item>
-        <!-- specify shared element transitions -->
-        <!--<item name="android:windowSharedElementEnterTransition">@android:transition/fade</item>-->
-        <!--<item name="android:windowSharedElementExitTransition">@android:transition/fade</item>-->
-        <!--<item name="android:windowBackground">@drawable/background_splash</item>-->
+        <!--special themes-->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="alertDialogTheme">@style/AppAlertDialog</item>
     </style>
 
-    <style name="AppTheme" parent="AppTheme.Base"/>
+    <style name="AppTheme.Main" parent="AppTheme">
+        <item name="android:windowExitTransition">@transition/main_exit</item>
+        <item name="android:windowReenterTransition">@transition/main_reenter</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    </style>
 
     <style name="AppTheme.Detail" parent="AppTheme">
+        <item name="android:windowEnterTransition">@transition/detail_enter</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>

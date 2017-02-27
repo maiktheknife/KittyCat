@@ -30,15 +30,17 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 	private lateinit var presenter: DetailPresenter<DetailView>
 	private lateinit var cat: Cat
-	private var mutedColor: Int = 0
-	private var vibrantColor: Int = 0
-	private var vibrantDarkColor: Int = 0
+	private var mutedColor = 0
+	private var vibrantColor = 0
+	private var vibrantDarkColor = 0
 	private var issFinishing = false
 	private var scrollRange = -1
 	private var isAppbarTitleShown = false
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Timber.d("onCreate")
+
 		setContentView(R.layout.ac_detail)
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
