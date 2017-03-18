@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+apply from: 'dependencies.gradle'
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -35,60 +37,10 @@ android {
 
 }
 
-def getPropertyValue(String key) {
+static def getPropertyValue(String key) {
     Properties properties = new Properties()
     properties.load(new FileInputStream("gradle.properties"))
     return "\"" + properties.getProperty(key) + "\""
-}
-
-dependencies {
-    def app = rootProject.ext.dependencies
-
-    compile app.appCompat
-    compile app.support
-    compile app.design
-    compile app.recycler
-    compile app.card
-    compile app.palette
-    compile app.preferencev7
-    compile app.preferencev14
-
-    compile app.kotlin
-
-    compile app.rxJava
-    compile app.rxAndroid
-
-    compile app.retrofit
-    compile app.retrofitAdapter
-    compile (app.retrofitConverter) {
-        exclude module: 'xpp3'
-        exclude group: 'stax'
-    }
-
-    compile app.picasso
-
-    compile app.okhttp
-    compile app.okhttpLogger
-
-    compile app.timber
-    compile app.photoView
-    compile (app.aboutlibraries) {
-        transitive = true
-    }
-
-    compile app.appbarspring
-
-    debugCompile app.leakcanary
-    releaseCompile app.leakcanary_no_op
-    testCompile app.leakcanary_no_op
-
-    compile app.androidPreferences
-
-    // Unit Tests
-    testCompile app.jUnit
-
-    // Integrations Tests
-    androidTestCompile app.jUnit
 }
 
 buildscript {
@@ -99,11 +51,4 @@ buildscript {
 
 kapt {
     generateStubs = true
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
 }
