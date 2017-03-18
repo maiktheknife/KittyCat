@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Favourites-->
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_favorite_black"
+        android:shortcutDisabledMessage="@string/shortcut_favourites_disabled"
+        android:shortcutId="favourites"
+        android:shortcutLongLabel="@string/shortcut_favourites_long_label"
+        android:shortcutShortLabel="@string/shortcut_favourites_short_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="net.kivitro.kittycat.view.activity.MainActivity"
+            android:targetPackage="net.kivitro.kittycat">
+            <extra
+                android:name="shortcut"
+                android:value="favourites"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+
+    <!--Preferences-->
+    <shortcut
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:shortcutDisabledMessage="@string/shortcut_preferences_disabled"
+        android:shortcutId="preferences"
+        android:shortcutLongLabel="@string/shortcut_preferences_long_label"
+        android:shortcutShortLabel="@string/shortcut_preferences_short_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="net.kivitro.kittycat.view.activity.SettingsActivity"
+            android:targetPackage="net.kivitro.kittycat"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+</shortcuts>

@@ -54,7 +54,9 @@ dependencies {
 
         compile "com.github.chrisbanes:PhotoView:$photoview_version"
 
-        compile "com.mikepenz:aboutlibraries:$about_version@aar"
+        compile ("com.mikepenz:aboutlibraries:$about_version@aar") {
+            transitive = true
+        }
 
         compile "com.github.todou:appbarspring:$appbarspring_version"
 
