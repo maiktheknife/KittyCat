@@ -11,18 +11,19 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
-import butterknife.bindView
+import kotlinx.android.synthetic.main.ac_main.*
+import kotlinx.android.synthetic.main.view_content.*
+import kotlinx.android.synthetic.main.view_error.*
+import kotlinx.android.synthetic.main.view_loading.*
 import net.kivitro.kittycat.R
+import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.model.Category
-import net.kivitro.kittycat.model.Image
 import net.kivitro.kittycat.presenter.MainPresenter
 import net.kivitro.kittycat.snack
 import net.kivitro.kittycat.view.MainView
@@ -40,16 +41,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	private var firstLoad: Boolean = true
 	private var isConnected: Boolean = false
 	private var isGridView: Boolean = true
-	private var kittens: List<Image>? = null
+	private var kittens: List<Cat>? = null
 	private var categories: List<Category>? = null
-
-	internal val containerView: View by bindView(R.id.ac_main_container)
-	internal val loadingView: View by bindView(R.id.ac_main_loading_view)
-	internal val errorView: View by bindView(R.id.ac_main_error_layout)
-	internal val retryBtn: View by bindView(R.id.ac_main_error_btn)
-	internal val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.ac_main_swipeLayout)
-	internal val recyclerView: RecyclerView by bindView(R.id.ac_main_recyclerView)
-	internal val categorySpinner: Spinner by bindView(R.id.ac_main_spinner)
 
 	private enum class State {
 		LOADING, ERROR, CONTENT
@@ -65,14 +58,16 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 		presenter = MainPresenter(this)
 
-		swipeRefreshLayout.setOnRefreshListener(this)
-		swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
+		ac_main_swipeLayout.apply {
+			setOnRefreshListener(this@MainActivity)
+			setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
+		}
 
-		retryBtn.setOnClickListener { loadKittiesIfPossible() }
+		ac_main_error_btn.setOnClickListener { loadKittiesIfPossible() }
 
 		spinnerAdapter = CategoryAdapter()
-		categorySpinner.adapter = spinnerAdapter
-		categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+		ac_main_spinner.adapter = spinnerAdapter
+		ac_main_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 				Timber.d("onItemSelected")
 				loadKitties()
@@ -96,7 +91,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		if (savedInstanceState != null) {
 			firstLoad = false
 			showState(State.CONTENT)
-			onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Image>)
+			onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Cat>)
 			onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
 		}
 	}
@@ -104,11 +99,11 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		Timber.d("onSaveInstanceState")
-		if (kittens != null) {
-			outState.putParcelableArrayList(EXTRA_KITTENS, kittens as ArrayList<Image>)
+		kittens?.let {
+			outState.putParcelableArrayList(EXTRA_KITTENS, it as ArrayList<Cat>)
 		}
-		if (categories != null) {
-			outState.putParcelableArrayList(EXTRA_CATEGORIES, categories as ArrayList<Category>)
+		categories?.let {
+			outState.putParcelableArrayList(EXTRA_CATEGORIES, it as ArrayList<Category>)
 		}
 	}
 
@@ -137,6 +132,10 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 				toggleView(item)
 				return true
 			}
+			R.id.action_favorites -> {
+				presenter.loadFavourites()
+				return true
+			}
 			R.id.action_settings -> {
 				presenter.onSettingsClicked()
 				return true
@@ -158,14 +157,14 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	}
 
 	private fun initRecyclerView(presenter: MainPresenter<MainView>) {
-		recyclerView.setHasFixedSize(true)
-		recyclerView.itemAnimator = DefaultItemAnimator()
+		ac_main_recyclerView.setHasFixedSize(true)
+		ac_main_recyclerView.itemAnimator = DefaultItemAnimator()
 
 		layoutManager = StaggeredGridLayoutManager(SPAN_GRID, StaggeredGridLayoutManager.VERTICAL)
-		recyclerView.layoutManager = layoutManager
+		ac_main_recyclerView.layoutManager = layoutManager
 
 		adapter = KittyAdapter(presenter)
-		recyclerView.adapter = adapter
+		ac_main_recyclerView.adapter = adapter
 	}
 
 	private fun loadKittiesIfPossible() {
@@ -181,7 +180,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		if (firstLoad) {
 			showState(State.LOADING)
 		}
-		val category = categorySpinner.selectedItem as Category?
+		val category = ac_main_spinner.selectedItem as Category?
 		if (Category.ALL == category) {
 			presenter.loadKittens(null)
 		} else {
@@ -193,19 +192,19 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		Timber.d("showState %s", state)
 		when (state) {
 			State.LOADING -> {
-				loadingView.visibility = View.VISIBLE
-				errorView.visibility = View.GONE
-				swipeRefreshLayout.visibility = View.GONE
+				ac_main_loading_view.visibility = View.VISIBLE
+				ac_main_error_layout.visibility = View.GONE
+				ac_main_swipeLayout.visibility = View.GONE
 			}
 			State.ERROR -> {
-				loadingView.visibility = View.GONE
-				errorView.visibility = View.VISIBLE
-				swipeRefreshLayout.visibility = View.GONE
+				ac_main_loading_view.visibility = View.GONE
+				ac_main_error_layout.visibility = View.VISIBLE
+				ac_main_swipeLayout.visibility = View.GONE
 			}
 			State.CONTENT -> {
-				loadingView.visibility = View.GONE
-				errorView.visibility = View.GONE
-				swipeRefreshLayout.visibility = View.VISIBLE
+				ac_main_loading_view.visibility = View.GONE
+				ac_main_error_layout.visibility = View.GONE
+				ac_main_swipeLayout.visibility = View.VISIBLE
 			}
 		}
 	}
@@ -226,19 +225,19 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	override val activity: Activity
 		get() = this
 
-	override fun onKittensLoaded(kittens: List<Image>) {
+	override fun onKittensLoaded(kittens: List<Cat>) {
 		Timber.d("onKittensLoaded %d", kittens.size)
 		this.firstLoad = false
 		this.kittens = kittens
 		adapter.addItems(kittens)
-		swipeRefreshLayout.isRefreshing = false
+		ac_main_swipeLayout.isRefreshing = false
 		showState(State.CONTENT)
 	}
 
 	override fun onKittensLoadError(message: String) {
 		Timber.d("onKittensLoadError %s", message)
-		containerView.snack("Loading Error: $message")
-		swipeRefreshLayout.isRefreshing = false
+		ac_main_container.snack("Loading Error: $message")
+		ac_main_swipeLayout.isRefreshing = false
 		showState(State.ERROR)
 	}
 
@@ -250,14 +249,14 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 	override fun onCategoriesLoadError(message: String) {
 		Timber.d("onCategoriesLoadError %s", message)
-		containerView.snack("Loading Error: $message")
-		swipeRefreshLayout.isRefreshing = false
+		ac_main_container.snack("Loading Error: $message")
+		ac_main_swipeLayout.isRefreshing = false
 	}
 
 	override fun showNoConnection() {
 		Timber.d("showNoConnection")
-		containerView.snack("No Connection")
-		swipeRefreshLayout.isRefreshing = false
+		ac_main_container.snack("No Connection")
+		ac_main_swipeLayout.isRefreshing = false
 		showState(State.ERROR)
 	}
 

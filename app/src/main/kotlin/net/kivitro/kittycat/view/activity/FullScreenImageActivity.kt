@@ -1,18 +1,16 @@
 package net.kivitro.kittycat.view.activity
 
 import android.os.Bundle
-import android.widget.ImageView
-import butterknife.bindView
+import kotlinx.android.synthetic.main.ac_full_image.*
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.loadUrl
-import net.kivitro.kittycat.model.Image
+import net.kivitro.kittycat.model.Cat
 import uk.co.senab.photoview.PhotoViewAttacher
 
 /**
  * Created by Max on 17.03.2016.
  */
 class FullScreenImageActivity : LowProfileActivity() {
-	private val image: ImageView by bindView(R.id.ac_full_image)
 	private lateinit var attacher: PhotoViewAttacher
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,14 +20,16 @@ class FullScreenImageActivity : LowProfileActivity() {
 		hideSystemUI()
 
 		val mutedColor = intent.getIntExtra(EXTRA_COLOR_MUTED, R.color.colorPrimary)
-		window.decorView.setBackgroundColor(mutedColor)
-		window.statusBarColor = mutedColor
-		window.navigationBarColor = mutedColor
+		window.apply {
+			decorView.setBackgroundColor(mutedColor)
+			statusBarColor = mutedColor
+			navigationBarColor = mutedColor
+		}
 
-		attacher = PhotoViewAttacher(image)
+		attacher = PhotoViewAttacher(ac_full_image)
 
-		val cat = intent.getParcelableExtra<Image>(EXTRA_CAT)
-		image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update()})
+		val cat = intent.getParcelableExtra<Cat>(EXTRA_CAT)
+		ac_full_image.loadUrl(cat.url!!, callback = { attacher.update() }, errorCallback = { attacher.update() })
 	}
 
 	override fun onStart() {

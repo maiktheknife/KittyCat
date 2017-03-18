@@ -6,9 +6,26 @@ import android.os.Parcelable
 /**
  * Created by Max on 11.03.2016.
  */
-data class CatCategory(var data: Categories? = null)
 
-data class Categories(var categories: List<Category>? = null)
+/*
+<response>
+	<data>
+		<categories>
+			<category>
+				<id>1</id>
+				<name>hats</name>
+			</category>
+			<category>
+				<id>2</id>
+				<name>space</name>
+			</category>
+		</categories>
+	</data>
+</response>
+ */
+data class CategoryResponse(var data: CategoryList? = null)
+
+data class CategoryList(var categories: List<Category>? = null)
 
 data class Category(var id: Int? = -1, var name: String? = "") : Parcelable {
 

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+apply from: 'dependencies.gradle'
+apply from: "$project.rootDir/tools/script-lint.gradle"
+apply from: "$project.rootDir/tools/script-findbugs.gradle"
+apply from: "$project.rootDir/tools/script-pmd.gradle"
 
 android {
     compileSdkVersion 25
@@ -34,61 +40,10 @@ android {
 
 }
 
-def getPropertyValue(String key) {
+static def getPropertyValue(String key) {
     Properties properties = new Properties()
-    properties.load(new FileInputStream("gradle.properties"))
+    properties.load(new FileInputStream("app/api.properties"))
     return "\"" + properties.getProperty(key) + "\""
-}
-
-dependencies {
-    compile project(':preferences')
-
-    def app = rootProject.ext.appDependencies
-
-    compile app.appCompat
-    compile app.support
-    compile app.design
-    compile app.recycler
-    compile app.card
-    compile app.palette
-    compile app.preferencev7
-    compile app.preferencev14
-
-    compile app.kotlin
-
-    compile app.rxJava
-    compile app.rxAndroid
-
-    compile app.retrofit
-    compile app.retrofitAdapter
-    compile (app.retrofitConverter) {
-        exclude module: 'xpp3'
-        exclude group: 'stax'
-    }
-
-    compile app.picasso
-
-    compile app.okhttp
-    compile app.okhttpLogger
-
-    compile app.kotterknife
-    compile app.timber
-    compile app.photoView
-    compile (app.aboutlibraries) {
-        transitive = true
-    }
-
-    compile app.appbarspring
-
-    debugCompile app.leakcanary
-    releaseCompile app.leakcanary_no_op
-    testCompile app.leakcanary_no_op
-
-    // Unit Tests
-    testCompile app.jUnit
-
-    // Integrations Tests
-    androidTestCompile app.jUnit
 }
 
 buildscript {
@@ -99,11 +54,4 @@ buildscript {
 
 kapt {
     generateStubs = true
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
 }
