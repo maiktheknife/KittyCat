@@ -10,7 +10,7 @@
 ### Get Started
 *   Clone project
 *   Get an [API Key](https://thecatapi.com/api-key-registration.html)
-*   Create a file named `gradle.properties` at project level with the entry: THE_CAT_API_KEY    
+*   Create a file named `api.properties` at app module level with the entry: THE_CAT_API_KEY    
     ```
     THE_CAT_API_KEY=YOUR_KEY
     ```

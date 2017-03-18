@@ -3,6 +3,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply from: 'dependencies.gradle'
+apply from: "$project.rootDir/tools/script-lint.gradle"
+apply from: "$project.rootDir/tools/script-findbugs.gradle"
+apply from: "$project.rootDir/tools/script-pmd.gradle"
 
 android {
     compileSdkVersion 25
@@ -39,7 +42,7 @@ android {
 
 static def getPropertyValue(String key) {
     Properties properties = new Properties()
-    properties.load(new FileInputStream("gradle.properties"))
+    properties.load(new FileInputStream("app/api.properties"))
     return "\"" + properties.getProperty(key) + "\""
 }
 

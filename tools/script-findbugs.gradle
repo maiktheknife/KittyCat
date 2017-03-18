@@ -1,0 +1,14 @@
+apply plugin: 'findbugs'
+
+task findbugs(type: FindBugs) {
+    excludeFilter = file("../tools/rules-findbugs.xml")
+    classes = fileTree("$project.buildDir/intermediates/classes/debug/net/kivitro/kittycat/")
+    source = fileTree('src/main/kotlin/net/kivitro/kittycat/')
+    classpath = files()
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.destination = "$project.buildDir/outputs/findbugs/findbugs.html"
+    }
+}
