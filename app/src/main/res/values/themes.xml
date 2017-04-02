@@ -13,6 +13,10 @@
         <item name="alertDialogTheme">@style/AppAlertDialog</item>
     </style>
 
+    <style name="AppTheme.Splash" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
     <style name="AppTheme.Main" parent="AppTheme">
         <!--<item name="android:windowExitTransition">@transition/main_exit</item>-->
         <!--<item name="android:windowReenterTransition">@transition/main_reenter</item>-->
