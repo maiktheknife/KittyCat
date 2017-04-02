@@ -1,13 +1,10 @@
 package net.kivitro.kittycat.view.activity
 
-import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.preference.PreferenceManager
-import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -30,7 +27,6 @@ import net.kivitro.kittycat.view.MainView
 import net.kivitro.kittycat.view.adapter.CategoryAdapter
 import net.kivitro.kittycat.view.adapter.KittyAdapter
 import timber.log.Timber
-import java.util.*
 
 class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefreshListener {
 	private lateinit var presenter: MainPresenter<MainView>
@@ -38,8 +34,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	private lateinit var adapter: KittyAdapter
 	private lateinit var spinnerAdapter: CategoryAdapter
 
+	private var spinnerInit: Boolean = false
 	private var firstLoad: Boolean = true
-	private var isConnected: Boolean = false
 	private var isGridView: Boolean = true
 	private var kittens: List<Cat>? = null
 	private var categories: List<Category>? = null
@@ -52,8 +48,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.ac_main)
 
-		Timber.d("access %s", ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
 		presenter = MainPresenter(this)
@@ -63,14 +57,18 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 			setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
 		}
 
-		ac_main_error_btn.setOnClickListener { loadKittiesIfPossible() }
+		ac_main_error_btn.setOnClickListener { loadKittiesIfPossible(favourites = intent.extras?.getString("shortcut") == "favourites") }
 
 		spinnerAdapter = CategoryAdapter()
 		ac_main_spinner.adapter = spinnerAdapter
 		ac_main_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 				Timber.d("onItemSelected")
-				loadKitties()
+				if (spinnerInit) {
+					loadKittiesIfPossible()
+				} else {
+					spinnerInit = true
+				}
 			}
 
 			override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -89,10 +87,15 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		Timber.d("sub_id %s", sub_id)
 
 		if (savedInstanceState != null) {
+			Timber.d("onCreate with savedState")
 			firstLoad = false
 			showState(State.CONTENT)
 			onKittensLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_KITTENS) as List<Cat>)
 			onCategoriesLoaded(savedInstanceState.getParcelableArrayList<Parcelable>(EXTRA_CATEGORIES) as List<Category>)
+		} else {
+			Timber.d("onCreate without savedState")
+			val fromFavoritesShortcut = intent.extras?.getString("shortcut") == "favourites"
+			loadKittiesIfPossible(favourites = fromFavoritesShortcut)
 		}
 	}
 
@@ -104,20 +107,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 		categories?.let {
 			outState.putParcelableArrayList(EXTRA_CATEGORIES, it as ArrayList<Category>)
-		}
-	}
-
-	override fun onResume() {
-		super.onResume()
-		isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
-		Timber.d("onResume %s %s", isConnected, firstLoad)
-		if (isConnected) {
-			if (firstLoad) {
-				presenter.loadCategories()
-				loadKitties()
-			}
-		} else {
-			presenter.onNoConnection()
 		}
 	}
 
@@ -133,7 +122,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 				return true
 			}
 			R.id.action_favorites -> {
-				presenter.loadFavourites()
+				loadKittiesIfPossible(favourites = true)
 				return true
 			}
 			R.id.action_settings -> {
@@ -167,24 +156,27 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		ac_main_recyclerView.adapter = adapter
 	}
 
-	private fun loadKittiesIfPossible() {
-		isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
+	private fun loadKittiesIfPossible(favourites: Boolean = false) {
+		val isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
 		if (isConnected) {
-			loadKitties()
+			if (firstLoad) {
+				showState(State.LOADING)
+				presenter.loadCategories()
+			} else {
+				firstLoad = false
+			}
+			if (favourites) {
+				presenter.loadFavourites()
+			} else {
+				val category = ac_main_spinner.selectedItem as Category?
+				if (Category.ALL == category) {
+					presenter.loadKittens(null)
+				} else {
+					presenter.loadKittens(category?.name)
+				}
+			}
 		} else {
 			presenter.onNoConnection()
-		}
-	}
-
-	private fun loadKitties() {
-		if (firstLoad) {
-			showState(State.LOADING)
-		}
-		val category = ac_main_spinner.selectedItem as Category?
-		if (Category.ALL == category) {
-			presenter.loadKittens(null)
-		} else {
-			presenter.loadKittens(category?.name)
 		}
 	}
 
@@ -209,15 +201,15 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 	}
 
+	private fun getConnectivityManager(): ConnectivityManager {
+		return getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+	}
+
 	/* @{link SwipeRefreshLayout.OnRefreshListener}*/
 
 	override fun onRefresh() {
 		Timber.d("onRefresh")
 		loadKittiesIfPossible()
-	}
-
-	private fun getConnectivityManager(): ConnectivityManager {
-		return getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 	}
 
 	/* @{link MainView} */

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_favourites_disabled">Favourites shortcut disabled</string>
+    <string name="shortcut_favourites_long_label">Shortcut to favourites</string>
+    <string name="shortcut_favourites_short_label">Favourites</string>
+
+    <string name="shortcut_preferences_disabled">Preferences shortcut disabled</string>
+    <string name="shortcut_preferences_long_label">Shortcut to preferences</string>
+    <string name="shortcut_preferences_short_label">Preferences</string>
+</resources>

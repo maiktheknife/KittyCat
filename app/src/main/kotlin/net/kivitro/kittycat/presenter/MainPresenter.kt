@@ -41,7 +41,7 @@ class MainPresenter<V : MainView>(val view: V) : Presenter<V> {
 				)
 	}
 
-	fun loadKittens(category: String?) {
+	fun loadKittens(category: String? = null) {
 		Timber.d("loadKittens %s", category)
 		TheCatAPI.API
 				.getKittens(category)
