@@ -1,14 +1,12 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                     xmlns:tools="http://schemas.android.com/tools"
-                                    android:id="@+id/xxxx"
                                     style="@style/CardStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/cat_row_image"
@@ -36,6 +34,7 @@
                 style="@style/TextStyleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textIsSelectable="false"
                 android:transitionName="@string/transition_cat_id"
                 tools:text="ID"/>
 
