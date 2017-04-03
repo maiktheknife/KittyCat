@@ -4,13 +4,13 @@ import android.content.Intent
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import net.kivitro.kittycat.R
 import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.network.TheCatAPI
 import net.kivitro.kittycat.view.DetailView
 import net.kivitro.kittycat.view.activity.FullScreenImageActivity
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import timber.log.Timber
 
 /**
