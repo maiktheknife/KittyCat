@@ -3,6 +3,7 @@ package net.kivitro.kittycat.network
 import android.content.Context
 import android.preference.PreferenceManager
 import android.support.annotation.IntRange
+import io.reactivex.Single
 import net.kivitro.kittycat.BuildConfig
 import net.kivitro.kittycat.model.*
 import okhttp3.Interceptor
@@ -10,11 +11,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import rx.Observable
 
 /**
  * Created by Max on 08.03.2016.
@@ -24,29 +24,29 @@ interface TheCatAPI {
 	/* API/IMAGES */
 
 	@GET("images/get?format=xml&type=png&size=med")
-	fun getKittens(@Query("category") category: String?): Observable<CatResponse>
+	fun getKittens(@Query("category") category: String?): Single<CatResponse>
 
 	@GET("images/vote")
-	fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Observable<VoteResponse>
+	fun vote(@Query("image_id") image_id: String, @Query("score") @IntRange(from = 0, to = 10) score: Int): Single<VoteResponse>
 
 	@GET("images/getvotes")
-	fun getVotes(): Observable<CatResponse>
+	fun getVotes(): Single<CatResponse>
 
 	@GET("images/favourite")
-	fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Observable<FavResponse>
+	fun favourite(@Query("image_id") image_id: String, @Query("action") action: String): Single<FavResponse>
 
 	@GET("images/getfavourites")
-	fun getFavourites(): Observable<CatResponse>
+	fun getFavourites(): Single<CatResponse>
 
 	/* API/CATEGORIES */
 
 	@GET("categories/list")
-	fun getCategories(): Observable<CategoryResponse>
+	fun getCategories(): Single<CategoryResponse>
 
 	/* API/STATS */
 
 	@GET("stats/getoverview")
-	fun getOverview(): Observable<OverviewResponse>
+	fun getOverview(): Single<OverviewResponse>
 
 	companion object {
 		const val ACTION_ADD = "add"
@@ -67,7 +67,7 @@ interface TheCatAPI {
 					.baseUrl("http://thecatapi.com/api/")
 					.client(client)
 					.addConverterFactory(SimpleXmlConverterFactory.createNonStrict())
-					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+					.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 					.validateEagerly(true)
 					.build()
 					.create(TheCatAPI::class.java)

@@ -21,8 +21,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:theme, android:icon">
         <activity
-            android:name=".view.activity.MainActivity"
-            android:theme="@style/AppTheme.Main">
+            android:name=".view.activity.SplashScreenActivity"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -30,6 +30,10 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts"/>
+        </activity>
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:theme="@style/AppTheme.Main">
         </activity>
         <activity
             android:name=".view.activity.DetailActivity"

@@ -15,8 +15,8 @@ android {
         applicationId "net.kivitro.kittycat"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.1"
+        versionCode 5
+        versionName "0.9.2"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
