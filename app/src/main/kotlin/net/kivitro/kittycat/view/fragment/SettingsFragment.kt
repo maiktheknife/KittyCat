@@ -21,17 +21,19 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 	override val activity: Activity
 		get() = getActivity()
 
-	private lateinit var presenter: SettingsPresenter<SettingsView>
+	private lateinit var presenter: SettingsPresenter
 
 	override fun onCreatePreferences(bundle: Bundle?, s: String?) {
 		Timber.d("onCreatePreferences")
 		addPreferencesFromResource(R.xml.settings)
-		presenter = SettingsPresenter(this)
+		presenter = SettingsPresenter()
 	}
 
 	override fun onStart() {
 		Timber.d("onStart")
 		super.onStart()
+		presenter.attachView(this)
+
 		for (i in 0..preferenceScreen.preferenceCount - 1) {
 			initSummary(preferenceScreen.getPreference(i))
 		}
@@ -88,6 +90,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 	override fun onPause() {
 		super.onPause()
 		preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+	}
+
+	override fun onStop() {
+		super.onStop()
+		presenter.detachView()
 	}
 
 	override fun onSharedPreferenceChanged(p: SharedPreferences?, key: String?) {

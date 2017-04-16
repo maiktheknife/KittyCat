@@ -29,7 +29,7 @@ import net.kivitro.kittycat.view.adapter.KittyAdapter
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefreshListener {
-	private lateinit var presenter: MainPresenter<MainView>
+	private lateinit var presenter: MainPresenter
 	private lateinit var layoutManager: StaggeredGridLayoutManager
 	private lateinit var adapter: KittyAdapter
 	private lateinit var spinnerAdapter: CategoryAdapter
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
-		presenter = MainPresenter(this)
+		presenter = MainPresenter()
 
 		ac_main_swipeLayout.apply {
 			setOnRefreshListener(this@MainActivity)
@@ -110,6 +110,16 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 	}
 
+	override fun onStart() {
+		super.onStart()
+		presenter.attachView(this)
+	}
+
+	override fun onStop() {
+		super.onStop()
+		presenter.detachView()
+	}
+
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
 		menuInflater.inflate(R.menu.menu_main, menu)
 		return true
@@ -145,7 +155,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 	}
 
-	private fun initRecyclerView(presenter: MainPresenter<MainView>) {
+	private fun initRecyclerView(presenter: MainPresenter) {
 		ac_main_recyclerView.setHasFixedSize(true)
 		ac_main_recyclerView.itemAnimator = DefaultItemAnimator()
 

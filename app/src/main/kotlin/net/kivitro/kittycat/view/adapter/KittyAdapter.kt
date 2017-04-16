@@ -19,7 +19,7 @@ import timber.log.Timber
 /**
  * Created by Max on 08.03.2016.
  */
-class KittyAdapter(val presenter: MainPresenter<MainView>) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
+class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAdapter.KittyHolder>() {
 	private var cats: MutableList<Cat> = arrayListOf()
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KittyHolder {
