@@ -31,4 +31,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="BottomBarStyle">
+        <item name="elevation">@dimen/bottom_bar_elevation</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="itemBackground">@drawable/nav_item_background</item>
+        <item name="itemIconTint">@drawable/nav_item_color_state</item>
+        <item name="itemTextColor">@drawable/nav_item_color_state</item>
+    </style>
+
+    <style name="Widget.AppCompat.CategorySpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
+    </style>
+
 </resources>

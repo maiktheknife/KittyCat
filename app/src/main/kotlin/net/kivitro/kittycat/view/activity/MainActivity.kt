@@ -34,9 +34,10 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	private lateinit var adapter: KittyAdapter
 	private lateinit var spinnerAdapter: CategoryAdapter
 
-	private var spinnerInit: Boolean = false
-	private var firstLoad: Boolean = true
-	private var isGridView: Boolean = true
+	private var spinnerInit = false
+	private var firstLoad = true
+	private var isGridView = true
+	private var selectedNavItem = 0
 	private var kittens: List<Cat>? = null
 	private var categories: List<Category>? = null
 
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
 		presenter = MainPresenter()
+		presenter.attachView(this)
 
 		ac_main_swipeLayout.apply {
 			setOnRefreshListener(this@MainActivity)
@@ -58,6 +60,32 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 
 		ac_main_error_btn.setOnClickListener { loadKittiesIfPossible(favourites = intent.extras?.getString("shortcut") == "favourites") }
+
+		ac_bottom_navigation.setOnNavigationItemReselectedListener { }
+		ac_bottom_navigation.setOnNavigationItemSelectedListener { menuItem ->
+			when (menuItem.itemId) {
+				R.id.action_random -> {
+					Timber.d("bottom nav select action_random")
+					selectedNavItem = 0
+					ac_main_spinner.visibility = View.VISIBLE
+					loadKittiesIfPossible(false)
+					true
+				}
+				R.id.action_favorites -> {
+					Timber.d("bottom nav select action_favorites")
+					selectedNavItem = 1
+					ac_main_spinner.visibility = View.INVISIBLE
+					loadKittiesIfPossible(true)
+					true
+				}
+				R.id.action_settings -> {
+					Timber.d("bottom nav select action_settings")
+					presenter.onSettingsClicked()
+					false
+				}
+				else -> false
+			}
+		}
 
 		spinnerAdapter = CategoryAdapter()
 		ac_main_spinner.adapter = spinnerAdapter
@@ -96,6 +124,8 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 			Timber.d("onCreate without savedState")
 			val fromFavoritesShortcut = intent.extras?.getString("shortcut") == "favourites"
 			loadKittiesIfPossible(favourites = fromFavoritesShortcut)
+			selectedNavItem = if (fromFavoritesShortcut) 1 else 0
+			ac_bottom_navigation.menu.getItem(selectedNavItem).isChecked = true
 		}
 	}
 
@@ -129,14 +159,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		when (item.itemId) {
 			R.id.action_toggle -> {
 				toggleView(item)
-				return true
-			}
-			R.id.action_favorites -> {
-				loadKittiesIfPossible(favourites = true)
-				return true
-			}
-			R.id.action_settings -> {
-				presenter.onSettingsClicked()
 				return true
 			}
 			else -> return super.onOptionsItemSelected(item)
@@ -219,7 +241,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 
 	override fun onRefresh() {
 		Timber.d("onRefresh")
-		loadKittiesIfPossible()
+		loadKittiesIfPossible(favourites = selectedNavItem == 1)
 	}
 
 	/* @{link MainView} */
