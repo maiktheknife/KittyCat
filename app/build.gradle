@@ -16,8 +16,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 5
-        versionName "0.9.2"
+        versionName "0.9.3"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")
+        buildConfigField "long", "REQUEST_TIMEOUT", getPropertyValue("REQUEST_TIMEOUT")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -43,7 +44,7 @@ android {
 static def getPropertyValue(String key) {
     Properties properties = new Properties()
     properties.load(new FileInputStream("app/api.properties"))
-    return "\"" + properties.getProperty(key) + "\""
+    return properties.getProperty(key)
 }
 
 buildscript {

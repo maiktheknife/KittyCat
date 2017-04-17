@@ -28,7 +28,7 @@ import timber.log.Timber
  */
 class DetailActivity : LowProfileActivity(), DetailView {
 
-	private lateinit var presenter: DetailPresenter<DetailView>
+	private lateinit var presenter: DetailPresenter
 	private lateinit var cat: Cat
 	private var mutedColor = 0
 	private var vibrantColor = 0
@@ -47,7 +47,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		collapse_toolbar.title = " "
 		appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset -> applyScroll(verticalOffset) }
 
-		presenter = DetailPresenter(this)
+		presenter = DetailPresenter()
 
 		cat = intent.getParcelableExtra<Cat>(EXTRA_CAT)
 
@@ -77,6 +77,16 @@ class DetailActivity : LowProfileActivity(), DetailView {
 				window.enterTransition.removeListener(this)
 			}
 		})
+	}
+
+	override fun onStart() {
+		super.onStart()
+		presenter.attachView(this)
+	}
+
+	override fun onStop() {
+		super.onStop()
+		presenter.detachView()
 	}
 
 	override fun onBackPressed() {
