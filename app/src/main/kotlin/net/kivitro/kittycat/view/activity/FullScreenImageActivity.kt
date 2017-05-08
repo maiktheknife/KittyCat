@@ -1,5 +1,7 @@
 package net.kivitro.kittycat.view.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import kotlinx.android.synthetic.main.ac_full_image.*
 import net.kivitro.kittycat.R
@@ -52,5 +54,15 @@ class FullScreenImageActivity : LowProfileActivity() {
 		const val EXTRA_COLOR_MUTED = "extra_muted"
 		const val EXTRA_COLOR_VIBRATE = "extra_vibrate"
 		const val EXTRA_COLOR_VIBRATE_DARK = "extra_vibrate_dark"
+
+		fun getStarterIntent(context: Context, cat: Cat, mutedColor: Int, vibrateColor: Int, vibrateColorDark: Int): Intent {
+			return Intent(context, FullScreenImageActivity::class.java).apply {
+				putExtra(EXTRA_CAT, cat)
+				putExtra(EXTRA_COLOR_MUTED, mutedColor)
+				putExtra(EXTRA_COLOR_VIBRATE, vibrateColor)
+				putExtra(EXTRA_COLOR_VIBRATE_DARK, vibrateColorDark)
+			}
+		}
+
 	}
 }

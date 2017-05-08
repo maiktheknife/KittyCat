@@ -1,6 +1,5 @@
 package net.kivitro.kittycat.presenter
 
-import android.content.Intent
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
@@ -36,7 +35,7 @@ class MainPresenter : Presenter<MainView>() {
 
 	fun onSettingsClicked() {
 		Timber.d("onSettingsClicked")
-		view?.activity?.startActivity(Intent(view?.activity, SettingsActivity::class.java))
+		view?.activity?.let { it.startActivity(SettingsActivity.getStarterIntent(it)) }
 	}
 
 	fun loadCategories() {
@@ -112,14 +111,11 @@ class MainPresenter : Presenter<MainView>() {
 		Timber.d("onKittyClicked %s", cat)
 		view?.let {
 			val ac = it.activity
-			val intent = Intent(ac, DetailActivity::class.java).apply {
-				putExtra(DetailActivity.EXTRA_CAT, cat)
-			}
 			val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
 					Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
 					Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
 			)
-			ac.startActivity(intent, aoc.toBundle())
+			ac.startActivity(DetailActivity.getStarterIntent(ac, cat), aoc.toBundle())
 		}
 	}
 

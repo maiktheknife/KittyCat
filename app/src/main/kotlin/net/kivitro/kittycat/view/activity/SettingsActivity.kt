@@ -1,5 +1,7 @@
 package net.kivitro.kittycat.view.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -19,6 +21,12 @@ class SettingsActivity : AppCompatActivity() {
 			setDisplayShowHomeEnabled(true)
 			setHomeButtonEnabled(true)
 			setDisplayHomeAsUpEnabled(true)
+		}
+	}
+
+	companion object {
+		fun getStarterIntent(context: Context): Intent {
+			return Intent(context, SettingsActivity::class.java)
 		}
 	}
 
