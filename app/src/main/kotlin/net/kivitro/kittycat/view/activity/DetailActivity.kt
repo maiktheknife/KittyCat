@@ -3,6 +3,8 @@ package net.kivitro.kittycat.view.activity
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -227,5 +229,12 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 	companion object {
 		const val EXTRA_CAT = "extra_cat"
+
+		fun getStarterIntent(context: Context, cat: Cat): Intent {
+			return Intent(context, DetailActivity::class.java).apply {
+				putExtra(EXTRA_CAT, cat)
+			}
+		}
+
 	}
 }

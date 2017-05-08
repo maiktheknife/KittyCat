@@ -1,6 +1,5 @@
 package net.kivitro.kittycat.presenter
 
-import android.content.Intent
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
@@ -88,16 +87,10 @@ class DetailPresenter : Presenter<DetailView>() {
 		Timber.d("onImageClicked %s", cat)
 		view?.let {
 			val ac = it.activity
-			val intent = Intent(ac, FullScreenImageActivity::class.java).apply {
-				putExtra(FullScreenImageActivity.EXTRA_CAT, cat)
-				putExtra(FullScreenImageActivity.EXTRA_COLOR_MUTED, mutedColor)
-				putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE, vibrateColor)
-				putExtra(FullScreenImageActivity.EXTRA_COLOR_VIBRATE_DARK, vibrateColorDark)
-			}
 			val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
 					Pair(v, ac.getString(R.string.transition_cat_image))
 			)
-			ac.startActivity(intent, aoc.toBundle())
+			ac.startActivity(FullScreenImageActivity.getStarterIntent(ac, cat, mutedColor, vibrateColor, vibrateColorDark), aoc.toBundle())
 		}
 	}
 
