@@ -55,8 +55,9 @@ interface TheCatAPI {
 			private set
 
 		fun create(c: Context) {
-			val loggingInterceptor = HttpLoggingInterceptor()
-			loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+			val loggingInterceptor = HttpLoggingInterceptor().apply {
+				level = HttpLoggingInterceptor.Level.BASIC
+			}
 
 			val client = OkHttpClient.Builder()
 					.addInterceptor(loggingInterceptor)

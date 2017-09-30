@@ -38,7 +38,7 @@ data class Cat(
 		var score: Int? = 0,
 		var id: String? = "",
 		var source_url: String? = "",
-		var created : String = "") : Parcelable {
+		var created: String = "") : Parcelable {
 
 	private constructor(p: Parcel) : this(p.readString(), p.readInt() == 0, p.readInt(), p.readString(), p.readString(), p.readString())
 
@@ -55,24 +55,17 @@ data class Cat(
 		p.writeString(created)
 	}
 
-	override fun describeContents(): Int {
-		return 0
-	}
+	override fun describeContents() = 0
 
-	override fun toString(): String {
-		return "Cat(id: $id, url=$url, source_url=$source_url, favourite=$favourite, score=$score, created=$created)"
-	}
+	override fun toString() =
+			"Cat(id: $id, url=$url, source_url=$source_url, favourite=$favourite, score=$score, created=$created)"
 
 	companion object {
 		@JvmField
 		val CREATOR = object : Parcelable.Creator<Cat> {
-			override fun createFromParcel(source: Parcel): Cat {
-				return Cat(source)
-			}
+			override fun createFromParcel(source: Parcel) = Cat(source)
 
-			override fun newArray(size: Int): Array<Cat?> {
-				return arrayOfNulls(size)
-			}
+			override fun newArray(size: Int): Array<Cat?> = arrayOfNulls(size)
 		}
 	}
 

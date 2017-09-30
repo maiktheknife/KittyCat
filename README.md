@@ -8,11 +8,13 @@
 ### Get Started
 *   Clone project
 *   Get an [API Key](https://thecatapi.com/api-key-registration.html)
-*   Create a file named `api.properties` at app module level with the entry: THE_CAT_API_KEY    
+*   Create a file named `api.properties` at app module level with the entry: _THE_CAT_API_KEY_ and _REQUEST_TIMEOUT_     
     ```
     THE_CAT_API_KEY=YOUR_KEY
-    ```
     
+    # in ms
+    REQUEST_TIMEOUT=10_000L
+    ```
 *   Build
 *   Enjoy
 

@@ -13,7 +13,6 @@ import net.kivitro.kittycat.R
 import net.kivitro.kittycat.loadUrl
 import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.presenter.MainPresenter
-import net.kivitro.kittycat.view.MainView
 import timber.log.Timber
 
 /**
@@ -31,9 +30,7 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
 		})
 	}
 
-	override fun getItemCount(): Int {
-		return cats.size
-	}
+	override fun getItemCount() = cats.size
 
 	override fun onBindViewHolder(holder: KittyHolder, position: Int) {
 		val context = holder.itemView.context
@@ -61,11 +58,11 @@ class KittyAdapter(val presenter: MainPresenter) : RecyclerView.Adapter<KittyAda
 			fun onKittyClicked(view: View, pos: Int)
 		}
 
-		val image = view.findViewById(R.id.cat_row_image) as ImageView
-		val id = view.findViewById(R.id.cat_row_id) as TextView
+		val image = view.findViewById<ImageView>(R.id.cat_row_image)
+		val id = view.findViewById<TextView>(R.id.cat_row_id)
 
 		init {
-			view.setOnClickListener { v -> callback.onKittyClicked(itemView, adapterPosition) }
+			view.setOnClickListener { _ -> callback.onKittyClicked(itemView, adapterPosition) }
 		}
 	}
 

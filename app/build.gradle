@@ -8,13 +8,13 @@ apply from: "$project.rootDir/tools/script-findbugs.gradle"
 apply from: "$project.rootDir/tools/script-pmd.gradle"
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         applicationId "net.kivitro.kittycat"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 5
         versionName "0.9.3"
         buildConfigField "String", "THE_CAT_API_KEY", getPropertyValue("THE_CAT_API_KEY")

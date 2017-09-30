@@ -3,7 +3,6 @@ package net.kivitro.kittycat.view.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.preference.PreferenceManager
@@ -191,26 +190,19 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 	}
 
 	private fun loadKittiesIfPossible(favourites: Boolean = false) {
-		val isConnected = getConnectivityManager().activeNetworkInfo?.isConnected ?: false
-		if (isConnected) {
-			if (firstLoad) {
-				showState(State.LOADING)
-				presenter.loadCategories()
-			} else {
-				firstLoad = false
-			}
-			if (favourites) {
-				presenter.loadFavourites()
-			} else {
-				val category = ac_main_spinner.selectedItem as Category?
-				if (Category.ALL == category) {
-					presenter.loadKittens(null)
-				} else {
-					presenter.loadKittens(category?.name)
-				}
-			}
+		if (firstLoad) {
+			showState(State.LOADING)
+			presenter.loadCategories()
+		}
+		if (favourites) {
+			presenter.loadFavourites()
 		} else {
-			presenter.onNoConnection()
+			val category = ac_main_spinner.selectedItem as Category?
+			if (Category.ALL == category) {
+				presenter.loadKittens(null)
+			} else {
+				presenter.loadKittens(category?.name)
+			}
 		}
 	}
 
@@ -235,9 +227,6 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		}
 	}
 
-	private fun getConnectivityManager(): ConnectivityManager {
-		return getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-	}
 
 	/* @{link SwipeRefreshLayout.OnRefreshListener}*/
 
@@ -293,9 +282,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		private const val SPAN_GRID = 2
 		private const val SPAN_LIST = 1
 
-		fun getStarterIntent(context: Context): Intent {
-			return Intent(context, MainActivity::class.java)
-		}
+		fun getStarterIntent(context: Context) = Intent(context, MainActivity::class.java)
 
 	}
 

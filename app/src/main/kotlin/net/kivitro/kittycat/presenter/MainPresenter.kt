@@ -8,6 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import net.kivitro.kittycat.BuildConfig
 import net.kivitro.kittycat.R
+import net.kivitro.kittycat.getConnectivityManager
 import net.kivitro.kittycat.model.Cat
 import net.kivitro.kittycat.network.TheCatAPI
 import net.kivitro.kittycat.view.MainView
@@ -33,6 +34,8 @@ class MainPresenter : Presenter<MainView>() {
 		favsDisposable?.dispose()
 	}
 
+	private fun isConnected() = view?.activity?.getConnectivityManager()?.activeNetworkInfo?.isConnected ?: false
+
 	fun onSettingsClicked() {
 		Timber.d("onSettingsClicked")
 		view?.activity?.let { it.startActivity(SettingsActivity.getStarterIntent(it)) }
@@ -40,70 +43,81 @@ class MainPresenter : Presenter<MainView>() {
 
 	fun loadCategories() {
 		Timber.d("loadCategories")
-		categoryDisposable = TheCatAPI.API
+		if (isConnected()) {
+			categoryDisposable = TheCatAPI.API
 				.getCategories()
 				.timeout(BuildConfig.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ categories ->
-							Timber.d("loadCategories got response")
-							view?.onCategoriesLoaded(categories.data!!.categories!!)
-						},
-						{ t ->
-							Timber.e(t, "loadCategories")
-							view?.onCategoriesLoadError(t.message ?: "Unknown Error")
-						}
+					{ categories ->
+						Timber.d("loadCategories got response")
+						view?.onCategoriesLoaded(categories.data!!.categories!!)
+					},
+					{ t ->
+						Timber.e(t, "loadCategories")
+						view?.onCategoriesLoadError(t.message ?: "Unknown Error")
+					}
 				)
+		} else {
+			onNoConnection()
+		}
 	}
 
 	fun loadKittens(category: String? = null) {
 		Timber.d("loadKittens %s", category)
-		kittensDisposable = TheCatAPI.API
+		if (isConnected()) {
+			kittensDisposable = TheCatAPI.API
 				.getKittens(category)
 				.timeout(BuildConfig.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ kittens ->
-							Timber.d("loadKittens got response")
-							view?.onKittensLoaded(kittens.data!!.images!!)
-						},
-						{ t ->
-							Timber.e(t, "loadKittens")
-							view?.onKittensLoadError(t.message ?: "Unknown Error")
-						}
+					{ kittens ->
+						Timber.d("loadKittens got response")
+						view?.onKittensLoaded(kittens.data!!.images!!)
+					},
+					{ t ->
+						Timber.e(t, "loadKittens")
+						view?.onKittensLoadError(t.message ?: "Unknown Error")
+					}
 				)
+		} else {
+			onNoConnection()
+		}
 	}
 
 	fun loadFavourites() {
 		Timber.d("loadFavourites")
-		favsDisposable = TheCatAPI.API
+		if (isConnected()) {
+			favsDisposable = TheCatAPI.API
 				.getFavourites()
 				.timeout(BuildConfig.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ kittens ->
-							Timber.d("loadFavourites got response")
-							// set favourite = true, they ARE Favourites
-							val favourites = kittens.data!!.images!!.map {
-								it.apply {
-									favourite = true
-								}
+					{ kittens ->
+						Timber.d("loadFavourites got response")
+						// set favourite = true, they ARE Favourites
+						val favourites = kittens.data!!.images!!.map {
+							it.apply {
+								favourite = true
 							}
-							view?.onKittensLoaded(favourites)
-						},
-						{ t ->
-							Timber.e(t, "loadFavourites")
-							view?.onKittensLoadError(t.message ?: "Unknown Error")
 						}
+						view?.onKittensLoaded(favourites)
+					},
+					{ t ->
+						Timber.e(t, "loadFavourites")
+						view?.onKittensLoadError(t.message ?: "Unknown Error")
+					}
 				)
-
+		} else {
+			onNoConnection()
+		}
 	}
 
 	fun onNoConnection() {
-		Timber.d("onNoConnection")
+		Timber.d("onNoConnection $view")
 		view?.showNoConnection()
 	}
 
@@ -112,8 +126,8 @@ class MainPresenter : Presenter<MainView>() {
 		view?.let {
 			val ac = it.activity
 			val aoc = ActivityOptionsCompat.makeSceneTransitionAnimation(ac,
-					Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
-					Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
+				Pair(v.findViewById(R.id.cat_row_id), ac.getString(R.string.transition_cat_id)),
+				Pair(v.findViewById(R.id.cat_row_image), ac.getString(R.string.transition_cat_image))
 			)
 			ac.startActivity(DetailActivity.getStarterIntent(ac, cat), aoc.toBundle())
 		}

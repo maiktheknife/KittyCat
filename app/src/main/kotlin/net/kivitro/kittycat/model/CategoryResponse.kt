@@ -36,24 +36,16 @@ data class Category(var id: Int? = -1, var name: String? = "") : Parcelable {
 		p.writeString(name)
 	}
 
-	override fun describeContents(): Int {
-		return 0
-	}
+	override fun describeContents() = 0
 
-	override fun toString(): String {
-		return "Category(id: $id, name=$name)"
-	}
+	override fun toString() = "Category(id: $id, name=$name)"
 
 	companion object {
 		@JvmField
 		val CREATOR = object : Parcelable.Creator<Category> {
-			override fun createFromParcel(source: Parcel): Category {
-				return Category(source)
-			}
+			override fun createFromParcel(source: Parcel) = Category(source)
 
-			override fun newArray(size: Int): Array<Category?> {
-				return arrayOfNulls(size)
-			}
+			override fun newArray(size: Int): Array<Category?> = arrayOfNulls(size)
 		}
 		val ALL: Category = Category(0, "All")
 	}

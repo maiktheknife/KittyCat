@@ -47,7 +47,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
 		collapse_toolbar.title = " "
-		appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset -> applyScroll(verticalOffset) }
+		appbar.addOnOffsetChangedListener { _, verticalOffset -> applyScroll(verticalOffset) }
 
 		presenter = DetailPresenter()
 
@@ -55,7 +55,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 
 		initViewWithCat(cat)
 
-		ac_detail_favourite.setOnClickListener { v -> if (cat.favourite!!) presenter.onDefavourited(cat) else presenter.onFavourited(cat) }
+		ac_detail_favourite.setOnClickListener { _ -> if (cat.favourite!!) presenter.onDefavourited(cat) else presenter.onFavourited(cat) }
 		ac_detail_image.setOnClickListener { v -> animateImageClick(v) }
 
 		ac_detail_image.loadUrl(cat.url!!, callback = {
@@ -126,7 +126,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 			duration = 1000
 			addListener(object : DefaultAnimatorListener() {
 				override fun onAnimationEnd(a: Animator) {
-					ac_detail_ratingbar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+					ac_detail_ratingbar.setOnRatingBarChangeListener { _, rating, _ ->
 						presenter.onVoted(cat, (rating * 2).toInt())
 					}
 				}

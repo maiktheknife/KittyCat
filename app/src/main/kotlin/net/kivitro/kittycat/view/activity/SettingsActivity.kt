@@ -25,9 +25,7 @@ class SettingsActivity : AppCompatActivity() {
 	}
 
 	companion object {
-		fun getStarterIntent(context: Context): Intent {
-			return Intent(context, SettingsActivity::class.java)
-		}
+		fun getStarterIntent(context: Context) = Intent(context, SettingsActivity::class.java)
 	}
 
 }

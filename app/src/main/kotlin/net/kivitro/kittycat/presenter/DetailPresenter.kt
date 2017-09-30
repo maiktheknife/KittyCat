@@ -39,7 +39,7 @@ class DetailPresenter : Presenter<DetailView>() {
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ d ->
+						{ _ ->
 							view?.onVoting(rating)
 						},
 						{ t ->
@@ -57,7 +57,7 @@ class DetailPresenter : Presenter<DetailView>() {
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ d ->
+						{ _ ->
 							view?.onFavourited()
 						},
 						{ t ->
@@ -66,7 +66,7 @@ class DetailPresenter : Presenter<DetailView>() {
 						})
 	}
 
-	fun onDefavourited(cat: Cat): Unit {
+	fun onDefavourited(cat: Cat) {
 		Timber.d("onDefavourited %s", cat)
 		defavDisposable = TheCatAPI.API
 				.favourite(cat.id!!, TheCatAPI.ACTION_REMOVE)
@@ -74,7 +74,7 @@ class DetailPresenter : Presenter<DetailView>() {
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(
-						{ d ->
+						{ _ ->
 							view?.onDefavourited()
 						},
 						{ t ->

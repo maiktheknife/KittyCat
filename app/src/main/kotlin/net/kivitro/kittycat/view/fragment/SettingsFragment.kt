@@ -39,21 +39,20 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 		}
 
 		/* Set Values */
-		val thisVersion: String =
-		try {
-			val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
-			pi.versionName + " (" + pi.versionCode + ")"
-		} catch (e: PackageManager.NameNotFoundException) {
-			"Could not get version name from manifest!"
-		}
-		findPreference(getString(R.string.pref_key_about_version)).summary = thisVersion
+		findPreference(getString(R.string.pref_key_about_version)).summary =
+				try {
+					val pi = activity.packageManager.getPackageInfo(activity.packageName, 0)
+					pi.versionName + " (" + pi.versionCode + ")"
+				} catch (e: PackageManager.NameNotFoundException) {
+					"Could not get version name from manifest!"
+				}
 
 		findPreference(getString(R.string.pref_key_about_license)).setOnPreferenceClickListener {
 			presenter.onAboutClicked()
 			true
 		}
 
-		findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { preference, value ->
+		findPreference(getString(R.string.pref_key_laf_theme)).setOnPreferenceChangeListener { _, value ->
 			Timber.d("onChange $value")
 			setUpTheme(activity, value as String)
 			activity.recreate()
@@ -74,7 +73,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView, SharedPrefere
 
 	private fun initSummary(p: Preference?) {
 		if (p is PreferenceGroup) { // PreferenceCategory oder PreferenceScreen
-			for (i in 0..p.preferenceCount - 1) {
+			for (i in 0 until p.preferenceCount) {
 				initSummary(p.getPreference(i))
 			}
 		} else {

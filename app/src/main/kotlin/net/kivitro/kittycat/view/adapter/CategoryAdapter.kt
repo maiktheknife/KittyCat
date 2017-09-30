@@ -15,29 +15,21 @@ import timber.log.Timber
 class CategoryAdapter : BaseAdapter() {
 	private var categories: MutableList<Category> = arrayListOf()
 
-	override fun getCount(): Int {
-		return categories.size
-	}
+	override fun getCount(): Int = categories.size
 
-	override fun getItem(position: Int): Category {
-		return categories[position]
-	}
+	override fun getItem(position: Int): Category = categories[position]
 
-	override fun getItemId(position: Int): Long {
-		return 0
-	}
+	override fun getItemId(position: Int): Long = 0
 
 	override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View? {
 		val v = convertView ?: LayoutInflater.from(parent.context).inflate(R.layout.item_spinner_item, parent, false)
-		val text = v.findViewById(android.R.id.text1) as TextView
-		text.text = getItem(position).name
+		v.findViewById<TextView>(android.R.id.text1).text = getItem(position).name
 		return v
 	}
 
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
 		val v = convertView ?: LayoutInflater.from(parent.context).inflate(R.layout.item_spinner, parent, false)
-		val text = v.findViewById(android.R.id.text1) as TextView
-		text.text = getItem(position).name
+		v.findViewById<TextView>(android.R.id.text1).text = getItem(position).name
 		return v
 	}
 
