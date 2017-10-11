@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.ac_main)
 
-		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+		setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
 
 		presenter = MainPresenter()
 		presenter.attachView(this)
@@ -156,14 +156,12 @@ class MainActivity : AppCompatActivity(), MainView, SwipeRefreshLayout.OnRefresh
 		return true
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
-			R.id.action_toggle -> {
-				toggleView(item)
-				return true
-			}
-			else -> return super.onOptionsItemSelected(item)
+	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+		R.id.action_toggle -> {
+			toggleView(item)
+			true
 		}
+		else -> super.onOptionsItemSelected(item)
 	}
 
 	private fun toggleView(item: MenuItem) {

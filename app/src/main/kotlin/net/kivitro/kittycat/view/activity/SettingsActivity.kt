@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.ac_settings)
 
-		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+		setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
 		supportActionBar?.apply {
 			setDisplayShowHomeEnabled(true)
 			setHomeButtonEnabled(true)

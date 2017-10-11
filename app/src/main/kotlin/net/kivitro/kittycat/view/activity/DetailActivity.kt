@@ -44,7 +44,7 @@ class DetailActivity : LowProfileActivity(), DetailView {
 		Timber.d("onCreate")
 
 		setContentView(R.layout.ac_detail)
-		setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+		setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
 
 		collapse_toolbar.title = " "
 		appbar.addOnOffsetChangedListener { _, verticalOffset -> applyScroll(verticalOffset) }

@@ -9,7 +9,7 @@ apply from: "$project.rootDir/tools/script-pmd.gradle"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "net.kivitro.kittycat"

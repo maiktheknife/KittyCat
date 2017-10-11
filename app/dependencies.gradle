@@ -1,6 +1,6 @@
 
 ext {
-    support_version = '25.3.1'
+    support_version = '26.1.0'
     rxjava_version = '2.0.8'
     rxandroid_version = '2.0.1'
     retrofit_version = '2.2.0'
@@ -8,7 +8,7 @@ ext {
     picasso_version = '2.5.2'
     photoview_version = '1.2.6'
     timber_version = '4.1.2'
-    about_version = '5.7.1'
+    about_version = '5.9.7'
     appbarspring_version = '1.0.2'
     leakcanary_version = '1.5'
     mkloader_version = '1.2.0'
